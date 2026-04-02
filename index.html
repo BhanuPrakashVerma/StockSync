@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0b0f1a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>StockSync</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#0b0f1a;--surface:#111827;--card:#162032;--card2:#1b2840;
+  --border:rgba(99,133,198,0.15);--border2:rgba(99,133,198,0.3);
+  --accent:#3b82f6;--accent2:#6366f1;
+  --admin:#f97316;
+  --ok:#22c55e;--warn:#eab308;--danger:#ef4444;
+  --text:#e2e8f0;--muted:#64748b;--muted2:#94a3b8;
+  --r:14px;--r2:10px;--shadow:0 8px 32px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
+.hide{display:none!important;}
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;}
+
+/* ══ LOGIN ══ */
+#loginScreen{background:var(--bg);align-items:center;justify-content:center;padding:28px;}
+.brand{text-align:center;margin-bottom:36px;}
+.brand h1{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.brand p{color:var(--muted2);font-size:.78rem;margin-top:5px;letter-spacing:.8px;text-transform:uppercase;}
+.login-card{width:100%;max-width:370px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--shadow);}
+.role-tabs{display:flex;background:var(--surface);border-radius:var(--r2);padding:3px;margin-bottom:20px;gap:3px;}
+.role-tab{flex:1;padding:10px;border:none;background:transparent;color:var(--muted2);border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.role-tab.sel-user{background:var(--accent);color:#fff;}
+.role-tab.sel-admin{background:var(--admin);color:#fff;}
+.f-group{margin-bottom:16px;}
+.f-group label{display:block;font-size:.72rem;font-weight:600;color:var(--muted2);margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase;}
+.f-group input{width:100%;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
+.f-group input:focus{border-color:var(--accent);}
+
+/* ── SETUP SCREEN (no URL configured) ── */
+.setup-screen{width:100%;max-width:370px;}
+.setup-screen .setup-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);border-radius:var(--r);padding:20px;margin-bottom:16px;}
+.setup-screen .setup-box h3{font-family:'Space Grotesk',sans-serif;font-size:.95rem;color:#fdba74;margin-bottom:10px;}
+.setup-screen .setup-box p{font-size:.75rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;}
+.setup-screen .setup-box ol{font-size:.75rem;color:var(--muted2);line-height:1.8;padding-left:16px;}
+.setup-screen .setup-box ol li{margin-bottom:2px;}
+.setup-screen .setup-box code{background:var(--surface);padding:1px 6px;border-radius:4px;font-size:.78rem;color:var(--text);}
+
+.btn-login{width:100%;padding:13px;border:none;border-radius:var(--r2);font-size:.95rem;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif;}
+.btn-user{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
+.btn-admin{background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;}
+.btn-login:active{transform:scale(.98);opacity:.9;}
+.btn-copy{width:100%;padding:10px;border:1px solid var(--border2);background:transparent;color:var(--muted2);border-radius:var(--r2);font-size:.82rem;cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px;transition:all .2s;}
+.btn-copy:hover{border-color:var(--accent);color:var(--text);}
+
+/* ══ APP SHELL ══ */
+#appScreen{display:none;}
+.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar-l{display:flex;align-items:center;gap:10px;}
+.topbar-l h1{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;}
+.topbar-r{display:flex;align-items:center;gap:8px;}
+.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0;}
+.av-u{background:linear-gradient(135deg,#3b82f6,#6366f1);}
+.av-a{background:linear-gradient(135deg,#f97316,#ef4444);}
+.out-btn{padding:5px 12px;border:1px solid var(--border2);background:transparent;color:var(--muted2);border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;}
+.sync-btn{padding:5px 10px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.08);color:#86efac;border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:4px;}
+.sync-btn.spinning svg{animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
+.content::-webkit-scrollbar{width:3px;}
+.content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+.btabs{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;}
+.btab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 0 7px;gap:3px;border:none;background:transparent;color:var(--muted);font-size:10px;cursor:pointer;transition:all .2s;}
+.btab svg{width:20px;height:20px;}
+.btab.on{color:var(--accent);}
+.btab.on-a{color:var(--admin)!important;}
+.page{display:none;flex-direction:column;min-height:100%;}
+.page.on{display:flex;}
+
+/* ══ LOADING OVERLAY ══ */
+#loadingOverlay{position:fixed;inset:0;background:rgba(11,15,26,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+#loadingOverlay.hide{display:none!important;}
+.spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+#loadingOverlay p{color:var(--muted2);font-size:.85rem;}
+
+/* ══ DASHBOARD ══ */
+.dash-top{padding:16px;background:linear-gradient(180deg,var(--card2),transparent);border-bottom:1px solid var(--border);}
+.dash-greeting{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;}
+.dash-sub{font-size:.75rem;color:var(--muted2);margin-top:3px;}
+.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
+.stat .lbl{font-size:.68rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.stat .num{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;line-height:1;}
+.stat .hint{font-size:.68rem;color:var(--muted2);margin-top:4px;}
+.section-lbl{font-size:.68rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;padding:0 16px;margin-bottom:8px;}
+.info-box{margin:0 16px 16px;border-radius:var(--r);padding:14px 16px;}
+.info-box.warn{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);}
+.info-box.ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);}
+.info-box h4{font-size:.85rem;font-weight:600;margin-bottom:3px;}
+.info-box p{font-size:.75rem;color:var(--muted2);line-height:1.5;}
+.mini-item{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);}
+.mi-left h4{font-size:.85rem;font-weight:500;}
+.mi-left span{font-size:.7rem;color:var(--muted2);font-family:monospace;}
+.mi-right{display:flex;align-items:center;gap:8px;}
+.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.3px;}
+.b-done{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.25);}
+.b-pend{background:rgba(59,130,246,.1);color:#93c5fd;border:1px solid rgba(59,130,246,.2);}
+.b-rev{background:rgba(234,179,8,.1);color:#fde047;border:1px solid rgba(234,179,8,.25);}
+
+/* ══ FORM PAGE ══ */
+.form-bar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;flex-shrink:0;}
+.form-bar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+.form-bar-top h2{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;}
+.prog-wrap{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .4s;}
+.prog-info{display:flex;justify-content:space-between;margin-top:5px;font-size:.68rem;color:var(--muted2);}
+.search-bar{padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border);position:relative;}
+.search-bar svg{position:absolute;left:26px;top:50%;transform:translateY(-50%);color:var(--muted);width:16px;height:16px;}
+.search-bar input{width:100%;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
+.search-bar input:focus{border-color:var(--accent);}
+.filter-tabs{display:flex;gap:6px;padding:8px 14px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none;}
+.filter-tabs::-webkit-scrollbar{display:none;}
+.ftab{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.ftab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+.ftab.on-warn{background:rgba(234,179,8,.15);border-color:rgba(234,179,8,.4);color:#fde047;}
+.items-wrap{padding:10px 12px 120px;}
+
+/* item cards */
+.item-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;transition:border-color .2s;}
+.item-card.ic-done{border-color:rgba(34,197,94,.3);}
+.item-card.ic-rev{border-color:rgba(234,179,8,.3);}
+.ic-head{display:flex;align-items:flex-start;padding:13px 14px;cursor:pointer;gap:10px;}
+.ic-head:active{background:var(--card2);}
+.ic-num{font-size:.65rem;color:var(--muted);font-family:monospace;padding-top:2px;min-width:24px;}
+.ic-info{flex:1;min-width:0;}
+.ic-name{font-family:'Space Grotesk',sans-serif;font-size:.98rem;font-weight:700;line-height:1.3;word-break:break-word;}
+.ic-code{font-size:.7rem;color:var(--muted2);margin-top:3px;font-family:monospace;}
+.ic-meta{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.ic-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+.chevron{transition:transform .2s;color:var(--muted);width:16px;height:16px;}
+.item-card.open .chevron{transform:rotate(180deg);}
+.ic-existing{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px 48px;}
+.ex-pill{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:.7rem;}
+.ex-pill span{color:var(--muted2);}
+.ex-pill strong{color:var(--text);font-weight:600;}
+.ic-body{display:none;border-top:1px solid var(--border);}
+.item-card.open .ic-body{display:block;}
+.revise-notice{background:rgba(234,179,8,.07);border-bottom:1px solid rgba(234,179,8,.15);padding:10px 14px;display:flex;align-items:center;gap:8px;}
+.revise-notice svg{width:16px;height:16px;color:#fde047;flex-shrink:0;}
+.revise-notice p{font-size:.75rem;color:#fde047;line-height:1.4;}
+.fields-section{padding:12px 14px 0;}
+.fields-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted2);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.req-dot{width:6px;height:6px;border-radius:50%;background:var(--danger);display:inline-block;}
+.ok-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block;}
+.f3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.f2-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.field{display:flex;flex-direction:column;}
+.field label{font-size:.68rem;font-weight:600;color:var(--muted2);margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase;}
+.field .req-star{color:var(--danger);margin-left:2px;}
+.field input{padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;width:100%;}
+.field input:focus{border-color:var(--accent);}
+.field input.err{border-color:var(--danger)!important;background:rgba(239,68,68,.06);}
+.field input[type=number]{-moz-appearance:textfield;}
+.field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;}
+.err-msg{font-size:.65rem;color:var(--danger);margin-top:3px;}
+.ic-actions{display:flex;gap:8px;padding:10px 14px 14px;}
+.ic-btn{flex:1;padding:11px;border:none;border-radius:9px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.ic-btn:active{transform:scale(.97);opacity:.88;}
+.btn-save{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
+.btn-revise{background:linear-gradient(135deg,#eab308,#f97316);color:#000;}
+.btn-skip{background:var(--surface);color:var(--muted2);border:1px solid var(--border);}
+.submit-sticky{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 14px;z-index:10;}
+.submit-sticky button{width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;border-radius:var(--r2);color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s;}
+.submit-sticky button:active{transform:scale(.99);opacity:.9;}
+.sub-meta{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted2);margin-top:7px;}
+
+/* ══ ADMIN PAGES ══ */
+.page-head{padding:16px;border-bottom:1px solid var(--border);border-left:3px solid var(--admin);}
+.page-head h2{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#fdba74;}
+.page-head p{font-size:.73rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
+.drop-zone{margin:14px;border:2px dashed var(--border);border-radius:var(--r);padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:var(--card);}
+.drop-zone:hover{border-color:var(--admin);background:rgba(249,115,22,.05);}
+.drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.drop-icon{font-size:2.4rem;margin-bottom:10px;}
+.drop-zone h3{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:5px;}
+.drop-zone p{font-size:.75rem;color:var(--muted2);}
+.sheet-card{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);}
+.sh-icon{width:38px;height:38px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.sh-info{flex:1;}
+.sh-info h4{font-size:.88rem;font-weight:600;}
+.sh-info p{font-size:.7rem;color:var(--muted2);margin-top:2px;}
+.sh-act{display:flex;gap:6px;flex-shrink:0;}
+.sh-btn{padding:6px 12px;border-radius:8px;font-size:.72rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.sh-act-btn{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.3);}
+.sh-del-btn{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
+.active-tag{font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.3);}
+.resp-toolbar{padding:12px 14px;display:flex;gap:8px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.r-btn{padding:8px 14px;border-radius:9px;font-size:.75rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s;}
+.r-btn:active{opacity:.8;transform:scale(.97);}
+.r-gs{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.3);}
+.r-csv{background:rgba(59,130,246,.1);color:#93c5fd;border:1px solid rgba(59,130,246,.25);}
+.r-vya{background:rgba(249,115,22,.1);color:#fdba74;border:1px solid rgba(249,115,22,.25);}
+.resp-card{padding:13px 16px;border-bottom:1px solid var(--border);}
+.rc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.rc-name{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;}
+.rc-by{font-size:.7rem;color:var(--muted2);}
+.rc-vals{display:flex;gap:8px;flex-wrap:wrap;}
+.rv{background:var(--surface);border-radius:7px;padding:5px 10px;font-size:.75rem;}
+.rv span{color:var(--muted2);font-size:.65rem;display:block;text-transform:uppercase;letter-spacing:.3px;}
+.rv strong{font-weight:700;}
+.sett-section{padding:14px;}
+.sett-lbl{font-size:.68rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;}
+.sett-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
+.sett-row{padding:13px 16px;border-bottom:1px solid var(--border);}
+.sett-row:last-child{border-bottom:none;}
+.sett-row h4{font-size:.85rem;font-weight:600;margin-bottom:2px;}
+.sett-row p{font-size:.72rem;color:var(--muted2);line-height:1.4;margin-bottom:8px;}
+.sett-row input{width:100%;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;}
+.sett-row input:focus{border-color:var(--admin);}
+.sett-row-inline{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border);}
+.sett-row-inline:last-child{border-bottom:none;}
+.tog{width:42px;height:23px;background:var(--muted);border-radius:12px;position:relative;cursor:pointer;border:none;flex-shrink:0;transition:background .2s;}
+.tog.on{background:var(--ok);}
+.tog::after{content:'';position:absolute;width:17px;height:17px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;}
+.tog.on::after{left:22px;}
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;}
+.empty-state .ei{font-size:2.8rem;margin-bottom:14px;opacity:.45;}
+.empty-state h3{font-family:'Space Grotesk',sans-serif;font-size:.9rem;color:var(--muted2);margin-bottom:5px;}
+.empty-state p{font-size:.75rem;color:var(--muted);}
+#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--card);border:1px solid var(--border2);padding:9px 18px;border-radius:20px;font-size:.8rem;font-weight:500;opacity:0;transition:all .25s;z-index:999;pointer-events:none;white-space:nowrap;box-shadow:var(--shadow);}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.m-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
+.m-box{background:var(--surface);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:480px;padding:24px;border-top:1px solid var(--border);animation:su .22s ease;}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.m-box h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:8px;}
+.m-box p{font-size:.82rem;color:var(--muted2);margin-bottom:18px;line-height:1.5;}
+.m-acts{display:flex;gap:10px;}
+.m-acts button{flex:1;padding:12px;border:none;border-radius:var(--r2);font-weight:600;font-size:.88rem;cursor:pointer;font-family:'Inter',sans-serif;}
+.m-cancel{background:var(--card);color:var(--muted2);}
+.m-ok{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- ══ LOADING ══ -->
+<div id="loadingOverlay" class="hide">
+  <div class="spinner"></div>
+  <p id="loadingMsg">Connecting to server…</p>
+</div>
+
+<!-- ══ LOGIN ══ -->
+<div class="screen" id="loginScreen">
+  <div class="brand">
+    <h1>⚡ StockSync</h1>
+    <p>Inventory · Pricing · Vyapar Ready</p>
+  </div>
+
+  <!-- SETUP STATE: no URL configured yet -->
+  <div class="setup-screen" id="setupView">
+    <div class="setup-box">
+      <h3>⚙️ One-Time Setup Required</h3>
+      <p>Before anyone can log in, paste your Google Apps Script URL below. This is the backend that stores all data across all devices.</p>
+      <ol>
+        <li>Open <strong>script.google.com</strong> → New Project</li>
+        <li>Click the button below to copy the script</li>
+        <li>Paste it into the editor → Save</li>
+        <li>Replace <code>SHEET_ID</code> with your Google Sheet ID</li>
+        <li>Deploy → Web App → Execute as <strong>Me</strong> → Access <strong>Anyone</strong></li>
+        <li>Copy the URL and paste below</li>
+      </ol>
+      <button class="btn-copy" onclick="copyScript()">📋 Copy Apps Script Code</button>
+    </div>
+    <div class="f-group">
+      <label>Google Apps Script Web App URL</label>
+      <input id="setupURL" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
+    </div>
+    <button class="btn-login btn-admin" onclick="saveSetupURL()">Save & Continue →</button>
+  </div>
+
+  <!-- LOGIN STATE: URL already configured -->
+  <div class="login-card hide" id="loginView">
+    <div class="role-tabs">
+      <button class="role-tab sel-user" id="rt-user" onclick="setRole('user')">👤 Staff</button>
+      <button class="role-tab" id="rt-admin" onclick="setRole('admin')">🛡 Admin</button>
+    </div>
+    <div class="f-group">
+      <label>Your Name</label>
+      <input id="ln" type="text" placeholder="Enter your name" autocomplete="off">
+    </div>
+    <div class="f-group hide" id="pin-grp">
+      <label>Admin PIN</label>
+      <input id="lp" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
+    </div>
+    <button class="btn-login btn-user" id="lb" onclick="doLogin()">Enter as Staff →</button>
+    <div style="text-align:center;margin-top:10px;">
+      <span style="font-size:.72rem;color:var(--muted);cursor:pointer;" onclick="resetURL()">Change backend URL</span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div class="screen" id="appScreen">
+  <div class="topbar">
+    <div class="topbar-l">
+      <span style="font-size:1.1rem">⚡</span>
+      <h1 id="tbTitle">StockSync</h1>
+    </div>
+    <div class="topbar-r">
+      <button class="sync-btn" id="syncBtn" onclick="syncNow()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+        Sync
+      </button>
+      <div class="av" id="tbAv"></div>
+      <button class="out-btn" onclick="doLogout()">Exit</button>
+    </div>
+  </div>
+
+  <div class="content" id="mainContent">
+
+    <!-- Dashboard -->
+    <div class="page on" id="pgDash">
+      <div class="dash-top">
+        <div class="dash-greeting" id="dGreet"></div>
+        <div class="dash-sub" id="dSub"></div>
+      </div>
+      <div class="stat-row" id="dStats"></div>
+      <div id="noSheetMsg"></div>
+      <div class="section-lbl" id="dRecentLbl" style="display:none">My Recent Submissions</div>
+      <div id="dRecent"></div>
+    </div>
+
+    <!-- Fill Form -->
+    <div class="page" id="pgForm">
+      <div class="form-bar">
+        <div class="form-bar-top">
+          <h2 id="formTitle">Stock Form</h2>
+          <span id="formSheet" style="font-size:.72rem;color:var(--muted2)"></span>
+        </div>
+        <div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0"></div></div>
+        <div class="prog-info"><span id="pText">0 / 0</span><span id="pPct">0%</span></div>
+      </div>
+      <div class="search-bar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="5"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="searchQ" placeholder="Search item name or code…" oninput="reRender()" autocomplete="off">
+      </div>
+      <div class="filter-tabs" id="filterTabs"></div>
+      <div class="items-wrap" id="itemsWrap"></div>
+      <div class="submit-sticky">
+        <button onclick="submitAll()">Submit All Filled Items →</button>
+        <div class="sub-meta">
+          <span id="subCount">0 drafts ready</span>
+          <span style="color:var(--ok)">→ Syncs to Google Sheets</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin: Sheets -->
+    <div class="page" id="pgSheets">
+      <div class="page-head">
+        <h2>Upload Item Sheets</h2>
+        <p>Upload Vyapar .xlsx files here. Items will appear on all staff devices immediately after upload.</p>
+      </div>
+      <div class="drop-zone">
+        <input type="file" id="fileIn" accept=".xlsx,.xls,.csv" onchange="handleUpload(event)">
+        <div class="drop-icon">📊</div>
+        <h3>Tap to Upload Vyapar Sheet</h3>
+        <p>Accepts .xlsx · .xls · .csv<br>Needs "Item name*" column</p>
+      </div>
+      <div id="sheetList"></div>
+    </div>
+
+    <!-- Admin: Responses -->
+    <div class="page" id="pgResp">
+      <div class="page-head">
+        <h2>Submitted Responses</h2>
+        <p>All stock entries by all staff in real-time. Export Vyapar CSV to import back into Vyapar.</p>
+      </div>
+      <div class="resp-toolbar">
+        <button class="r-btn r-csv" onclick="exportCSV('plain')">⬇ Export CSV</button>
+        <button class="r-btn r-vya" onclick="exportCSV('vyapar')">📦 Vyapar CSV</button>
+        <button class="r-btn r-gs" onclick="loadResponses()">🔄 Refresh</button>
+      </div>
+      <div id="respList"></div>
+    </div>
+
+    <!-- Admin: Settings -->
+    <div class="page" id="pgSett">
+      <div class="page-head">
+        <h2>Settings</h2>
+        <p>Backend URL, Admin PIN, preferences.</p>
+      </div>
+      <div class="sett-section">
+        <div class="sett-lbl">Backend</div>
+        <div class="sett-card">
+          <div class="sett-row">
+            <h4>Apps Script URL</h4>
+            <p>The Google Apps Script Web App URL that powers the backend.</p>
+            <input id="gsURLDisp" type="url" placeholder="Configured" readonly style="opacity:.6;cursor:default">
+          </div>
+          <div class="sett-row">
+            <h4>Change Backend URL</h4>
+            <p>Replace with a new Apps Script URL if needed.</p>
+            <input id="gsURLNew" type="url" placeholder="Paste new URL here">
+            <button onclick="updateURL()" style="margin-top:8px;padding:8px 14px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif;">Update URL</button>
+          </div>
+        </div>
+        <div class="sett-lbl">Security</div>
+        <div class="sett-card">
+          <div class="sett-row">
+            <h4>Change Admin PIN</h4>
+            <p>Must be exactly 4 digits. Stored in Google Sheets.</p>
+            <input id="newPIN" type="password" placeholder="New 4-digit PIN" maxlength="4" inputmode="numeric">
+            <button onclick="changePIN()" style="margin-top:8px;padding:8px 14px;border:1px solid var(--admin);background:transparent;color:var(--admin);border-radius:8px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif;">Save PIN</button>
+          </div>
+        </div>
+        <div class="sett-lbl">Preferences</div>
+        <div class="sett-card">
+          <div class="sett-row-inline">
+            <div>
+              <h4 style="font-size:.85rem">Auto-advance after save</h4>
+              <p style="font-size:.7rem;color:var(--muted2)">Jump to next unfilled item</p>
+            </div>
+            <button class="tog on" id="togAdv" onclick="togSett('adv')"></button>
+          </div>
+          <div class="sett-row-inline">
+            <div>
+              <h4 style="font-size:.85rem">Show optional fields</h4>
+              <p style="font-size:.7rem;color:var(--muted2)">Location, Tax Rate, Notes</p>
+            </div>
+            <button class="tog on" id="togOpt" onclick="togSett('opt')"></button>
+          </div>
+        </div>
+        <div class="sett-lbl">Data</div>
+        <div class="sett-card">
+          <div class="sett-row-inline">
+            <div>
+              <h4 style="font-size:.85rem">Clear all responses</h4>
+              <p style="font-size:.7rem;color:var(--muted2)">Deletes from Google Sheets too</p>
+            </div>
+            <button onclick="clearData('resp')" style="padding:6px 12px;border:1px solid var(--danger);background:transparent;color:var(--danger);border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
+          </div>
+          <div class="sett-row-inline">
+            <div>
+              <h4 style="font-size:.85rem">Clear all sheets</h4>
+              <p style="font-size:.7rem;color:var(--muted2)">Removes uploaded item lists</p>
+            </div>
+            <button onclick="clearData('sheets')" style="padding:6px 12px;border:1px solid var(--danger);background:transparent;color:var(--danger);border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+
+  <div class="btabs hide" id="userTabs">
+    <button class="btab on" id="bt-dash" onclick="nav('pgDash','bt-dash')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button>
+    <button class="btab" id="bt-form" onclick="nav('pgForm','bt-form')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+      Fill Stock
+    </button>
+  </div>
+  <div class="btabs hide" id="adminTabs">
+    <button class="btab on" id="bt-sh" onclick="aNav('pgSheets','bt-sh')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      Sheets
+    </button>
+    <button class="btab" id="bt-re" onclick="aNav('pgResp','bt-re')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      Responses
+    </button>
+    <button class="btab" id="bt-se" onclick="aNav('pgSett','bt-se')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </button>
+  </div>
+</div>
+
+<div id="toast"></div>
+<div class="m-overlay hide" id="modal">
+  <div class="m-box">
+    <h3 id="mTitle"></h3>
+    <p id="mMsg"></p>
+    <div class="m-acts">
+      <button class="m-cancel" onclick="closeModal()">Cancel</button>
+      <button class="m-ok" id="mOk" onclick="runModal()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   HOW THIS WORKS
+   - Google Apps Script = backend database
+   - READ  → JSONP via <script> tag  (100% CORS-free)
+   - WRITE → fetch no-cors + form data (fire-and-forget,
+             then we re-read to confirm)
+   - localStorage caches URL + offline drafts only
+══════════════════════════════════════════════════ */
+
+const LS = {
+  get:(k,d)=>{ try{ const v=localStorage.getItem('ss3_'+k); return v!==null?JSON.parse(v):d; }catch(e){ return d; }},
+  set:(k,v)=>{ try{ localStorage.setItem('ss3_'+k,JSON.stringify(v)); }catch(e){} }
+};
+
+let GAS_URL = LS.get('gasURL','');
+
+let S = {
+  role:'', name:'', loginRole:'user',
+  items:[], responses:{},
+  settings:{ pin:'1234', adv:true, opt:true },
+  openItem:null, activeFilter:'all',
+  draft:{}, modalCb:null,
+};
+
+/* ── JSONP READ (GET) — works from any origin, no CORS ── */
+function gasGet(params){
+  return new Promise((resolve, reject)=>{
+    if(!GAS_URL){ reject(new Error('No backend URL set')); return; }
+
+    const cbName = 'gcb_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+    const timeout = setTimeout(()=>{
+      delete window[cbName];
+      const s = document.getElementById(cbName);
+      if(s) s.remove();
+      reject(new Error('Request timed out. Check the URL and make sure deployment is "Anyone".'));
+    }, 15000);
+
+    window[cbName] = function(data){
+      clearTimeout(timeout);
+      delete window[cbName];
+      const s = document.getElementById(cbName);
+      if(s) s.remove();
+      resolve(data);
+    };
+
+    const p = new URLSearchParams({ ...params, callback: cbName });
+    const script = document.createElement('script');
+    script.id  = cbName;
+    script.src = GAS_URL + '?' + p.toString();
+    script.onerror = ()=>{
+      clearTimeout(timeout);
+      delete window[cbName];
+      script.remove();
+      reject(new Error('Script load failed. Paste URL again and redeploy.'));
+    };
+    document.head.appendChild(script);
+  });
+}
+
+/* ── no-cors POST (WRITE) — sends data, can't read response ──
+   We use fetch no-cors which always "succeeds" from browser side.
+   Apps Script receives it fine. We then re-read with gasGet to confirm. */
+async function gasPost(action, data){
+  if(!GAS_URL) throw new Error('No backend URL set');
+  const body = new URLSearchParams({ action, data: JSON.stringify(data) });
+  // no-cors: browser sends the request, ignores response — avoids CORS block
+  await fetch(GAS_URL, {
+    method: 'POST',
+    mode:   'no-cors',
+    body,
+    headers:{ 'Content-Type':'application/x-www-form-urlencoded' }
+  });
+  // Small wait for Sheets to commit, then return ok
+  await new Promise(r => setTimeout(r, 800));
+  return { status:'ok' };
+}
+
+/* ══════════════════════════════════════════════════
+   LOADING
+══════════════════════════════════════════════════ */
+function showLoading(msg='Loading…'){
+  document.getElementById('loadingOverlay').classList.remove('hide');
+  document.getElementById('loadingMsg').textContent=msg;
+}
+function hideLoading(){ document.getElementById('loadingOverlay').classList.add('hide'); }
+
+/* ══════════════════════════════════════════════════
+   SETUP & URL
+══════════════════════════════════════════════════ */
+function checkSetup(){
+  if(GAS_URL){
+    document.getElementById('setupView').classList.add('hide');
+    document.getElementById('loginView').classList.remove('hide');
+  } else {
+    document.getElementById('setupView').classList.remove('hide');
+    document.getElementById('loginView').classList.add('hide');
+  }
+}
+
+async function saveSetupURL(){
+  const u = document.getElementById('setupURL').value.trim();
+  if(!u){ toast('❌ Paste the Apps Script URL first'); return; }
+  if(!u.includes('script.google.com')){
+    toast('❌ URL must be from script.google.com'); return;
+  }
+  if(!u.includes('/exec')){
+    toast('❌ URL must end with /exec — copy from Deploy → Manage Deployments'); return;
+  }
+  // Save URL immediately — no blocking ping test
+  GAS_URL = u;
+  LS.set('gasURL', GAS_URL);
+  checkSetup(); // show login screen right away
+  showLoading('Testing connection…');
+  // Test silently in background
+  try{
+    const r = await gasGet({ action:'ping' });
+    hideLoading();
+    toast(r && r.status==='ok' ? '✅ Connected! Enter your name to log in.' : '✅ URL saved. Try logging in.');
+  } catch(e){
+    hideLoading();
+    toast('✅ URL saved. Log in to verify — if it fails, check deployment is set to Anyone.');
+  }
+}
+
+function resetURL(){ GAS_URL=''; LS.set('gasURL',''); checkSetup(); }
+function updateURL(){
+  const u=document.getElementById('gsURLNew').value.trim();
+  if(!u){ toast('Paste a URL first'); return; }
+  GAS_URL=u; LS.set('gasURL',u); toast('✅ URL updated'); loadSettUI();
+}
+
+/* ══════════════════════════════════════════════════
+   LOGIN
+══════════════════════════════════════════════════ */
+function setRole(r){
+  S.loginRole=r;
+  document.getElementById('rt-user').className='role-tab'+(r==='user'?' sel-user':'');
+  document.getElementById('rt-admin').className='role-tab'+(r==='admin'?' sel-admin':'');
+  document.getElementById('pin-grp').classList.toggle('hide',r!=='admin');
+  const lb=document.getElementById('lb');
+  lb.className='btn-login '+(r==='admin'?'btn-admin':'btn-user');
+  lb.textContent=r==='admin'?'Enter as Admin →':'Enter as Staff →';
+}
+
+async function doLogin(){
+  const n=document.getElementById('ln').value.trim();
+  if(!n){ toast('Enter your name'); return; }
+  showLoading('Signing in…');
+  try{
+    // Try to get settings (for PIN). Timeout is OK — use default PIN.
+    try{
+      const cfg = await gasGet({ action:'getSettings' });
+      if(cfg && cfg.status==='ok' && cfg.data) S.settings={ ...S.settings, ...cfg.data };
+    } catch(e){ /* offline or slow — use cached/default PIN */ }
+
+    if(S.loginRole==='admin'){
+      if(document.getElementById('lp').value !== S.settings.pin){
+        hideLoading(); toast('❌ Wrong PIN'); return;
+      }
+      S.role='admin';
+    } else { S.role='user'; }
+
+    S.name=n;
+    try{ await loadItems(); } catch(e){ console.warn('items load failed',e); }
+    try{ await loadResponses(); } catch(e){ console.warn('responses load failed',e); }
+
+    hideLoading();
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('appScreen').style.display='flex';
+    bootApp();
+  } catch(e){
+    hideLoading();
+    toast('❌ Login failed: '+e.message);
+  }
+}
+
+function doLogout(){
+  S.role=''; S.name=''; S.items=[]; S.responses={}; S.draft={};
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('appScreen').style.display='none';
+  document.getElementById('ln').value='';
+  document.getElementById('lp').value='';
+}
+
+/* ══════════════════════════════════════════════════
+   BOOT
+══════════════════════════════════════════════════ */
+function bootApp(){
+  const isA=S.role==='admin';
+  document.getElementById('userTabs').classList.toggle('hide',isA);
+  document.getElementById('adminTabs').classList.toggle('hide',!isA);
+  document.getElementById('tbTitle').textContent=isA?'Admin Panel':'StockSync';
+  const av=document.getElementById('tbAv');
+  av.className='av '+(isA?'av-a':'av-u');
+  av.textContent=S.name.substring(0,2).toUpperCase();
+
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.btab').forEach(b=>{b.classList.remove('on');b.classList.remove('on-a');});
+
+  if(isA){
+    document.getElementById('pgSheets').classList.add('on');
+    document.getElementById('bt-sh').classList.add('on','on-a');
+    renderSheets(); renderResponses(); loadSettUI();
+  } else {
+    document.getElementById('pgDash').classList.add('on');
+    document.getElementById('bt-dash').classList.add('on');
+    renderDash(); reRender();
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   SYNC
+══════════════════════════════════════════════════ */
+async function syncNow(){
+  const btn=document.getElementById('syncBtn');
+  btn.classList.add('spinning');
+  try{
+    await loadItems();
+    await loadResponses();
+    renderDash(); reRender();
+    if(S.role==='admin'){ renderSheets(); renderResponses(); }
+    toast('✅ Synced!');
+  } catch(e){ toast('❌ Sync failed: '+e.message); }
+  btn.classList.remove('spinning');
+}
+
+/* ══════════════════════════════════════════════════
+   DATA: ITEMS (load from Sheets)
+══════════════════════════════════════════════════ */
+async function loadItems(){
+  const r = await gasGet({ action:'getItems' });
+  if(r.status==='ok') S.items = r.data||[];
+}
+
+async function loadResponses(){
+  const r = await gasGet({ action:'getResponses' });
+  if(r.status==='ok'){
+    S.responses={};
+    (r.data||[]).forEach(row=>{ S.responses[row.itemId]=row; });
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   ITEM STATUS
+══════════════════════════════════════════════════ */
+function itemStatus(item){
+  const resp=S.responses[item.id];
+  const draft=S.draft[item.id];
+  if(resp) return draft?'revising':'submitted';
+  if(draft) return 'drafted';
+  if(Number(item.salePrice)>0||Number(item.purchasePrice)>0||Number(item.stock)>0) return 'has-data';
+  return 'vacant';
+}
+
+/* ══════════════════════════════════════════════════
+   NAV
+══════════════════════════════════════════════════ */
+function nav(pg,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#userTabs .btab').forEach(b=>b.classList.remove('on'));
+  document.getElementById(pg).classList.add('on');
+  document.getElementById(btn).classList.add('on');
+  if(pg==='pgDash') renderDash();
+  if(pg==='pgForm') reRender();
+}
+function aNav(pg,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('#adminTabs .btab').forEach(b=>{b.classList.remove('on');b.classList.remove('on-a');});
+  document.getElementById(pg).classList.add('on');
+  document.getElementById(btn).classList.add('on','on-a');
+  if(pg==='pgSheets') renderSheets();
+  if(pg==='pgResp')   renderResponses();
+  if(pg==='pgSett')   loadSettUI();
+}
+
+/* ══════════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════════ */
+function renderDash(){
+  document.getElementById('dGreet').textContent=`Hello, ${S.name}!`;
+  const sh = S.items.length ? 'Active' : null;
+  document.getElementById('dSub').textContent = sh ? `${S.items.length} items loaded · synced from Google Sheets` : 'No items loaded yet';
+
+  const total=S.items.length;
+  const submitted=S.items.filter(i=>S.responses[i.id]).length;
+  const vacant=S.items.filter(i=>itemStatus(i)==='vacant').length;
+  const hasData=S.items.filter(i=>itemStatus(i)==='has-data').length;
+
+  document.getElementById('dStats').innerHTML=`
+    <div class="stat"><div class="lbl">📦 Total Items</div><div class="num">${total||'—'}</div><div class="hint">in active sheet</div></div>
+    <div class="stat"><div class="lbl">✅ Submitted</div><div class="num" style="color:var(--ok)">${submitted}</div><div class="hint">by all staff</div></div>
+    <div class="stat"><div class="lbl">⬜ Vacant</div><div class="num" style="color:var(--warn)">${vacant}</div><div class="hint">no data at all</div></div>
+    <div class="stat"><div class="lbl">📋 Has Data</div><div class="num" style="color:var(--accent)">${hasData}</div><div class="hint">from sheet</div></div>`;
+
+  document.getElementById('noSheetMsg').innerHTML = !total
+    ? `<div class="info-box warn"><h4>No Items Loaded</h4><p>Admin must upload and activate a Vyapar sheet. All devices will see it instantly.</p></div>`
+    : '';
+
+  const myR=Object.values(S.responses).filter(r=>r.by===S.name).sort((a,b)=>b.ts-a.ts).slice(0,6);
+  const rl=document.getElementById('dRecent');
+  const lbl=document.getElementById('dRecentLbl');
+  if(myR.length){
+    lbl.style.display='block';
+    rl.innerHTML=myR.map(r=>`
+      <div class="mini-item">
+        <div class="mi-left"><h4>${r.itemName}</h4><span>${r.code||'—'} · ${timeAgo(r.ts)}</span></div>
+        <div class="mi-right">
+          <span class="badge b-done">✓ Submitted</span>
+          <span style="font-size:.82rem;font-weight:700;color:var(--ok)">${r.qty} pcs</span>
+        </div>
+      </div>`).join('');
+  } else { lbl.style.display='none'; rl.innerHTML=''; }
+}
+
+/* ══════════════════════════════════════════════════
+   FORM & FILTERS
+══════════════════════════════════════════════════ */
+function buildFilters(){
+  const counts={all:S.items.length,vacant:0,'has-data':0,drafted:0,submitted:0};
+  S.items.forEach(i=>{ const s=itemStatus(i); if(counts[s]!==undefined) counts[s]++; });
+  const tabs=[
+    {k:'all',label:`All (${counts.all})`},
+    {k:'vacant',label:`⬜ Vacant (${counts.vacant})`},
+    {k:'has-data',label:`📋 Has Data (${counts['has-data']})`},
+    {k:'drafted',label:`✏️ Draft (${counts.drafted})`},
+    {k:'submitted',label:`✅ Done (${counts.submitted})`},
+  ];
+  document.getElementById('filterTabs').innerHTML=tabs.map(t=>
+    `<button class="ftab${S.activeFilter===t.k?' on':''}" onclick="setFilter('${t.k}',this)">${t.label}</button>`
+  ).join('');
+}
+
+function setFilter(k,btn){
+  S.activeFilter=k;
+  document.querySelectorAll('.ftab').forEach(b=>{b.classList.remove('on');b.classList.remove('on-warn');});
+  btn.classList.add('on');
+  if(k==='vacant') btn.classList.add('on-warn');
+  reRender();
+}
+
+function reRender(){
+  document.getElementById('formTitle').textContent='Stock Count Form';
+  document.getElementById('formSheet').textContent=S.items.length?`${S.items.length} items`:'No sheet';
+
+  const q=(document.getElementById('searchQ').value||'').trim().toLowerCase();
+  let filtered=!q?[...S.items]:S.items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
+  if(S.activeFilter!=='all') filtered=filtered.filter(i=>itemStatus(i)===S.activeFilter);
+
+  const total=S.items.length;
+  const done=S.items.filter(i=>S.responses[i.id]||S.draft[i.id]).length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('pFill').style.width=pct+'%';
+  document.getElementById('pText').textContent=`${done} / ${total} entries`;
+  document.getElementById('pPct').textContent=pct+'%';
+  document.getElementById('subCount').textContent=`${Object.keys(S.draft).filter(id=>S.items.find(i=>i.id==id)).length} drafts ready`;
+
+  buildFilters();
+
+  if(!S.items.length){
+    document.getElementById('itemsWrap').innerHTML=`<div class="empty-state"><div class="ei">📭</div><h3>No items loaded</h3><p>Admin uploads a Vyapar sheet — it appears here on all devices</p></div>`;
+    return;
+  }
+  if(!filtered.length){
+    document.getElementById('itemsWrap').innerHTML=`<div class="empty-state"><div class="ei">🔍</div><h3>No items match</h3><p>Try a different search or filter</p></div>`;
+    return;
+  }
+  document.getElementById('itemsWrap').innerHTML=filtered.map((item,idx)=>renderItemCard(item,idx)).join('');
+}
+
+function renderItemCard(item,idx){
+  const st=itemStatus(item);
+  const r=S.responses[item.id];
+  const d=S.draft[item.id];
+  const isOpen=S.openItem===item.id;
+
+  let badge='',cardClass='item-card';
+  if(st==='submitted') { badge=`<span class="badge b-done">✓ Submitted</span>`; cardClass+=' ic-done'; }
+  else if(st==='has-data') { badge=`<span class="badge b-pend">📋 Has Data</span>`; }
+  else if(st==='drafted')  { badge=`<span class="badge b-rev">✏️ Draft</span>`; }
+  else if(st==='revising') { badge=`<span class="badge b-rev">🔄 Revising</span>`; cardClass+=' ic-rev'; }
+  else                     { badge=`<span class="badge b-pend">⬜ Vacant</span>`; }
+  if(isOpen) cardClass+=' open';
+
+  // existing data preview pills (only when closed)
+  let existingSnip='';
+  if(!isOpen){
+    const eQty=r?.qty??item.stock;
+    const eSP=r?.sp??item.salePrice;
+    const eCP=r?.cp??item.purchasePrice;
+    if(eQty||eSP||eCP){
+      existingSnip=`<div class="ic-existing">
+        ${eQty?`<div class="ex-pill"><span>Qty</span><strong>${eQty}</strong></div>`:''}
+        ${eSP?`<div class="ex-pill"><span>Sale ₹</span><strong>${eSP}</strong></div>`:''}
+        ${eCP?`<div class="ex-pill"><span>Cost ₹</span><strong>${eCP}</strong></div>`:''}
+      </div>`;
+    }
+  }
+
+  const fv=k=>{
+    if(d&&d[k]!==undefined&&d[k]!=='') return d[k];
+    if(r&&r[k]!==undefined&&r[k]!=='') return r[k];
+    if(item[k]) return item[k];
+    return '';
+  };
+
+  const isRevise=st==='submitted'||st==='revising';
+  const showOpt=S.settings.opt;
+
+  return `<div class="${cardClass}" id="ic-${item.id}">
+    <div class="ic-head" onclick="toggleItem(${item.id})">
+      <div class="ic-num">#${idx+1}</div>
+      <div class="ic-info">
+        <div class="ic-name">${item.name}</div>
+        <div class="ic-code">Code: ${item.code||'—'}</div>
+        <div class="ic-meta">${badge}</div>
+      </div>
+      <div class="ic-right">
+        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+    ${existingSnip}
+    <div class="ic-body">
+      ${isRevise?`<div class="revise-notice">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        <p>Already submitted. Saving will <strong>revise</strong> this entry in Google Sheets.</p>
+      </div>`:''}
+      <div class="fields-section">
+        <div class="fields-lbl"><span class="req-dot"></span> Mandatory — all three required</div>
+        <div class="f3-grid">
+          <div class="field">
+            <label>CURRENT QTY <span class="req-star">*</span></label>
+            <input type="number" id="f-${item.id}-qty" value="${fv('qty')||fv('stock')||''}" placeholder="50" inputmode="decimal" oninput="onDraft(${item.id})">
+            <span class="err-msg hide" id="e-${item.id}-qty">Required</span>
+          </div>
+          <div class="field">
+            <label>SALE PRICE ₹ <span class="req-star">*</span></label>
+            <input type="number" id="f-${item.id}-sp" value="${fv('sp')||fv('salePrice')||''}" placeholder="150" inputmode="decimal" oninput="onDraft(${item.id})">
+            <span class="err-msg hide" id="e-${item.id}-sp">Required</span>
+          </div>
+          <div class="field">
+            <label>COST PRICE ₹ <span class="req-star">*</span></label>
+            <input type="number" id="f-${item.id}-cp" value="${fv('cp')||fv('purchasePrice')||''}" placeholder="120" inputmode="decimal" oninput="onDraft(${item.id})">
+            <span class="err-msg hide" id="e-${item.id}-cp">Required</span>
+          </div>
+        </div>
+        ${showOpt?`
+        <div class="fields-lbl" style="margin-top:4px"><span class="ok-dot"></span> Optional</div>
+        <div class="f2-grid">
+          <div class="field"><label>MIN STOCK</label><input type="number" id="f-${item.id}-min" value="${fv('min')||fv('minStock')||''}" placeholder="5" inputmode="decimal" oninput="onDraft(${item.id})"></div>
+          <div class="field"><label>LOCATION</label><input type="text" id="f-${item.id}-loc" value="${fv('loc')||fv('location')||''}" placeholder="Store 1" oninput="onDraft(${item.id})"></div>
+          <div class="field"><label>TAX RATE %</label><input type="number" id="f-${item.id}-tax" value="${fv('tax')||fv('taxRate')||''}" placeholder="18" inputmode="decimal" oninput="onDraft(${item.id})"></div>
+          <div class="field"><label>NOTES</label><input type="text" id="f-${item.id}-notes" value="${fv('notes')||''}" placeholder="Remark" oninput="onDraft(${item.id})"></div>
+        </div>`:''}
+      </div>
+      <div class="ic-actions">
+        <button class="ic-btn ${isRevise?'btn-revise':'btn-save'}" onclick="saveItem(${item.id})">
+          ${isRevise?'🔄 Revise & Save':'✓ Save Entry'}
+        </button>
+        <button class="ic-btn btn-skip" onclick="skipItem(${item.id})">Skip</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   ITEM ACTIONS
+══════════════════════════════════════════════════ */
+function toggleItem(id){
+  S.openItem=S.openItem===id?null:id;
+  reRender();
+  if(S.openItem){
+    setTimeout(()=>{ const el=document.getElementById('ic-'+id); if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'}); },100);
+  }
+}
+
+function onDraft(id){
+  const g=f=>{ const el=document.getElementById(`f-${id}-${f}`); return el?el.value:''; };
+  S.draft[id]={ qty:g('qty'),sp:g('sp'),cp:g('cp'),min:g('min'),loc:g('loc'),tax:g('tax'),notes:g('notes') };
+}
+
+async function saveItem(id){
+  const item=S.items.find(i=>i.id===id); if(!item) return;
+  const g=f=>{ const el=document.getElementById(`f-${id}-${f}`); return (el?el.value:'').trim(); };
+  const qty=g('qty'), sp=g('sp'), cp=g('cp');
+
+  let valid=true;
+  [['qty',qty],['sp',sp],['cp',cp]].forEach(([f,v])=>{
+    const err=document.getElementById(`e-${id}-${f}`);
+    const inp=document.getElementById(`f-${id}-${f}`);
+    if(v===''){
+      valid=false;
+      err&&err.classList.remove('hide');
+      inp&&inp.classList.add('err');
+    } else {
+      err&&err.classList.add('hide');
+      inp&&inp.classList.remove('err');
+    }
+  });
+  if(!valid){ toast('⚠️ Qty, Sale Price and Cost Price are all required'); return; }
+
+  const wasSubmitted=!!S.responses[id];
+  const payload={
+    itemId:id, itemName:item.name, code:item.code||'',
+    qty, sp, cp,
+    min:g('min'), loc:g('loc'), tax:g('tax'), notes:g('notes'),
+    by:S.name, ts:Date.now(), isRevision:wasSubmitted
+  };
+
+  showLoading('Saving to Google Sheets…');
+  try{
+    const r=await gasPost('saveResponse', payload);
+    if(r.status!=='ok') throw new Error(r.message);
+    S.responses[id]=payload;
+    delete S.draft[id];
+    hideLoading();
+    toast(wasSubmitted?'🔄 Revised & synced!':'✅ Saved to Google Sheets!');
+    S.openItem=null;
+    if(S.settings.adv) advanceNext(id);
+    else reRender();
+  } catch(e){
+    hideLoading();
+    // Save to draft if offline
+    S.draft[id]=payload;
+    toast('⚠️ Saved as draft (offline). Will sync on Submit.');
+    reRender();
+  }
+}
+
+function advanceNext(id){
+  const idx=S.items.findIndex(i=>i.id===id);
+  const next=S.items.slice(idx+1).find(i=>!S.responses[i.id]);
+  S.openItem=next?next.id:null;
+  reRender();
+  if(next) setTimeout(()=>{ const el=document.getElementById('ic-'+next.id); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },150);
+}
+
+function skipItem(id){ S.openItem=null; reRender(); }
+
+/* ══════════════════════════════════════════════════
+   SUBMIT ALL (flush drafts)
+══════════════════════════════════════════════════ */
+async function submitAll(){
+  const draftIds=Object.keys(S.draft).filter(id=>S.items.find(i=>i.id==id));
+  if(!draftIds.length){ toast(Object.keys(S.responses).length?'✅ All items already submitted':'⚠️ Nothing filled yet'); return; }
+
+  showModal('Submit All Drafts',`Push ${draftIds.length} drafted item(s) to Google Sheets?`,false,async()=>{
+    showLoading(`Submitting ${draftIds.length} items…`);
+    let ok=0;
+    for(const id of draftIds){
+      const item=S.items.find(i=>i.id==id);
+      if(!item) continue;
+      const d=S.draft[id];
+      const payload={ itemId:id, itemName:item.name, code:item.code||'', ...d, by:S.name, ts:Date.now(), isRevision:false };
+      try{
+        const r=await gasPost('saveResponse',payload);
+        if(r.status==='ok'){ S.responses[id]=payload; delete S.draft[id]; ok++; }
+      } catch(e){}
+    }
+    hideLoading();
+    toast(`✅ ${ok} items synced to Google Sheets!`);
+    reRender(); renderDash();
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   ADMIN: SHEET UPLOAD
+══════════════════════════════════════════════════ */
+function handleUpload(e){
+  const f=e.target.files[0]; if(!f) return;
+  const ext=f.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){
+    const r=new FileReader();
+    r.onload=ev=>parseAndUpload(csvRows(ev.target.result),f.name);
+    r.readAsText(f);
+  } else {
+    const r=new FileReader();
+    r.onload=ev=>{ const wb=XLSX.read(ev.target.result,{type:'array'}); parseAndUpload(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1}),f.name); };
+    r.readAsArrayBuffer(f);
+  }
+  e.target.value='';
+}
+function csvRows(text){ return text.split('\n').map(r=>r.split(',').map(c=>c.replace(/^"|"$/g,'').trim())); }
+
+async function parseAndUpload(rows,fname){
+  if(!rows.length){ toast('❌ Empty file'); return; }
+  let hi=rows.findIndex(r=>r.some(c=>(c||'').toString().toLowerCase().includes('item name')));
+  if(hi<0) hi=0;
+  const H=rows[hi].map(h=>(h||'').toString().toLowerCase().trim());
+  const ci=k=>H.findIndex(h=>h.includes(k));
+  const iName=Math.max(ci('item name'),0),iCode=ci('item code'),iSP=ci('sale price'),iCP=ci('purchase price');
+  const iStk=ci('opening stock'),iMin=ci('minimum stock'),iLoc=ci('item location'),iTax=ci('tax rate');
+
+  const items=[];
+  for(let r=hi+1;r<rows.length;r++){
+    const row=rows[r];
+    const name=(row[iName]||'').toString().trim();
+    if(!name) continue;
+    items.push({
+      id:r, name, code:iCode>=0?(row[iCode]||'').toString().trim():'',
+      salePrice:iSP>=0?Number(row[iSP]||0):0, purchasePrice:iCP>=0?Number(row[iCP]||0):0,
+      stock:iStk>=0?Number(row[iStk]||0):0, minStock:iMin>=0?Number(row[iMin]||0):0,
+      location:iLoc>=0?(row[iLoc]||'').toString().trim():'', taxRate:iTax>=0?Number(row[iTax]||0):0,
+    });
+  }
+  if(!items.length){ toast('❌ No items found'); return; }
+
+  showLoading(`Uploading ${items.length} items to Google Sheets…`);
+  try{
+    const r=await gasPost('saveItems',{ name:fname, items, uploaded:Date.now() });
+    if(r.status!=='ok') throw new Error(r.message);
+    S.items=items;
+    hideLoading();
+    const vacant=items.filter(i=>!i.salePrice&&!i.purchasePrice&&!i.stock).length;
+    toast(`✅ ${items.length} items uploaded! ${vacant} vacant, ${items.length-vacant} have data`);
+    await loadItems();
+    renderSheets(); reRender(); renderDash();
+  } catch(e){ hideLoading(); toast('❌ Upload failed: '+e.message); }
+}
+
+function renderSheets(){
+  const el=document.getElementById('sheetList');
+  if(!S.items.length){ el.innerHTML=`<div class="empty-state"><div class="ei">📭</div><h3>No sheet uploaded</h3><p>Upload a Vyapar Excel export above</p></div>`; return; }
+  const vacant=S.items.filter(i=>!i.salePrice&&!i.purchasePrice&&!i.stock).length;
+  el.innerHTML=`<div class="sheet-card">
+    <div class="sh-icon">📊</div>
+    <div class="sh-info">
+      <h4>Active Sheet <span class="active-tag">ACTIVE</span></h4>
+      <p>${S.items.length} items · ${S.items.length-vacant} with existing data · ${vacant} vacant</p>
+    </div>
+    <div class="sh-act"><button class="sh-btn sh-del-btn" onclick="clearData('sheets')">Remove</button></div>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════
+   ADMIN: RESPONSES
+══════════════════════════════════════════════════ */
+function renderResponses(){
+  const el=document.getElementById('respList');
+  const all=Object.values(S.responses);
+  if(!all.length){ el.innerHTML=`<div class="empty-state"><div class="ei">📭</div><h3>No submissions yet</h3><p>Staff will submit stock entries here</p></div>`; return; }
+  el.innerHTML=all.slice().sort((a,b)=>b.ts-a.ts).map(r=>`
+    <div class="resp-card">
+      <div class="rc-top">
+        <div><div class="rc-name">${r.itemName}</div><div class="rc-by">${r.code||'—'} · by ${r.by} · ${timeAgo(r.ts)}${r.isRevision?' · <span style="color:var(--warn)">Revised</span>':''}</div></div>
+      </div>
+      <div class="rc-vals">
+        <div class="rv"><span>Qty</span><strong>${r.qty||'—'}</strong></div>
+        <div class="rv"><span>Sale ₹</span><strong>${r.sp||'—'}</strong></div>
+        <div class="rv"><span>Cost ₹</span><strong>${r.cp||'—'}</strong></div>
+        ${r.min?`<div class="rv"><span>Min</span><strong>${r.min}</strong></div>`:''}
+        ${r.loc?`<div class="rv"><span>Location</span><strong>${r.loc}</strong></div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+function exportCSV(mode){
+  const all=Object.values(S.responses);
+  if(!all.length){ toast('No data to export'); return; }
+  let rows,fn;
+  if(mode==='vyapar'){
+    rows=[['Item name*','Item code','Sale price','Purchase price','Opening stock quantity','Minimum stock quantity','Item Location','Tax Rate'],
+      ...all.map(r=>[r.itemName,r.code,r.sp,r.cp,r.qty,r.min||'',r.loc||'',r.tax||''])];
+    fn=`VyaparImport_${dstr()}.csv`;
+  } else {
+    rows=[['Item Name','Code','Qty','Sale Price','Cost Price','Min Stock','Location','Tax','Notes','By','Timestamp'],
+      ...all.map(r=>[r.itemName,r.code,r.qty,r.sp,r.cp,r.min||'',r.loc||'',r.tax||'',r.notes||'',r.by,new Date(r.ts).toLocaleString('en-IN')])];
+    fn=`StockExport_${dstr()}.csv`;
+  }
+  const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=fn; a.click();
+  toast(`✅ ${fn} downloaded!`);
+}
+
+/* ══════════════════════════════════════════════════
+   SETTINGS
+══════════════════════════════════════════════════ */
+function loadSettUI(){
+  document.getElementById('gsURLDisp').value=GAS_URL||'';
+  document.getElementById('togAdv').className='tog'+(S.settings.adv?' on':'');
+  document.getElementById('togOpt').className='tog'+(S.settings.opt?' on':'');
+}
+function togSett(k){ S.settings[k]=!S.settings[k]; loadSettUI(); reRender(); }
+async function changePIN(){
+  const p=document.getElementById('newPIN').value.trim();
+  if(p.length!==4||isNaN(p)){ toast('PIN must be exactly 4 digits'); return; }
+  showLoading('Saving PIN…');
+  try{
+    const r=await gasPost('saveSetting',{ key:'pin', value:p });
+    if(r.status==='ok'){ S.settings.pin=p; hideLoading(); toast('✅ PIN updated'); }
+    else throw new Error(r.message);
+  } catch(e){ hideLoading(); toast('❌ Failed: '+e.message); }
+}
+async function clearData(type){
+  showModal('Confirm Clear', type==='resp'?'Delete all submitted responses from Google Sheets?':'Remove item list from Google Sheets?',false,async()=>{
+    showLoading('Clearing…');
+    try{
+      await gasPost('clearData',{ type });
+      if(type==='resp') S.responses={};
+      else { S.items=[]; }
+      hideLoading();
+      if(type==='resp') renderResponses(); else renderSheets();
+      renderDash(); reRender();
+      toast('Cleared from Google Sheets');
+    } catch(e){ hideLoading(); toast('❌ '+e.message); }
+  });
+}
+
+/* ══════════════════════════════════════════════════
+   MODAL & TOAST
+══════════════════════════════════════════════════ */
+function showModal(title,msg,warn,cb){
+  document.getElementById('mTitle').textContent=title;
+  document.getElementById('mMsg').textContent=msg;
+  document.getElementById('modal').classList.remove('hide');
+  S.modalCb=cb;
+}
+function closeModal(){ document.getElementById('modal').classList.add('hide'); S.modalCb=null; }
+function runModal(){ if(S.modalCb) S.modalCb(); closeModal(); }
+
+let tt;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+/* ══════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════ */
+function timeAgo(ts){
+  const d=Date.now()-ts;
+  if(d<60000) return 'just now';
+  if(d<3600000) return Math.floor(d/60000)+'m ago';
+  if(d<86400000) return Math.floor(d/3600000)+'h ago';
+  return Math.floor(d/86400000)+'d ago';
+}
+function dstr(){ const d=new Date(); return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`; }
+
+/* ══════════════════════════════════════════════════
+   COPY APPS SCRIPT
+══════════════════════════════════════════════════ */
+function copyScript(){
+const code=`// ═══════════════════════════════════════════════════════════
+// StockSync Backend — Google Apps Script  (JSONP + POST)
+// ═══════════════════════════════════════════════════════════
+// SETUP STEPS:
+// 1. Open script.google.com → paste this entire code → Save (Ctrl+S)
+// 2. Change SHEET_ID below to your Google Sheet ID
+//    (open your Sheet → copy the long ID from the URL between /d/ and /edit)
+// 3. Click Deploy → New Deployment
+//    · Type        : Web App
+//    · Execute as  : Me
+//    · Who has access : Anyone
+// 4. Click Deploy → Authorize (allow all permissions) → Copy the URL
+// 5. Paste the URL in the StockSync app setup screen
+// ═══════════════════════════════════════════════════════════
+
+const SHEET_ID     = 'PASTE_YOUR_GOOGLE_SHEET_ID_HERE';
+const SH_ITEMS     = 'Items';
+const SH_RESPONSES = 'Responses';
+const SH_SETTINGS  = 'Settings';
+
+// ─── doGet — handles JSONP reads (ping / getItems / getResponses / getSettings)
+// The app sends ?action=xxx&callback=fnName
+// We wrap response in callback(JSON) so browser JSONP works cross-origin
+function doGet(e) {
+  const cb = e.parameter.callback || '';   // JSONP callback name
+  try {
+    const action = e.parameter.action || 'ping';
+    const ss     = SpreadsheetApp.openById(SHEET_ID);
+    let result;
+
+    if (action === 'ping') {
+      result = { status:'ok', message:'StockSync is running' };
+    }
+
+    else if (action === 'getItems') {
+      const sheet = ss.getSheetByName(SH_ITEMS);
+      if (!sheet || sheet.getLastRow() < 2) {
+        result = { status:'ok', data:[] };
+      } else {
+        const rows = sheet.getRange(2, 1, sheet.getLastRow()-1, 10).getValues();
+        result = { status:'ok', data: rows.filter(r=>r[0]).map(r=>({
+          id:r[0], name:r[1], code:r[2],
+          salePrice:r[3], purchasePrice:r[4], stock:r[5],
+          minStock:r[6], location:r[7], taxRate:r[8]
+        }))};
+      }
+    }
+
+    else if (action === 'getResponses') {
+      const sheet = ss.getSheetByName(SH_RESPONSES);
+      if (!sheet || sheet.getLastRow() < 2) {
+        result = { status:'ok', data:[] };
+      } else {
+        const rows = sheet.getRange(2, 1, sheet.getLastRow()-1, 13).getValues();
+        result = { status:'ok', data: rows.filter(r=>r[0]).map(r=>({
+          itemId:r[0], itemName:r[1], code:r[2],
+          qty:r[3], sp:r[4], cp:r[5], min:r[6], loc:r[7],
+          tax:r[8], notes:r[9], by:r[10], ts:r[11], isRevision:r[12]
+        }))};
+      }
+    }
+
+    else if (action === 'getSettings') {
+      const sheet = getOrCreate(ss, SH_SETTINGS, ['Key','Value']);
+      const rows  = sheet.getLastRow() > 1
+        ? sheet.getRange(2,1,sheet.getLastRow()-1,2).getValues() : [];
+      const cfg   = {};
+      rows.forEach(r => { if(r[0]) cfg[r[0]] = r[1]; });
+      result = { status:'ok', data:{ pin: cfg['pin'] || '1234' } };
+    }
+
+    else {
+      result = { status:'ok', message:'unknown action: '+action };
+    }
+
+    // Wrap in JSONP callback if provided
+    const out = cb
+      ? cb + '(' + JSON.stringify(result) + ');'
+      : JSON.stringify(result);
+    return ContentService.createTextOutput(out)
+      .setMimeType(cb ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
+
+  } catch(err) {
+    const result = { status:'error', message: err.message };
+    const out = cb ? cb+'('+JSON.stringify(result)+');' : JSON.stringify(result);
+    return ContentService.createTextOutput(out)
+      .setMimeType(cb ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
+  }
+}
+
+// ─── doPost — handles writes (saveItems / saveResponse / saveSetting / clearData)
+// Receives application/x-www-form-urlencoded: action=xxx&data={...json...}
+function doPost(e) {
+  try {
+    const action = e.parameter.action;
+    const data   = JSON.parse(e.parameter.data || '{}');
+    const ss     = SpreadsheetApp.openById(SHEET_ID);
+
+    if (action === 'saveItems') {
+      const sheet = getOrCreate(ss, SH_ITEMS,
+        ['id','name','code','salePrice','purchasePrice','stock','minStock','location','taxRate','uploadedAt']);
+      if (sheet.getLastRow() > 1)
+        sheet.getRange(2,1,sheet.getLastRow()-1,10).clearContent();
+      const rows = data.items.map(i=>[
+        i.id, i.name, i.code||'', i.salePrice||0, i.purchasePrice||0,
+        i.stock||0, i.minStock||0, i.location||'', i.taxRate||0, data.uploaded||Date.now()
+      ]);
+      if (rows.length) sheet.getRange(2,1,rows.length,10).setValues(rows);
+      return jsonOut({ status:'ok', message: rows.length+' items saved' });
+    }
+
+    if (action === 'saveResponse') {
+      const sheet = getOrCreate(ss, SH_RESPONSES,
+        ['itemId','itemName','code','qty','sp','cp','min','loc','tax','notes','by','ts','isRevision']);
+      const id = String(data.itemId);
+      let rowNum = -1;
+      if (sheet.getLastRow() > 1) {
+        const ids = sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues().flat().map(String);
+        const idx = ids.indexOf(id);
+        if (idx > -1) rowNum = idx + 2;
+      }
+      const row = [id, data.itemName, data.code||'', data.qty, data.sp, data.cp,
+        data.min||'', data.loc||'', data.tax||'', data.notes||'',
+        data.by, data.ts, data.isRevision ? 'Yes' : 'No'];
+      if (rowNum > -1) sheet.getRange(rowNum,1,1,row.length).setValues([row]);
+      else sheet.appendRow(row);
+      return jsonOut({ status:'ok', message:'saved' });
+    }
+
+    if (action === 'saveSetting') {
+      const sheet = getOrCreate(ss, SH_SETTINGS, ['Key','Value']);
+      let rowNum = -1;
+      if (sheet.getLastRow() > 1) {
+        const keys = sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues().flat();
+        const idx  = keys.indexOf(data.key);
+        if (idx > -1) rowNum = idx + 2;
+      }
+      if (rowNum > -1) sheet.getRange(rowNum,2).setValue(data.value);
+      else sheet.appendRow([data.key, data.value]);
+      return jsonOut({ status:'ok', message:'setting saved' });
+    }
+
+    if (action === 'clearData') {
+      const shName = data.type === 'resp' ? SH_RESPONSES : SH_ITEMS;
+      const cols   = data.type === 'resp' ? 13 : 10;
+      const sheet  = ss.getSheetByName(shName);
+      if (sheet && sheet.getLastRow() > 1)
+        sheet.getRange(2,1,sheet.getLastRow()-1,cols).clearContent();
+      return jsonOut({ status:'ok', message:'cleared' });
+    }
+
+    return jsonOut({ status:'ok', message:'unknown action: '+action });
+  } catch(err) {
+    return jsonOut({ status:'error', message: err.message });
+  }
+}
+
+// ─── Helpers
+function getOrCreate(ss, name, headers) {
+  let sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+    sheet.appendRow(headers);
+    sheet.getRange(1,1,1,headers.length).setFontWeight('bold');
+  }
+  return sheet;
+}
+function jsonOut(obj) {
+  return ContentService.createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}`;
+  navigator.clipboard.writeText(code)
+    .then(()=>toast('📋 Apps Script copied! Paste into script.google.com'))
+    .catch(()=>{ alert('Copy this manually:\n\nGo to script.google.com, paste the code shown in the setup instructions'); });
+}
+
+/* ══════════════════════════════════════════════════
+   KEYBOARD
+══════════════════════════════════════════════════ */
+document.getElementById('ln').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('lp').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+document.getElementById('setupURL').addEventListener('keydown',e=>{ if(e.key==='Enter') saveSetupURL(); });
+
+/* ══════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════ */
+checkSetup();
+</script>
+</body>
+</html>
