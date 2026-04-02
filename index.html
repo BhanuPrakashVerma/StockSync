@@ -284,7 +284,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
   <!-- LOGIN STATE: URL already configured -->
   <div class="login-card hide" id="loginView">
     <div class="role-tabs">
-      <button class="role-tab sel-user" id="rt-user" onclick="setRole('user')">👤 Staff</button>
+      <button class="role-tab sel-user" id="rt-user" onclick="setRole('user')">👤 Member</button>
       <button class="role-tab" id="rt-admin" onclick="setRole('admin')">🛡 Admin</button>
     </div>
     <div class="f-group">
@@ -295,7 +295,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
       <label>Admin PIN</label>
       <input id="lp" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
     </div>
-    <button class="btn-login btn-user" id="lb" onclick="doLogin()">Enter as Staff →</button>
+    <button class="btn-login btn-user" id="lb" onclick="doLogin()">Enter as Member →</button>
     <div style="text-align:center;margin-top:10px;">
       <span style="font-size:.72rem;color:var(--muted);cursor:pointer;" onclick="resetURL()">Change backend URL</span>
     </div>
