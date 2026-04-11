@@ -484,7 +484,22 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
             <h4>Web App URL</h4>
             <p>Paste your Google Apps Script deployment URL here.</p>
             <input id="gsURLInp" type="url" placeholder="https://script.google.com/macros/s/…/exec">
-            <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveGASURL()">Save URL</button>
+            <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveGASURL()">Save URL & Test</button>
+            <!-- Deploy note — shown after saving URL -->
+            <div id="deployNote" class="hide" style="margin-top:12px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:13px;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:700;color:#86efac;margin-bottom:8px;">✅ URL saved on this device</div>
+              <div style="font-size:.72rem;color:var(--muted2);line-height:1.7;margin-bottom:10px;">
+                To make the app work on <strong style="color:var(--text)">all other phones and devices</strong>, you must embed this URL into the HTML file:<br><br>
+                1. Open <strong style="color:var(--text)">StockSync_v5_FINAL.html</strong> in a text editor (Notepad, VS Code)<br>
+                2. Find this line near the top of the &lt;script&gt; section:<br>
+                <code style="display:block;margin:6px 0;padding:6px 9px;background:var(--bg);border-radius:6px;font-size:.72rem;color:#fde047;">const HARDCODED_GAS_URL = '';</code>
+                3. Replace it with:<br>
+                <code id="deployURLDisplay" style="display:block;margin:6px 0;padding:6px 9px;background:var(--bg);border-radius:6px;font-size:.65rem;color:#86efac;word-break:break-all;"></code>
+                4. Upload the updated HTML to GitHub Pages / Netlify<br>
+                5. All staff open the same GitHub URL — no setup needed
+              </div>
+              <button onclick="copyDeployLine()" style="width:100%;padding:9px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:8px;color:#86efac;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">📋 Copy the Code Line to Replace</button>
+            </div>
           </div>
         </div>
 
@@ -596,8 +611,16 @@ const LS={
   set:(k,v)=>{try{localStorage.setItem('ss5_'+k,JSON.stringify(v));}catch(e){}}
 };
 
-/* GAS_URL only stored locally — admin sets it in settings */
-let GAS_URL = LS.get('gasURL','');
+/* ── DEPLOYMENT URL ──────────────────────────────────────────────
+   IMPORTANT: Replace the empty string below with your Apps Script URL.
+   This makes the app work for ALL users on ALL devices automatically.
+   After setting it here, upload the HTML to GitHub Pages / Netlify.
+   The URL you paste in Admin Settings is also saved to localStorage
+   as a fallback, but this hardcoded value is the source of truth.
+   ─────────────────────────────────────────────────────────────── */
+const HARDCODED_GAS_URL = 'https://script.google.com/macros/s/AKfycbzhuukJ4cGQNjLdhF4RL4X_QfVOnKxdXwDV48BZwunoMFdJXZfTWk_6FZBZSPjgmYLZnA/exec';
+
+let GAS_URL = HARDCODED_GAS_URL || LS.get('gasURL','');
 
 let S={
   role:'', name:'', loginRole:'user',
@@ -1559,8 +1582,15 @@ function saveGASURL(){
   const u=document.getElementById('gsURLInp').value.trim();
   if(!u){toast('Paste URL first');return;}
   if(!u.includes('script.google.com')||!u.includes('/exec')){toast('❌ Must be a /exec URL from script.google.com');return;}
-  GAS_URL=u; LS.set('gasURL',u);
-  toast('✅ URL saved! Sync to test connection.');
+  GAS_URL=u;
+  LS.set('gasURL',u);
+  toast('✅ URL saved for this device! Read the deploy note below.');
+  // Show the deploy instruction
+  const noteEl=document.getElementById('deployNote');
+  if(noteEl){
+    noteEl.classList.remove('hide');
+    document.getElementById('deployURLDisplay').textContent=u;
+  }
 }
 
 async function saveLocations(){
@@ -1615,6 +1645,15 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 /* ══════════════════════════════════════════════════
    COPY APPS SCRIPT
 ══════════════════════════════════════════════════ */
+function copyDeployLine(){
+  const url = document.getElementById('deployURLDisplay')?.textContent || GAS_URL;
+  if(!url){ toast('Save URL first'); return; }
+  const line = "const HARDCODED_GAS_URL = '" + url + "';";
+  navigator.clipboard.writeText(line)
+    .then(()=>toast('📋 Code line copied! Paste into the HTML file.'))
+    .catch(()=>toast('Manual copy: const HARDCODED_GAS_URL = \'' + url + '\';'));
+}
+
 function copyScript(){
 const code=`// ══════════════════════════════════════════════════════
 // StockSync v5 — Complete Backend — Google Apps Script
@@ -1627,7 +1666,7 @@ const code=`// ═════════════════════�
 // 4. Authorize → Copy the /exec URL → paste in Admin Settings
 // ══════════════════════════════════════════════════════
 
-const SHEET_ID = 'PASTE_YOUR_GOOGLE_SHEET_ID_HERE';
+const SHEET_ID = '1FtYlYtRArTqe5Wox_JkbG9MHt_3Cx5sG3pNrYPntzno';
 
 // Fixed sheet names
 const SH_META  = '_Meta';       // index of all uploaded item sheets
@@ -1643,9 +1682,16 @@ function getSalesSheetName() {
 }
 
 // ─── doGet: JSONP reads ───────────────────────────────
+// NOTE: Do NOT run doGet/doPost with the Run button in the editor.
+// Test using testDoGet() below, or open the /exec URL in a browser.
 function doGet(e) {
-  const cb     = (e.parameter && e.parameter.callback) || '';
-  const action = (e.parameter && e.parameter.action)   || 'ping';
+  // Guard against editor test-run (e is undefined when run manually)
+  if (!e || !e.parameter) {
+    return ContentService.createTextOutput(JSON.stringify({status:'ok',message:'StockSync running. Test via browser URL, not Run button.'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+  const cb     = e.parameter.callback || '';
+  const action = e.parameter.action   || 'ping';
   try {
     const ss = SpreadsheetApp.openById(SHEET_ID);
     let result;
@@ -1732,6 +1778,10 @@ function doGet(e) {
 
 // ─── doPost: writes ───────────────────────────────────
 function doPost(e) {
+  if (!e || !e.parameter) {
+    return ContentService.createTextOutput(JSON.stringify({status:'error',message:'doPost called without parameters. Use the app, not Run button.'}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
   try {
     const action = e.parameter.action;
     const data   = JSON.parse(e.parameter.data || '{}');
@@ -1852,6 +1902,28 @@ function doPost(e) {
   }
 }
 
+// ─── Test function (run THIS from editor, not doGet/doPost) ──
+// Select testDoGet from the function dropdown and click Run to test
+function testDoGet() {
+  const fakeEvent = { parameter: { action: 'ping', callback: '' } };
+  const result = doGet(fakeEvent);
+  Logger.log(result.getContent());
+  // Should log: {"status":"ok","message":"StockSync v5 running"}
+  // If it does, your script is working correctly.
+}
+
+function testConnection() {
+  try {
+    const ss = SpreadsheetApp.openById(SHEET_ID);
+    const name = ss.getName();
+    Logger.log('✅ Connected to: ' + name);
+    Logger.log('Sheets: ' + ss.getSheets().map(s=>s.getName()).join(', '));
+  } catch(err) {
+    Logger.log('❌ Error: ' + err.message);
+    Logger.log('Check your SHEET_ID value.');
+  }
+}
+
 // ─── Helpers ─────────────────────────────────────────
 function getOrCreate(ss, name, headers) {
   let ws = ss.getSheetByName(name);
@@ -1880,8 +1952,18 @@ document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')
    INIT — show login directly, no setup screen
 ══════════════════════════════════════════════════ */
 // Show note if no URL configured
+// If we have a hardcoded URL, sync it to localStorage immediately
+if(HARDCODED_GAS_URL && !LS.get('gasURL','')) {
+  LS.set('gasURL', HARDCODED_GAS_URL);
+}
+// Show note only if truly no URL configured anywhere
 if(!GAS_URL){
   document.getElementById('noURLNote').classList.remove('hide');
+}
+// Pre-fill the settings input if URL is known
+if(GAS_URL){
+  const inp = document.getElementById('gsURLInp');
+  if(inp) inp.value = GAS_URL;
 }
 </script>
 </body>
