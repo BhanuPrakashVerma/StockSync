@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="theme-color" content="#0b0f1a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,10 +12,9 @@
 <style>
 :root{
   --bg:#0b0f1a;--surface:#111827;--card:#162032;--card2:#1b2840;
-  --border:rgba(99,133,198,0.15);--border2:rgba(99,133,198,0.3);
-  --accent:#3b82f6;--accent2:#6366f1;
-  --admin:#f97316;
-  --ok:#22c55e;--warn:#eab308;--danger:#ef4444;
+  --border:rgba(99,133,198,.15);--border2:rgba(99,133,198,.3);
+  --accent:#3b82f6;--accent2:#6366f1;--admin:#f97316;
+  --ok:#22c55e;--warn:#eab308;--danger:#ef4444;--sell:#a855f7;
   --text:#e2e8f0;--muted:#64748b;--muted2:#94a3b8;
   --r:14px;--r2:10px;--shadow:0 8px 32px rgba(0,0,0,.6);
 }
@@ -26,446 +25,541 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .screen{position:fixed;inset:0;display:flex;flex-direction:column;}
 
 /* ══ LOGIN ══ */
-#loginScreen{background:var(--bg);align-items:center;justify-content:center;padding:28px;}
-.brand{text-align:center;margin-bottom:36px;}
-.brand h1{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.brand p{color:var(--muted2);font-size:.78rem;margin-top:5px;letter-spacing:.8px;text-transform:uppercase;}
-.login-card{width:100%;max-width:370px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:28px;box-shadow:var(--shadow);}
-.role-tabs{display:flex;background:var(--surface);border-radius:var(--r2);padding:3px;margin-bottom:20px;gap:3px;}
-.role-tab{flex:1;padding:10px;border:none;background:transparent;color:var(--muted2);border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s;}
-.role-tab.sel-user{background:var(--accent);color:#fff;}
-.role-tab.sel-admin{background:var(--admin);color:#fff;}
-.f-group{margin-bottom:16px;}
-.f-group label{display:block;font-size:.72rem;font-weight:600;color:var(--muted2);margin-bottom:6px;letter-spacing:.4px;text-transform:uppercase;}
-.f-group input{width:100%;padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
-.f-group input:focus{border-color:var(--accent);}
-
-/* ── SETUP SCREEN (no URL configured) ── */
-.setup-screen{width:100%;max-width:370px;}
-.setup-screen .setup-box{background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.3);border-radius:var(--r);padding:20px;margin-bottom:16px;}
-.setup-screen .setup-box h3{font-family:'Space Grotesk',sans-serif;font-size:.95rem;color:#fdba74;margin-bottom:10px;}
-.setup-screen .setup-box p{font-size:.75rem;color:var(--muted2);line-height:1.6;margin-bottom:10px;}
-.setup-screen .setup-box ol{font-size:.75rem;color:var(--muted2);line-height:1.8;padding-left:16px;}
-.setup-screen .setup-box ol li{margin-bottom:2px;}
-.setup-screen .setup-box code{background:var(--surface);padding:1px 6px;border-radius:4px;font-size:.78rem;color:var(--text);}
-
-.btn-login{width:100%;padding:13px;border:none;border-radius:var(--r2);font-size:.95rem;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif;}
-.btn-user{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
-.btn-admin{background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;}
-.btn-login:active{transform:scale(.98);opacity:.9;}
-.btn-copy{width:100%;padding:10px;border:1px solid var(--border2);background:transparent;color:var(--muted2);border-radius:var(--r2);font-size:.82rem;cursor:pointer;font-family:'Inter',sans-serif;margin-top:8px;transition:all .2s;}
-.btn-copy:hover{border-color:var(--accent);color:var(--text);}
+#loginScreen{background:var(--bg);align-items:center;justify-content:center;padding:28px;overflow-y:auto;}
+.brand{text-align:center;margin-bottom:32px;}
+.brand h1{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.brand p{color:var(--muted2);font-size:.75rem;margin-top:4px;letter-spacing:.8px;text-transform:uppercase;}
+.login-card{width:100%;max-width:360px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);}
+.role-tabs{display:flex;background:var(--surface);border-radius:var(--r2);padding:3px;margin-bottom:18px;gap:3px;}
+.rtab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted2);border-radius:8px;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.rtab.sel-u{background:var(--accent);color:#fff;}
+.rtab.sel-a{background:var(--admin);color:#fff;}
+.fg{margin-bottom:14px;}
+.fg label{display:block;font-size:.7rem;font-weight:600;color:var(--muted2);margin-bottom:5px;letter-spacing:.4px;text-transform:uppercase;}
+.fg input{width:100%;padding:11px 13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
+.fg input:focus{border-color:var(--accent);}
+.btn-main{width:100%;padding:12px;border:none;border-radius:var(--r2);font-size:.92rem;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif;margin-top:4px;}
+.btn-u{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
+.btn-a{background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;}
+.btn-main:active{transform:scale(.98);}
+.no-url-note{text-align:center;margin-top:12px;font-size:.72rem;color:var(--muted);padding:10px;background:rgba(249,115,22,.06);border-radius:8px;border:1px solid rgba(249,115,22,.2);}
 
 /* ══ APP SHELL ══ */
 #appScreen{display:none;}
-.topbar{height:56px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.topbar-l{display:flex;align-items:center;gap:10px;}
-.topbar-l h1{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;}
-.topbar-r{display:flex;align-items:center;gap:8px;}
-.av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.75rem;flex-shrink:0;}
+.topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.topbar-l{display:flex;align-items:center;gap:8px;}
+.topbar-l h1{font-family:'Space Grotesk',sans-serif;font-size:.93rem;font-weight:700;}
+.topbar-r{display:flex;align-items:center;gap:6px;}
+.av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0;}
 .av-u{background:linear-gradient(135deg,#3b82f6,#6366f1);}
 .av-a{background:linear-gradient(135deg,#f97316,#ef4444);}
-.out-btn{padding:5px 12px;border:1px solid var(--border2);background:transparent;color:var(--muted2);border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;}
-.sync-btn{padding:5px 10px;border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.08);color:#86efac;border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:4px;}
-.sync-btn.spinning svg{animation:spin .8s linear infinite;}
+.tb-btn{padding:5px 9px;border:1px solid var(--border2);background:transparent;color:var(--muted2);border-radius:7px;font-size:.68rem;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:3px;}
+.tb-btn.sync.spinning svg{animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
-
 .content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
 .content::-webkit-scrollbar{width:3px;}
 .content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
 .btabs{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;}
-.btab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 0 7px;gap:3px;border:none;background:transparent;color:var(--muted);font-size:10px;cursor:pointer;transition:all .2s;}
-.btab svg{width:20px;height:20px;}
+.btab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 0 5px;gap:3px;border:none;background:transparent;color:var(--muted);font-size:9px;cursor:pointer;transition:color .2s;}
+.btab svg{width:18px;height:18px;}
 .btab.on{color:var(--accent);}
 .btab.on-a{color:var(--admin)!important;}
 .page{display:none;flex-direction:column;min-height:100%;}
 .page.on{display:flex;}
 
-/* ══ LOADING OVERLAY ══ */
-#loadingOverlay{position:fixed;inset:0;background:rgba(11,15,26,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
-#loadingOverlay.hide{display:none!important;}
-.spinner{width:40px;height:40px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
-#loadingOverlay p{color:var(--muted2);font-size:.85rem;}
+/* ══ LOADING ══ */
+#loadOver{position:fixed;inset:0;background:rgba(11,15,26,.92);z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+#loadOver.hide{display:none!important;}
+.spinner{width:36px;height:36px;border:3px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+#loadMsg{color:var(--muted2);font-size:.82rem;}
+
+/* ══ COMMON COMPONENTS ══ */
+.page-head{padding:13px 14px;border-bottom:1px solid var(--border);border-left:3px solid var(--admin);padding-left:12px;}
+.page-head h2{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;color:#fdba74;}
+.page-head p{font-size:.7rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
+.slabel{font-size:.64rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;padding:0 13px;margin:4px 0 6px;}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:700;}
+.b-ok{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.25);}
+.b-bl{background:rgba(59,130,246,.1);color:#93c5fd;border:1px solid rgba(59,130,246,.2);}
+.b-yw{background:rgba(234,179,8,.1);color:#fde047;border:1px solid rgba(234,179,8,.25);}
+.b-pu{background:rgba(168,85,247,.12);color:#d8b4fe;border:1px solid rgba(168,85,247,.25);}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 24px;text-align:center;}
+.empty .ei{font-size:2.6rem;margin-bottom:12px;opacity:.4;}
+.empty h3{font-family:'Space Grotesk',sans-serif;font-size:.88rem;color:var(--muted2);margin-bottom:4px;}
+.empty p{font-size:.72rem;color:var(--muted);}
+
+/* sheet-tab strip (used in viewer + sell) */
+.stab-row{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none;}
+.stab-row::-webkit-scrollbar{display:none;}
+.stab{flex-shrink:0;padding:4px 11px;border-radius:20px;font-size:.68rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.stab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+
+/* search bar */
+.sbar{padding:9px 12px;background:var(--surface);border-bottom:1px solid var(--border);position:relative;}
+.sbar svg{position:absolute;left:23px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
+.sbar input{width:100%;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.83rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
+.sbar input:focus{border-color:var(--accent);}
 
 /* ══ DASHBOARD ══ */
-.dash-top{padding:16px;background:linear-gradient(180deg,var(--card2),transparent);border-bottom:1px solid var(--border);}
-.dash-greeting{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;}
-.dash-sub{font-size:.75rem;color:var(--muted2);margin-top:3px;}
-.stat-row{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:14px;}
-.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:14px;}
-.stat .lbl{font-size:.68rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
-.stat .num{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;line-height:1;}
-.stat .hint{font-size:.68rem;color:var(--muted2);margin-top:4px;}
-.section-lbl{font-size:.68rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;padding:0 16px;margin-bottom:8px;}
-.info-box{margin:0 16px 16px;border-radius:var(--r);padding:14px 16px;}
+.dash-hero{padding:14px;background:linear-gradient(180deg,var(--card2),transparent);border-bottom:1px solid var(--border);}
+.dash-hero h2{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;}
+.dash-hero p{font-size:.72rem;color:var(--muted2);margin-top:3px;}
+.stat-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:12px 13px;}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px;}
+.stat-box .sl{font-size:.62rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.stat-box .sn{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;line-height:1;}
+.stat-box .sh{font-size:.62rem;color:var(--muted2);margin-top:3px;}
+.info-box{margin:0 13px 10px;border-radius:var(--r);padding:12px;}
 .info-box.warn{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);}
-.info-box.ok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);}
-.info-box h4{font-size:.85rem;font-weight:600;margin-bottom:3px;}
-.info-box p{font-size:.75rem;color:var(--muted2);line-height:1.5;}
-.mini-item{display:flex;align-items:center;justify-content:space-between;padding:11px 16px;border-bottom:1px solid var(--border);}
-.mi-left h4{font-size:.85rem;font-weight:500;}
-.mi-left span{font-size:.7rem;color:var(--muted2);font-family:monospace;}
-.mi-right{display:flex;align-items:center;gap:8px;}
-.badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:700;letter-spacing:.3px;}
-.b-done{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.25);}
-.b-pend{background:rgba(59,130,246,.1);color:#93c5fd;border:1px solid rgba(59,130,246,.2);}
-.b-rev{background:rgba(234,179,8,.1);color:#fde047;border:1px solid rgba(234,179,8,.25);}
+.info-box h4{font-size:.82rem;font-weight:600;margin-bottom:2px;}
+.info-box p{font-size:.72rem;color:var(--muted2);line-height:1.5;}
+.mini-row{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid var(--border);}
+.mini-row h4{font-size:.82rem;font-weight:500;}
+.mini-row span{font-size:.67rem;color:var(--muted2);}
 
-/* ══ FORM PAGE ══ */
-.form-bar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 16px;flex-shrink:0;}
-.form-bar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
-.form-bar-top h2{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;}
-.prog-wrap{height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
-.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width .4s;}
-.prog-info{display:flex;justify-content:space-between;margin-top:5px;font-size:.68rem;color:var(--muted2);}
-.search-bar{padding:10px 14px;background:var(--surface);border-bottom:1px solid var(--border);position:relative;}
-.search-bar svg{position:absolute;left:26px;top:50%;transform:translateY(-50%);color:var(--muted);width:16px;height:16px;}
-.search-bar input{width:100%;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
-.search-bar input:focus{border-color:var(--accent);}
-.filter-tabs{display:flex;gap:6px;padding:8px 14px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none;}
+/* ══ VIEWER TAB ══ */
+.vi-list{padding:9px 11px 20px;}
+.vi-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;overflow:hidden;}
+.vi-head{padding:12px 13px;cursor:pointer;display:flex;align-items:flex-start;justify-content:space-between;gap:9px;}
+.vi-head:active{background:var(--card2);}
+.vi-name{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;line-height:1.3;word-break:break-word;flex:1;}
+.vi-code{font-size:.67rem;color:var(--muted2);margin-top:3px;font-family:monospace;}
+.vi-chevron{color:var(--muted);width:15px;height:15px;flex-shrink:0;transition:transform .2s;}
+.vi-card.open .vi-chevron{transform:rotate(180deg);}
+.vi-body{display:none;border-top:1px solid var(--border);}
+.vi-card.open .vi-body{display:block;}
+/* big qty */
+.vi-qty-sec{padding:16px 13px 10px;}
+.vi-qty-lbl{font-size:.62rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;}
+.vi-total-row{display:flex;align-items:baseline;gap:7px;margin-bottom:14px;}
+.vi-qty-big{font-family:'Space Grotesk',sans-serif;font-size:3.4rem;font-weight:700;line-height:1;color:var(--ok);}
+.vi-qty-unit{font-size:.78rem;color:var(--muted2);}
+/* location breakdown */
+.vi-loc-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;}
+.loc-pill{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 12px;flex:1;min-width:90px;}
+.loc-pill .lp-loc{font-size:.65rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
+.loc-pill .lp-qty{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;color:var(--accent);}
+.loc-pill .lp-sold{font-size:.65rem;color:var(--danger);margin-top:2px;}
+/* price row */
+.vi-price-row{display:flex;gap:7px;padding:0 13px 13px;}
+.price-box{flex:1;background:var(--surface);border-radius:9px;padding:9px 11px;border:1px solid var(--border);}
+.price-box .pb-lbl{font-size:.62rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.price-box .pb-val{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;}
+.price-box.sp .pb-val{color:#86efac;}
+.price-box.cp .pb-val{color:#fca5a5;}
+
+/* ══ FORM TAB ══ */
+.sheet-sel-bar{padding:8px 12px;background:var(--surface);border-bottom:1px solid var(--border);}
+.sheet-sel-bar label{font-size:.63rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:4px;}
+.sheet-sel-bar select{width:100%;padding:8px 11px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.83rem;font-family:'Inter',sans-serif;outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;background-color:var(--card);}
+.form-bar{background:var(--card);border-bottom:1px solid var(--border);padding:10px 13px;flex-shrink:0;}
+.form-bar-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.form-bar-top h2{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;}
+.prog-track{height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .4s;}
+.prog-info{display:flex;justify-content:space-between;margin-top:4px;font-size:.63rem;color:var(--muted2);}
+.filter-tabs{display:flex;gap:5px;padding:7px 11px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none;}
 .filter-tabs::-webkit-scrollbar{display:none;}
-.ftab{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:.72rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.ftab{flex-shrink:0;padding:4px 10px;border-radius:20px;font-size:.67rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .ftab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
-.ftab.on-warn{background:rgba(234,179,8,.15);border-color:rgba(234,179,8,.4);color:#fde047;}
-.items-wrap{padding:10px 12px 120px;}
-
-/* item cards */
-.item-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;overflow:hidden;transition:border-color .2s;}
-.item-card.ic-done{border-color:rgba(34,197,94,.3);}
-.item-card.ic-rev{border-color:rgba(234,179,8,.3);}
-.ic-head{display:flex;align-items:flex-start;padding:13px 14px;cursor:pointer;gap:10px;}
+.items-wrap{padding:8px 10px 110px;}
+/* item form cards */
+.ic{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;overflow:hidden;transition:border-color .2s;}
+.ic.ic-done{border-color:rgba(34,197,94,.3);}
+.ic.ic-rev{border-color:rgba(234,179,8,.3);}
+.ic-head{display:flex;align-items:flex-start;padding:11px 12px;cursor:pointer;gap:8px;}
 .ic-head:active{background:var(--card2);}
-.ic-num{font-size:.65rem;color:var(--muted);font-family:monospace;padding-top:2px;min-width:24px;}
+.ic-num{font-size:.6rem;color:var(--muted);font-family:monospace;padding-top:2px;min-width:20px;}
 .ic-info{flex:1;min-width:0;}
-.ic-name{font-family:'Space Grotesk',sans-serif;font-size:.98rem;font-weight:700;line-height:1.3;word-break:break-word;}
-.ic-code{font-size:.7rem;color:var(--muted2);margin-top:3px;font-family:monospace;}
-.ic-meta{display:flex;align-items:center;gap:6px;margin-top:6px;flex-wrap:wrap;}
-.ic-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
-.chevron{transition:transform .2s;color:var(--muted);width:16px;height:16px;}
-.item-card.open .chevron{transform:rotate(180deg);}
-.ic-existing{display:flex;gap:6px;flex-wrap:wrap;padding:0 14px 10px 48px;}
-.ex-pill{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:.7rem;}
+.ic-name{font-family:'Space Grotesk',sans-serif;font-size:.92rem;font-weight:700;line-height:1.3;word-break:break-word;}
+.ic-code{font-size:.65rem;color:var(--muted2);margin-top:2px;font-family:monospace;}
+.ic-meta{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap;}
+.caret{color:var(--muted);width:14px;height:14px;transition:transform .2s;flex-shrink:0;}
+.ic.open .caret{transform:rotate(180deg);}
+.ic-pills{display:flex;gap:5px;flex-wrap:wrap;padding:0 12px 8px 40px;}
+.ex-pill{background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:3px 7px;font-size:.65rem;}
 .ex-pill span{color:var(--muted2);}
 .ex-pill strong{color:var(--text);font-weight:600;}
 .ic-body{display:none;border-top:1px solid var(--border);}
-.item-card.open .ic-body{display:block;}
-.revise-notice{background:rgba(234,179,8,.07);border-bottom:1px solid rgba(234,179,8,.15);padding:10px 14px;display:flex;align-items:center;gap:8px;}
-.revise-notice svg{width:16px;height:16px;color:#fde047;flex-shrink:0;}
-.revise-notice p{font-size:.75rem;color:#fde047;line-height:1.4;}
-.fields-section{padding:12px 14px 0;}
-.fields-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted2);margin-bottom:8px;display:flex;align-items:center;gap:6px;}
-.req-dot{width:6px;height:6px;border-radius:50%;background:var(--danger);display:inline-block;}
-.ok-dot{width:6px;height:6px;border-radius:50%;background:var(--ok);display:inline-block;}
-.f3-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
-.f2-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.ic.open .ic-body{display:block;}
+.rev-notice{background:rgba(234,179,8,.07);border-bottom:1px solid rgba(234,179,8,.15);padding:8px 12px;font-size:.7rem;color:#fde047;}
+.fields-sec{padding:10px 12px 0;}
+.flbl{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted2);margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.rdot{width:5px;height:5px;border-radius:50%;background:var(--danger);display:inline-block;}
+.gdot{width:5px;height:5px;border-radius:50%;background:var(--ok);display:inline-block;}
+.f3{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px;}
 .field{display:flex;flex-direction:column;}
-.field label{font-size:.68rem;font-weight:600;color:var(--muted2);margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase;}
-.field .req-star{color:var(--danger);margin-left:2px;}
-.field input{padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;width:100%;}
-.field input:focus{border-color:var(--accent);}
+.field label{font-size:.63rem;font-weight:600;color:var(--muted2);margin-bottom:4px;letter-spacing:.3px;text-transform:uppercase;}
+.req{color:var(--danger);margin-left:2px;}
+.field input,.field select{padding:9px 10px;background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--text);font-size:.87rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;width:100%;appearance:none;background-color:var(--surface);}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;background-color:var(--surface);}
+.field input:focus,.field select:focus{border-color:var(--accent);}
 .field input.err{border-color:var(--danger)!important;background:rgba(239,68,68,.06);}
 .field input[type=number]{-moz-appearance:textfield;}
 .field input::-webkit-outer-spin-button,.field input::-webkit-inner-spin-button{-webkit-appearance:none;}
-.err-msg{font-size:.65rem;color:var(--danger);margin-top:3px;}
-.ic-actions{display:flex;gap:8px;padding:10px 14px 14px;}
-.ic-btn{flex:1;padding:11px;border:none;border-radius:9px;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
-.ic-btn:active{transform:scale(.97);opacity:.88;}
+.errmsg{font-size:.6rem;color:var(--danger);margin-top:2px;}
+.ic-actions{display:flex;gap:6px;padding:8px 12px 11px;}
+.ic-btn{flex:1;padding:10px;border:none;border-radius:8px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.ic-btn:active{transform:scale(.97);}
 .btn-save{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
 .btn-revise{background:linear-gradient(135deg,#eab308,#f97316);color:#000;}
 .btn-skip{background:var(--surface);color:var(--muted2);border:1px solid var(--border);}
-.submit-sticky{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:12px 14px;z-index:10;}
-.submit-sticky button{width:100%;padding:14px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;border-radius:var(--r2);color:#fff;font-size:.95rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s;}
-.submit-sticky button:active{transform:scale(.99);opacity:.9;}
-.sub-meta{display:flex;justify-content:space-between;font-size:.68rem;color:var(--muted2);margin-top:7px;}
+.submit-sticky{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 12px;z-index:10;}
+.submit-sticky button{width:100%;padding:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;border-radius:var(--r2);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;}
+.submit-sticky button:active{transform:scale(.99);}
+.sub-meta{display:flex;justify-content:space-between;font-size:.63rem;color:var(--muted2);margin-top:5px;}
 
-/* ══ ADMIN PAGES ══ */
-.page-head{padding:16px;border-bottom:1px solid var(--border);border-left:3px solid var(--admin);}
-.page-head h2{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#fdba74;}
-.page-head p{font-size:.73rem;color:var(--muted2);margin-top:3px;line-height:1.5;}
-.drop-zone{margin:14px;border:2px dashed var(--border);border-radius:var(--r);padding:28px 20px;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:var(--card);}
+/* ══ SELL TAB ══ */
+.sell-list{padding:9px 11px 20px;}
+.sell-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;overflow:hidden;}
+.sell-head{padding:12px 13px;cursor:pointer;display:flex;align-items:flex-start;gap:9px;}
+.sell-head:active{background:var(--card2);}
+.sell-info{flex:1;min-width:0;}
+.sell-name{font-family:'Space Grotesk',sans-serif;font-size:.93rem;font-weight:700;line-height:1.3;word-break:break-word;}
+.sell-code{font-size:.65rem;color:var(--muted2);margin-top:2px;font-family:monospace;}
+.sell-stock-row{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;}
+.sell-stock-pill{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:3px 9px;font-size:.68rem;}
+.sell-stock-pill .sp-loc{color:var(--muted2);}
+.sell-stock-pill .sp-qty{font-weight:700;color:var(--ok);}
+.sell-body{display:none;border-top:1px solid var(--border);padding:12px 13px;}
+.sell-card.open .sell-body{display:block;}
+.sell-card.open .sell-caret{transform:rotate(180deg);}
+.sell-caret{color:var(--muted);width:14px;height:14px;transition:transform .2s;flex-shrink:0;margin-top:3px;}
+.sell-form-lbl{font-size:.63rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.sell-f2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.sell-btn{width:100%;padding:11px;background:linear-gradient(135deg,#a855f7,#6366f1);border:none;border-radius:9px;color:#fff;font-size:.85rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s;}
+.sell-btn:active{transform:scale(.98);}
+.sell-hist{margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.sell-hist-lbl{font-size:.6rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.sell-hist-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border);font-size:.72rem;}
+.sell-hist-row:last-child{border-bottom:none;}
+
+/* ══ ADMIN: SHEETS ══ */
+.drop-zone{margin:11px;border:2px dashed var(--border);border-radius:var(--r);padding:22px 16px;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:var(--card);}
 .drop-zone:hover{border-color:var(--admin);background:rgba(249,115,22,.05);}
 .drop-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.drop-icon{font-size:2.4rem;margin-bottom:10px;}
-.drop-zone h3{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;margin-bottom:5px;}
-.drop-zone p{font-size:.75rem;color:var(--muted2);}
-.sheet-card{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--border);}
-.sh-icon{width:38px;height:38px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-.sh-info{flex:1;}
-.sh-info h4{font-size:.88rem;font-weight:600;}
-.sh-info p{font-size:.7rem;color:var(--muted2);margin-top:2px;}
-.sh-act{display:flex;gap:6px;flex-shrink:0;}
-.sh-btn{padding:6px 12px;border-radius:8px;font-size:.72rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
-.sh-act-btn{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.3);}
-.sh-del-btn{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
-.active-tag{font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(34,197,94,.15);color:#86efac;border:1px solid rgba(34,197,94,.3);}
-.resp-toolbar{padding:12px 14px;display:flex;gap:8px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
-.r-btn{padding:8px 14px;border-radius:9px;font-size:.75rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;transition:all .15s;}
+.drop-zone .di{font-size:2rem;margin-bottom:7px;}
+.drop-zone h3{font-family:'Space Grotesk',sans-serif;font-size:.86rem;font-weight:700;margin-bottom:4px;}
+.drop-zone p{font-size:.7rem;color:var(--muted2);}
+.sh-card{display:flex;align-items:center;gap:9px;padding:11px 13px;border-bottom:1px solid var(--border);}
+.sh-icon{width:34px;height:34px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+.sh-info{flex:1;min-width:0;}
+.sh-info h4{font-size:.83rem;font-weight:600;}
+.sh-info p{font-size:.67rem;color:var(--muted2);margin-top:2px;}
+.sh-del{padding:5px 10px;border-radius:7px;font-size:.68rem;font-weight:600;background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.25);cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* ══ ADMIN: RESPONSES ══ */
+.resp-toolbar{padding:9px 12px;display:flex;gap:6px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.r-btn{padding:7px 11px;border-radius:8px;font-size:.7rem;font-weight:600;border:none;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:4px;}
 .r-btn:active{opacity:.8;transform:scale(.97);}
 .r-gs{background:rgba(34,197,94,.12);color:#86efac;border:1px solid rgba(34,197,94,.3);}
 .r-csv{background:rgba(59,130,246,.1);color:#93c5fd;border:1px solid rgba(59,130,246,.25);}
 .r-vya{background:rgba(249,115,22,.1);color:#fdba74;border:1px solid rgba(249,115,22,.25);}
-.resp-card{padding:13px 16px;border-bottom:1px solid var(--border);}
-.rc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
-.rc-name{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;}
-.rc-by{font-size:.7rem;color:var(--muted2);}
-.rc-vals{display:flex;gap:8px;flex-wrap:wrap;}
-.rv{background:var(--surface);border-radius:7px;padding:5px 10px;font-size:.75rem;}
-.rv span{color:var(--muted2);font-size:.65rem;display:block;text-transform:uppercase;letter-spacing:.3px;}
+.resp-card{padding:11px 13px;border-bottom:1px solid var(--border);}
+.rc-name{font-family:'Space Grotesk',sans-serif;font-size:.87rem;font-weight:700;}
+.rc-by{font-size:.67rem;color:var(--muted2);margin-top:2px;margin-bottom:6px;}
+.rc-vals{display:flex;gap:6px;flex-wrap:wrap;}
+.rv{background:var(--surface);border-radius:6px;padding:4px 8px;font-size:.7rem;}
+.rv span{color:var(--muted2);font-size:.6rem;display:block;text-transform:uppercase;letter-spacing:.3px;}
 .rv strong{font-weight:700;}
-.sett-section{padding:14px;}
-.sett-lbl{font-size:.68rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;}
-.sett-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px;}
-.sett-row{padding:13px 16px;border-bottom:1px solid var(--border);}
+
+/* ══ SETTINGS ══ */
+.sett-wrap{padding:11px;}
+.sett-lbl{font-size:.63rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;}
+.sett-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:13px;}
+.sett-row{padding:11px 13px;border-bottom:1px solid var(--border);}
 .sett-row:last-child{border-bottom:none;}
-.sett-row h4{font-size:.85rem;font-weight:600;margin-bottom:2px;}
-.sett-row p{font-size:.72rem;color:var(--muted2);line-height:1.4;margin-bottom:8px;}
-.sett-row input{width:100%;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:9px;color:var(--text);font-size:.85rem;font-family:'Inter',sans-serif;outline:none;}
-.sett-row input:focus{border-color:var(--admin);}
-.sett-row-inline{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--border);}
+.sett-row h4{font-size:.82rem;font-weight:600;margin-bottom:2px;}
+.sett-row p{font-size:.69rem;color:var(--muted2);line-height:1.4;margin-bottom:6px;}
+.sett-row input,.sett-row textarea{width:100%;padding:9px 10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.82rem;font-family:'Inter',sans-serif;outline:none;resize:vertical;}
+.sett-row textarea{min-height:75px;line-height:1.5;}
+.sett-row input:focus,.sett-row textarea:focus{border-color:var(--admin);}
+.sett-row-inline{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;border-bottom:1px solid var(--border);}
 .sett-row-inline:last-child{border-bottom:none;}
-.tog{width:42px;height:23px;background:var(--muted);border-radius:12px;position:relative;cursor:pointer;border:none;flex-shrink:0;transition:background .2s;}
+.tog{width:40px;height:22px;background:var(--muted);border-radius:11px;position:relative;cursor:pointer;border:none;flex-shrink:0;transition:background .2s;}
 .tog.on{background:var(--ok);}
-.tog::after{content:'';position:absolute;width:17px;height:17px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;}
-.tog.on::after{left:22px;}
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;}
-.empty-state .ei{font-size:2.8rem;margin-bottom:14px;opacity:.45;}
-.empty-state h3{font-family:'Space Grotesk',sans-serif;font-size:.9rem;color:var(--muted2);margin-bottom:5px;}
-.empty-state p{font-size:.75rem;color:var(--muted);}
-#toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--card);border:1px solid var(--border2);padding:9px 18px;border-radius:20px;font-size:.8rem;font-weight:500;opacity:0;transition:all .25s;z-index:999;pointer-events:none;white-space:nowrap;box-shadow:var(--shadow);}
+.tog::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:3px;left:3px;transition:left .2s;}
+.tog.on::after{left:21px;}
+.act-btn{padding:7px 12px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;border:none;}
+.ab-ok{background:rgba(59,130,246,.15);color:#93c5fd;border:1px solid rgba(59,130,246,.3);}
+.ab-warn{background:rgba(249,115,22,.12);color:#fdba74;border:1px solid rgba(249,115,22,.3);}
+.ab-danger{background:rgba(239,68,68,.1);color:#fca5a5;border:1px solid rgba(239,68,68,.25);}
+.setup-box{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-radius:10px;padding:14px;margin-bottom:13px;}
+.setup-box h4{font-size:.85rem;font-weight:600;color:#fdba74;margin-bottom:8px;}
+.setup-box ol{font-size:.7rem;color:var(--muted2);line-height:1.7;padding-left:15px;}
+.setup-box code{background:var(--surface);padding:1px 5px;border-radius:4px;color:var(--text);font-size:.72rem;}
+
+/* ══ TOAST & MODAL ══ */
+#toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--card);border:1px solid var(--border2);padding:8px 16px;border-radius:18px;font-size:.77rem;font-weight:500;opacity:0;transition:all .25s;z-index:999;pointer-events:none;white-space:nowrap;box-shadow:var(--shadow);}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-.m-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
-.m-box{background:var(--surface);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:480px;padding:24px;border-top:1px solid var(--border);animation:su .22s ease;}
+.m-ov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:300;display:flex;align-items:flex-end;justify-content:center;}
+.m-box{background:var(--surface);border-radius:var(--r) var(--r) 0 0;width:100%;max-width:480px;padding:22px;border-top:1px solid var(--border);animation:su .2s ease;}
 @keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.m-box h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:8px;}
-.m-box p{font-size:.82rem;color:var(--muted2);margin-bottom:18px;line-height:1.5;}
-.m-acts{display:flex;gap:10px;}
-.m-acts button{flex:1;padding:12px;border:none;border-radius:var(--r2);font-weight:600;font-size:.88rem;cursor:pointer;font-family:'Inter',sans-serif;}
+.m-box h3{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:7px;}
+.m-box p{font-size:.79rem;color:var(--muted2);margin-bottom:16px;line-height:1.5;}
+.m-acts{display:flex;gap:8px;}
+.m-acts button{flex:1;padding:11px;border:none;border-radius:var(--r2);font-weight:600;font-size:.83rem;cursor:pointer;font-family:'Inter',sans-serif;}
 .m-cancel{background:var(--card);color:var(--muted2);}
 .m-ok{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
+
+/* ══ DASHBOARD SALES ACTIVITY ══ */
+.sale-row{display:flex;align-items:flex-start;justify-content:space-between;padding:10px 13px;border-bottom:1px solid var(--border);gap:10px;}
+.sale-row:hover{background:var(--card2);}
+.sale-row-l{flex:1;min-width:0;}
+.sale-item-name{font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:600;line-height:1.3;word-break:break-word;}
+.sale-item-meta{font-size:.67rem;color:var(--muted2);margin-top:2px;}
+.sale-row-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;}
+.sale-qty{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--danger);}
+.sale-qty span{font-size:.65rem;font-weight:500;color:var(--muted2);}
+.sale-amt{font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:700;color:var(--warn);}
+/* profit hidden visually — shows on hover / for admin  */
+.sale-profit{font-size:.65rem;color:var(--ok);opacity:.5;filter:blur(3px);transition:all .2s;cursor:pointer;user-select:none;}
+.sale-profit:hover,.sale-profit:active{opacity:1;filter:blur(0);}
+/* gross total footer */
+.sale-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 13px;background:var(--card2);border-top:2px solid var(--border2);margin-top:2px;}
+.sale-gross-total{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;color:var(--warn);}
+.sale-profit-total{font-size:.72rem;color:var(--ok);margin-top:2px;filter:blur(3px);transition:all .2s;cursor:pointer;}
+.sale-profit-total:hover,.sale-profit-total:active{filter:blur(0);}
+
+/* ══ NEGOTIATION PRICE CALCULATOR ══ */
+.nego-box{margin:0 13px 14px;background:linear-gradient(135deg,rgba(59,130,246,.07),rgba(99,102,241,.05));border:1px solid rgba(59,130,246,.2);border-radius:var(--r);overflow:hidden;}
+.nego-title{padding:11px 13px 4px;font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:700;color:#93c5fd;}
+.nego-sub{padding:0 13px 10px;font-size:.67rem;color:var(--muted2);}
+.nego-presets{display:flex;gap:6px;padding:0 13px 12px;overflow-x:auto;scrollbar-width:none;}
+.nego-presets::-webkit-scrollbar{display:none;}
+.preset-btn{flex-shrink:0;min-width:54px;padding:8px 6px;background:var(--surface);border:1px solid var(--border2);border-radius:9px;color:var(--text);font-size:.72rem;font-weight:600;cursor:pointer;text-align:center;line-height:1.4;transition:all .15s;font-family:'Inter',sans-serif;}
+.preset-btn span{display:block;font-family:'Space Grotesk',sans-serif;font-size:.8rem;font-weight:700;color:var(--ok);}
+.preset-btn:active,.preset-btn:hover{background:rgba(59,130,246,.15);border-color:var(--accent);color:#fff;}
+.nego-custom-row{display:flex;align-items:center;gap:10px;padding:0 13px 10px;}
+.nego-custom-label{font-size:.68rem;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;}
+.nego-input-wrap{flex:1;position:relative;}
+.nego-input{width:100%;padding:9px 30px 9px 11px;background:var(--surface);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:1rem;font-weight:600;font-family:'Inter',sans-serif;outline:none;text-align:center;}
+.nego-input:focus{border-color:var(--accent);}
+.nego-pct{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:.75rem;color:var(--muted2);font-weight:600;}
+.nego-result{margin:0 13px 13px;background:var(--surface);border-radius:10px;padding:12px 14px;border:1px solid var(--border);}
+.nego-result-lbl{font-size:.64rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
+.nego-result-price{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:var(--accent);line-height:1;}
+.nego-result-formula{font-size:.67rem;color:var(--muted2);margin-top:5px;line-height:1.5;}
 </style>
 </head>
 <body>
 
-<!-- ══ LOADING ══ -->
-<div id="loadingOverlay" class="hide">
+<div id="loadOver" class="hide">
   <div class="spinner"></div>
-  <p id="loadingMsg">Connecting to server…</p>
+  <p id="loadMsg">Loading…</p>
 </div>
 
-<!-- ══ LOGIN ══ -->
+<!-- ══ LOGIN — no setup landing page ══ -->
 <div class="screen" id="loginScreen">
-  <div class="brand">
-    <h1>⚡ StockSync</h1>
-    <p>Inventory · Pricing · Vyapar Ready</p>
-  </div>
-
-  <!-- SETUP STATE: no URL configured yet -->
-  <div class="setup-screen" id="setupView">
-    <div class="setup-box">
-      <h3>⚙️ One-Time Setup Required</h3>
-      <p>Before anyone can log in, paste your Google Apps Script URL below. This is the backend that stores all data across all devices.</p>
-      <ol>
-        <li>Open <strong>script.google.com</strong> → New Project</li>
-        <li>Click the button below to copy the script</li>
-        <li>Paste it into the editor → Save</li>
-        <li>Replace <code>SHEET_ID</code> with your Google Sheet ID</li>
-        <li>Deploy → Web App → Execute as <strong>Me</strong> → Access <strong>Anyone</strong></li>
-        <li>Copy the URL and paste below</li>
-      </ol>
-      <button class="btn-copy" onclick="copyScript()">📋 Copy Apps Script Code</button>
-    </div>
-    <div class="f-group">
-      <label>Google Apps Script Web App URL</label>
-      <input id="setupURL" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off">
-    </div>
-    <button class="btn-login btn-admin" onclick="saveSetupURL()">Save & Continue →</button>
-  </div>
-
-  <!-- LOGIN STATE: URL already configured -->
-  <div class="login-card hide" id="loginView">
+  <div class="brand"><h1>⚡ StockSync</h1><p>Inventory · Pricing · Vyapar Ready</p></div>
+  <div class="login-card">
     <div class="role-tabs">
-      <button class="role-tab sel-user" id="rt-user" onclick="setRole('user')">👤 Member</button>
-      <button class="role-tab" id="rt-admin" onclick="setRole('admin')">🛡 Admin</button>
+      <button class="rtab sel-u" id="rt-u" onclick="setRole('user')">👤 Staff</button>
+      <button class="rtab" id="rt-a" onclick="setRole('admin')">🛡 Admin</button>
     </div>
-    <div class="f-group">
+    <div class="fg">
       <label>Your Name</label>
       <input id="ln" type="text" placeholder="Enter your name" autocomplete="off">
     </div>
-    <div class="f-group hide" id="pin-grp">
+    <div class="fg hide" id="pin-grp">
       <label>Admin PIN</label>
       <input id="lp" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
     </div>
-    <button class="btn-login btn-user" id="lb" onclick="doLogin()">Enter as Member →</button>
-    <div style="text-align:center;margin-top:10px;">
-      <span style="font-size:.72rem;color:var(--muted);cursor:pointer;" onclick="resetURL()">Change backend URL</span>
-    </div>
+    <button class="btn-main btn-u" id="lb" onclick="doLogin()">Enter as Staff →</button>
+    <div id="noURLNote" class="no-url-note hide">⚠️ Backend not configured. Login as Admin to set up the Google Sheets URL in Settings.</div>
   </div>
 </div>
 
 <!-- ══ APP ══ -->
 <div class="screen" id="appScreen">
   <div class="topbar">
-    <div class="topbar-l">
-      <span style="font-size:1.1rem">⚡</span>
-      <h1 id="tbTitle">StockSync</h1>
-    </div>
+    <div class="topbar-l"><span style="font-size:1rem">⚡</span><h1 id="tbTitle">StockSync</h1></div>
     <div class="topbar-r">
-      <button class="sync-btn" id="syncBtn" onclick="syncNow()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      <button class="tb-btn sync" id="syncBtn" onclick="syncAll()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
         Sync
       </button>
       <div class="av" id="tbAv"></div>
-      <button class="out-btn" onclick="doLogout()">Exit</button>
+      <button class="tb-btn" onclick="doLogout()">Exit</button>
     </div>
   </div>
 
-  <div class="content" id="mainContent">
+  <div class="content">
 
-    <!-- Dashboard -->
+    <!-- DASHBOARD -->
     <div class="page on" id="pgDash">
-      <div class="dash-top">
-        <div class="dash-greeting" id="dGreet"></div>
-        <div class="dash-sub" id="dSub"></div>
-      </div>
-      <div class="stat-row" id="dStats"></div>
+      <div class="dash-hero"><h2 id="dGreet">Hello!</h2><p id="dSub">Loading…</p></div>
+      <div class="stat-grid" id="dStats"></div>
       <div id="noSheetMsg"></div>
-      <div class="section-lbl" id="dRecentLbl" style="display:none">My Recent Submissions</div>
+      <div class="slabel" id="dRecentLbl" style="display:none">Recent Activity</div>
       <div id="dRecent"></div>
     </div>
 
-    <!-- Fill Form -->
+    <!-- VIEWER -->
+    <div class="page" id="pgView">
+      <div class="sbar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="5"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="viewQ" placeholder="Search item…" oninput="renderViewer()" autocomplete="off">
+      </div>
+      <div class="stab-row" id="viewerTabs"></div>
+      <div class="vi-list" id="viewerList"></div>
+    </div>
+
+    <!-- FILL FORM -->
     <div class="page" id="pgForm">
+      <div class="sheet-sel-bar">
+        <label>Select Sheet</label>
+        <select id="formSheetSel" onchange="onFormSheetChange()"></select>
+      </div>
       <div class="form-bar">
-        <div class="form-bar-top">
-          <h2 id="formTitle">Stock Form</h2>
-          <span id="formSheet" style="font-size:.72rem;color:var(--muted2)"></span>
-        </div>
-        <div class="prog-wrap"><div class="prog-fill" id="pFill" style="width:0"></div></div>
+        <div class="form-bar-top"><h2 id="formTitle">Stock Form</h2><span id="formMeta" style="font-size:.67rem;color:var(--muted2)"></span></div>
+        <div class="prog-track"><div class="prog-fill" id="pFill" style="width:0"></div></div>
         <div class="prog-info"><span id="pText">0 / 0</span><span id="pPct">0%</span></div>
       </div>
-      <div class="search-bar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="5"/><path d="m21 21-4.35-4.35"/></svg>
-        <input id="searchQ" placeholder="Search item name or code…" oninput="reRender()" autocomplete="off">
+      <div class="sbar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="5"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="searchQ" placeholder="Search item…" oninput="reRender()" autocomplete="off">
       </div>
       <div class="filter-tabs" id="filterTabs"></div>
       <div class="items-wrap" id="itemsWrap"></div>
       <div class="submit-sticky">
         <button onclick="submitAll()">Submit All Filled Items →</button>
-        <div class="sub-meta">
-          <span id="subCount">0 drafts ready</span>
-          <span style="color:var(--ok)">→ Syncs to Google Sheets</span>
-        </div>
+        <div class="sub-meta"><span id="subCount">0 drafts</span><span style="color:var(--ok)">→ Google Sheets</span></div>
       </div>
     </div>
 
-    <!-- Admin: Sheets -->
-    <div class="page" id="pgSheets">
-      <div class="page-head">
-        <h2>Upload Item Sheets</h2>
-        <p>Upload Vyapar .xlsx files here. Items will appear on all staff devices immediately after upload.</p>
+    <!-- SELL -->
+    <div class="page" id="pgSell">
+      <div class="sbar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><circle cx="11" cy="11" r="5"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="sellQ" placeholder="Search item to sell…" oninput="renderSell()" autocomplete="off">
       </div>
+      <div class="stab-row" id="sellTabs"></div>
+      <div class="sell-list" id="sellList"></div>
+    </div>
+
+    <!-- ADMIN: SHEETS -->
+    <div class="page" id="pgSheets">
+      <div class="page-head"><h2>Upload Item Sheets</h2><p>Each upload creates a new worksheet tab in your Google Workbook. Staff can switch between sheets.</p></div>
       <div class="drop-zone">
         <input type="file" id="fileIn" accept=".xlsx,.xls,.csv" onchange="handleUpload(event)">
-        <div class="drop-icon">📊</div>
+        <div class="di">📊</div>
         <h3>Tap to Upload Vyapar Sheet</h3>
         <p>Accepts .xlsx · .xls · .csv<br>Needs "Item name*" column</p>
       </div>
       <div id="sheetList"></div>
     </div>
 
-    <!-- Admin: Responses -->
+    <!-- ADMIN: RESPONSES -->
     <div class="page" id="pgResp">
-      <div class="page-head">
-        <h2>Submitted Responses</h2>
-        <p>All stock entries by all staff in real-time. Export Vyapar CSV to import back into Vyapar.</p>
-      </div>
+      <div class="page-head"><h2>All Submissions</h2><p>Stock entries from all staff across all sheets.</p></div>
       <div class="resp-toolbar">
-        <button class="r-btn r-csv" onclick="exportCSV('plain')">⬇ Export CSV</button>
+        <button class="r-btn r-gs" onclick="loadResponses().then(renderResponses)">🔄 Refresh</button>
+        <button class="r-btn r-csv" onclick="exportCSV('plain')">⬇ CSV</button>
         <button class="r-btn r-vya" onclick="exportCSV('vyapar')">📦 Vyapar CSV</button>
-        <button class="r-btn r-gs" onclick="loadResponses()">🔄 Refresh</button>
       </div>
       <div id="respList"></div>
     </div>
 
-    <!-- Admin: Settings -->
+    <!-- ADMIN: SETTINGS -->
     <div class="page" id="pgSett">
-      <div class="page-head">
-        <h2>Settings</h2>
-        <p>Backend URL, Admin PIN, preferences.</p>
-      </div>
-      <div class="sett-section">
-        <div class="sett-lbl">Backend</div>
+      <div class="page-head"><h2>Settings</h2><p>Backend URL, PIN, locations, preferences.</p></div>
+      <div class="sett-wrap">
+
+        <div class="sett-lbl">Google Sheets Backend</div>
         <div class="sett-card">
           <div class="sett-row">
-            <h4>Apps Script URL</h4>
-            <p>The Google Apps Script Web App URL that powers the backend.</p>
-            <input id="gsURLDisp" type="url" placeholder="Configured" readonly style="opacity:.6;cursor:default">
-          </div>
-          <div class="sett-row">
-            <h4>Change Backend URL</h4>
-            <p>Replace with a new Apps Script URL if needed.</p>
-            <input id="gsURLNew" type="url" placeholder="Paste new URL here">
-            <button onclick="updateURL()" style="margin-top:8px;padding:8px 14px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:8px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif;">Update URL</button>
+            <div class="setup-box">
+              <h4>⚙️ Apps Script Setup</h4>
+              <ol>
+                <li>Open <strong>script.google.com</strong> → New Project</li>
+                <li>Tap "Copy Script" below → paste → Save</li>
+                <li>Replace <code>SHEET_ID</code> with your Google Sheet ID</li>
+                <li>Deploy → Web App → Execute as <strong>Me</strong> → Access <strong>Anyone</strong></li>
+                <li>Copy <code>/exec</code> URL → paste below</li>
+              </ol>
+              <button class="act-btn ab-warn" style="margin-top:9px;width:100%" onclick="copyScript()">📋 Copy Apps Script Code</button>
+            </div>
+            <h4>Web App URL</h4>
+            <p>Paste your Google Apps Script deployment URL here.</p>
+            <input id="gsURLInp" type="url" placeholder="https://script.google.com/macros/s/…/exec">
+            <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveGASURL()">Save URL</button>
           </div>
         </div>
+
+        <div class="sett-lbl">Store Locations</div>
+        <div class="sett-card">
+          <div class="sett-row">
+            <h4>Location List</h4>
+            <p>One location per line. Staff picks from this dropdown when filling stock and recording sales.</p>
+            <textarea id="locList" placeholder="Store 1&#10;Store 2&#10;Warehouse&#10;Godown"></textarea>
+            <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveLocations()">Save Locations</button>
+          </div>
+        </div>
+
         <div class="sett-lbl">Security</div>
         <div class="sett-card">
           <div class="sett-row">
             <h4>Change Admin PIN</h4>
-            <p>Must be exactly 4 digits. Stored in Google Sheets.</p>
-            <input id="newPIN" type="password" placeholder="New 4-digit PIN" maxlength="4" inputmode="numeric">
-            <button onclick="changePIN()" style="margin-top:8px;padding:8px 14px;border:1px solid var(--admin);background:transparent;color:var(--admin);border-radius:8px;font-size:.78rem;cursor:pointer;font-family:'Inter',sans-serif;">Save PIN</button>
+            <p>Must be exactly 4 digits.</p>
+            <div style="display:flex;gap:7px">
+              <input id="newPIN" type="password" placeholder="New PIN" maxlength="4" inputmode="numeric" style="flex:1">
+              <button class="act-btn ab-warn" onclick="changePIN()">Save</button>
+            </div>
           </div>
         </div>
+
         <div class="sett-lbl">Preferences</div>
         <div class="sett-card">
           <div class="sett-row-inline">
-            <div>
-              <h4 style="font-size:.85rem">Auto-advance after save</h4>
-              <p style="font-size:.7rem;color:var(--muted2)">Jump to next unfilled item</p>
-            </div>
+            <div><h4 style="font-size:.81rem">Auto-advance after save</h4><p style="font-size:.67rem;color:var(--muted2)">Jump to next unfilled item</p></div>
             <button class="tog on" id="togAdv" onclick="togSett('adv')"></button>
           </div>
           <div class="sett-row-inline">
-            <div>
-              <h4 style="font-size:.85rem">Show optional fields</h4>
-              <p style="font-size:.7rem;color:var(--muted2)">Location, Tax Rate, Notes</p>
-            </div>
+            <div><h4 style="font-size:.81rem">Show optional fields</h4><p style="font-size:.67rem;color:var(--muted2)">Location, Tax Rate, Notes</p></div>
             <button class="tog on" id="togOpt" onclick="togSett('opt')"></button>
           </div>
         </div>
+
         <div class="sett-lbl">Data</div>
         <div class="sett-card">
           <div class="sett-row-inline">
-            <div>
-              <h4 style="font-size:.85rem">Clear all responses</h4>
-              <p style="font-size:.7rem;color:var(--muted2)">Deletes from Google Sheets too</p>
-            </div>
-            <button onclick="clearData('resp')" style="padding:6px 12px;border:1px solid var(--danger);background:transparent;color:var(--danger);border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
+            <div><h4 style="font-size:.81rem">Clear all responses</h4><p style="font-size:.67rem;color:var(--muted2)">Wipes from Google Sheets</p></div>
+            <button class="act-btn ab-danger" onclick="clearData('resp')">Clear</button>
           </div>
           <div class="sett-row-inline">
-            <div>
-              <h4 style="font-size:.85rem">Clear all sheets</h4>
-              <p style="font-size:.7rem;color:var(--muted2)">Removes uploaded item lists</p>
-            </div>
-            <button onclick="clearData('sheets')" style="padding:6px 12px;border:1px solid var(--danger);background:transparent;color:var(--danger);border-radius:8px;font-size:.72rem;cursor:pointer;font-family:'Inter',sans-serif;">Clear</button>
+            <div><h4 style="font-size:.81rem">Clear all sales</h4><p style="font-size:.67rem;color:var(--muted2)">Wipes sales history</p></div>
+            <button class="act-btn ab-danger" onclick="clearData('sales')">Clear</button>
           </div>
         </div>
+
       </div>
     </div>
 
   </div><!-- /content -->
 
+  <!-- User tabs -->
   <div class="btabs hide" id="userTabs">
     <button class="btab on" id="bt-dash" onclick="nav('pgDash','bt-dash')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       Dashboard
     </button>
+    <button class="btab" id="bt-view" onclick="nav('pgView','bt-view')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Viewer
+    </button>
     <button class="btab" id="bt-form" onclick="nav('pgForm','bt-form')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
       Fill Stock
     </button>
+    <button class="btab" id="bt-sell" onclick="nav('pgSell','bt-sell')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61H19a2 2 0 001.99-1.81L23 6H6"/></svg>
+      Sell
+    </button>
   </div>
+
+  <!-- Admin tabs -->
   <div class="btabs hide" id="adminTabs">
     <button class="btab on" id="bt-sh" onclick="aNav('pgSheets','bt-sh')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -483,10 +577,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 </div>
 
 <div id="toast"></div>
-<div class="m-overlay hide" id="modal">
+<div class="m-ov hide" id="modal">
   <div class="m-box">
-    <h3 id="mTitle"></h3>
-    <p id="mMsg"></p>
+    <h3 id="mTitle"></h3><p id="mMsg"></p>
     <div class="m-acts">
       <button class="m-cancel" onclick="closeModal()">Cancel</button>
       <button class="m-ok" id="mOk" onclick="runModal()">Confirm</button>
@@ -496,183 +589,142 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 
 <script>
 /* ══════════════════════════════════════════════════
-   HOW THIS WORKS
-   - Google Apps Script = backend database
-   - READ  → JSONP via <script> tag  (100% CORS-free)
-   - WRITE → fetch no-cors + form data (fire-and-forget,
-             then we re-read to confirm)
-   - localStorage caches URL + offline drafts only
+   STORAGE
 ══════════════════════════════════════════════════ */
-
-const LS = {
-  get:(k,d)=>{ try{ const v=localStorage.getItem('ss3_'+k); return v!==null?JSON.parse(v):d; }catch(e){ return d; }},
-  set:(k,v)=>{ try{ localStorage.setItem('ss3_'+k,JSON.stringify(v)); }catch(e){} }
+const LS={
+  get:(k,d)=>{try{const v=localStorage.getItem('ss5_'+k);return v!==null?JSON.parse(v):d;}catch(e){return d;}},
+  set:(k,v)=>{try{localStorage.setItem('ss5_'+k,JSON.stringify(v));}catch(e){}}
 };
 
+/* GAS_URL only stored locally — admin sets it in settings */
 let GAS_URL = LS.get('gasURL','');
 
-let S = {
+let S={
   role:'', name:'', loginRole:'user',
-  items:[], responses:{},
-  settings:{ pin:'1234', adv:true, opt:true },
-  openItem:null, activeFilter:'all',
-  draft:{}, modalCb:null,
+  sheets:[],           /* [{sheetKey,name,items:[]}] */
+  responses:{},        /* key=sheetKey+'::'+itemId → resp obj */
+  sales:[],            /* [{id,itemId,itemName,sheetKey,loc,qty,soldBy,ts}] */
+  settings:{pin:'1234',adv:true,opt:true,locations:['Store 1','Store 2']},
+  formSheetKey:'',
+  viewerSheetKey:'',
+  sellSheetKey:'',
+  openItem:null, openViewer:null, openSell:null,
+  activeFilter:'all',
+  draft:{},
+  modalCb:null,
 };
 
-/* ── JSONP READ (GET) — works from any origin, no CORS ── */
+/* ══════════════════════════════════════════════════
+   JSONP — reads (CORS-free)
+══════════════════════════════════════════════════ */
 function gasGet(params){
-  return new Promise((resolve, reject)=>{
-    if(!GAS_URL){ reject(new Error('No backend URL set')); return; }
-
-    const cbName = 'gcb_' + Date.now() + '_' + Math.floor(Math.random()*9999);
-    const timeout = setTimeout(()=>{
-      delete window[cbName];
-      const s = document.getElementById(cbName);
-      if(s) s.remove();
-      reject(new Error('Request timed out. Check the URL and make sure deployment is "Anyone".'));
-    }, 15000);
-
-    window[cbName] = function(data){
-      clearTimeout(timeout);
-      delete window[cbName];
-      const s = document.getElementById(cbName);
-      if(s) s.remove();
-      resolve(data);
-    };
-
-    const p = new URLSearchParams({ ...params, callback: cbName });
-    const script = document.createElement('script');
-    script.id  = cbName;
-    script.src = GAS_URL + '?' + p.toString();
-    script.onerror = ()=>{
-      clearTimeout(timeout);
-      delete window[cbName];
-      script.remove();
-      reject(new Error('Script load failed. Paste URL again and redeploy.'));
-    };
-    document.head.appendChild(script);
+  return new Promise((resolve,reject)=>{
+    if(!GAS_URL){reject(new Error('No backend URL. Admin must set URL in Settings.'));return;}
+    const cb='gcb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
+    const timer=setTimeout(()=>{
+      delete window[cb]; document.getElementById(cb)?.remove();
+      reject(new Error('Request timed out'));
+    },20000);
+    window[cb]=data=>{clearTimeout(timer);delete window[cb];document.getElementById(cb)?.remove();resolve(data);};
+    const s=document.createElement('script');
+    s.id=cb;
+    s.src=GAS_URL+'?'+new URLSearchParams({...params,callback:cb}).toString();
+    s.onerror=()=>{clearTimeout(timer);delete window[cb];s.remove();reject(new Error('Network error — check URL'));};
+    document.head.appendChild(s);
   });
 }
 
-/* ── no-cors POST (WRITE) — sends data, can't read response ──
-   We use fetch no-cors which always "succeeds" from browser side.
-   Apps Script receives it fine. We then re-read with gasGet to confirm. */
-async function gasPost(action, data){
-  if(!GAS_URL) throw new Error('No backend URL set');
-  const body = new URLSearchParams({ action, data: JSON.stringify(data) });
-  // no-cors: browser sends the request, ignores response — avoids CORS block
-  await fetch(GAS_URL, {
-    method: 'POST',
-    mode:   'no-cors',
-    body,
-    headers:{ 'Content-Type':'application/x-www-form-urlencoded' }
+/* ══════════════════════════════════════════════════
+   no-cors POST — writes
+   Using fetch no-cors: browser sends, Apps Script receives, no response body
+══════════════════════════════════════════════════ */
+async function gasPost(action,data){
+  if(!GAS_URL) throw new Error('No backend URL. Set in Admin Settings.');
+  await fetch(GAS_URL,{
+    method:'POST', mode:'no-cors',
+    body:new URLSearchParams({action,data:JSON.stringify(data)}),
+    headers:{'Content-Type':'application/x-www-form-urlencoded'}
   });
-  // Small wait for Sheets to commit, then return ok
-  await new Promise(r => setTimeout(r, 800));
-  return { status:'ok' };
+  await new Promise(r=>setTimeout(r,1000)); /* wait for Sheets to commit */
+  return {status:'ok'};
 }
 
 /* ══════════════════════════════════════════════════
    LOADING
 ══════════════════════════════════════════════════ */
-function showLoading(msg='Loading…'){
-  document.getElementById('loadingOverlay').classList.remove('hide');
-  document.getElementById('loadingMsg').textContent=msg;
-}
-function hideLoading(){ document.getElementById('loadingOverlay').classList.add('hide'); }
+function showLoad(msg='Loading…'){document.getElementById('loadOver').classList.remove('hide');document.getElementById('loadMsg').textContent=msg;}
+function hideLoad(){document.getElementById('loadOver').classList.add('hide');}
 
 /* ══════════════════════════════════════════════════
-   SETUP & URL
-══════════════════════════════════════════════════ */
-function checkSetup(){
-  if(GAS_URL){
-    document.getElementById('setupView').classList.add('hide');
-    document.getElementById('loginView').classList.remove('hide');
-  } else {
-    document.getElementById('setupView').classList.remove('hide');
-    document.getElementById('loginView').classList.add('hide');
-  }
-}
-
-async function saveSetupURL(){
-  const u = document.getElementById('setupURL').value.trim();
-  if(!u){ toast('❌ Paste the Apps Script URL first'); return; }
-  if(!u.includes('script.google.com')){
-    toast('❌ URL must be from script.google.com'); return;
-  }
-  if(!u.includes('/exec')){
-    toast('❌ URL must end with /exec — copy from Deploy → Manage Deployments'); return;
-  }
-  // Save URL immediately — no blocking ping test
-  GAS_URL = u;
-  LS.set('gasURL', GAS_URL);
-  checkSetup(); // show login screen right away
-  showLoading('Testing connection…');
-  // Test silently in background
-  try{
-    const r = await gasGet({ action:'ping' });
-    hideLoading();
-    toast(r && r.status==='ok' ? '✅ Connected! Enter your name to log in.' : '✅ URL saved. Try logging in.');
-  } catch(e){
-    hideLoading();
-    toast('✅ URL saved. Log in to verify — if it fails, check deployment is set to Anyone.');
-  }
-}
-
-function resetURL(){ GAS_URL=''; LS.set('gasURL',''); checkSetup(); }
-function updateURL(){
-  const u=document.getElementById('gsURLNew').value.trim();
-  if(!u){ toast('Paste a URL first'); return; }
-  GAS_URL=u; LS.set('gasURL',u); toast('✅ URL updated'); loadSettUI();
-}
-
-/* ══════════════════════════════════════════════════
-   LOGIN
+   LOGIN — no setup landing page
+   Staff just enter name and go
+   Admin sets backend in Settings tab
 ══════════════════════════════════════════════════ */
 function setRole(r){
   S.loginRole=r;
-  document.getElementById('rt-user').className='role-tab'+(r==='user'?' sel-user':'');
-  document.getElementById('rt-admin').className='role-tab'+(r==='admin'?' sel-admin':'');
+  document.getElementById('rt-u').className='rtab'+(r==='user'?' sel-u':'');
+  document.getElementById('rt-a').className='rtab'+(r==='admin'?' sel-a':'');
   document.getElementById('pin-grp').classList.toggle('hide',r!=='admin');
   const lb=document.getElementById('lb');
-  lb.className='btn-login '+(r==='admin'?'btn-admin':'btn-user');
+  lb.className='btn-main '+(r==='admin'?'btn-a':'btn-u');
   lb.textContent=r==='admin'?'Enter as Admin →':'Enter as Staff →';
+  // show note if no URL and user mode
+  document.getElementById('noURLNote').classList.toggle('hide', !(!GAS_URL && r==='user'));
 }
 
 async function doLogin(){
   const n=document.getElementById('ln').value.trim();
-  if(!n){ toast('Enter your name'); return; }
-  showLoading('Signing in…');
-  try{
-    // Try to get settings (for PIN). Timeout is OK — use default PIN.
-    try{
-      const cfg = await gasGet({ action:'getSettings' });
-      if(cfg && cfg.status==='ok' && cfg.data) S.settings={ ...S.settings, ...cfg.data };
-    } catch(e){ /* offline or slow — use cached/default PIN */ }
+  if(!n){toast('Enter your name');return;}
 
-    if(S.loginRole==='admin'){
-      if(document.getElementById('lp').value !== S.settings.pin){
-        hideLoading(); toast('❌ Wrong PIN'); return;
-      }
-      S.role='admin';
-    } else { S.role='user'; }
-
-    S.name=n;
-    try{ await loadItems(); } catch(e){ console.warn('items load failed',e); }
-    try{ await loadResponses(); } catch(e){ console.warn('responses load failed',e); }
-
-    hideLoading();
+  if(S.loginRole==='admin'){
+    // Admin can always login — even without URL (to set it up)
+    const pin=document.getElementById('lp').value;
+    const localPin=LS.get('adminPIN','1234');
+    if(pin!==localPin && pin!==S.settings.pin){toast('❌ Wrong PIN');return;}
+    S.role='admin'; S.name=n;
     document.getElementById('loginScreen').style.display='none';
     document.getElementById('appScreen').style.display='flex';
     bootApp();
-  } catch(e){
-    hideLoading();
-    toast('❌ Login failed: '+e.message);
+    // Load data in background if URL exists
+    if(GAS_URL){ silentSync(); }
+    return;
   }
+
+  // Staff login
+  if(!GAS_URL){
+    toast('❌ App not configured yet. Ask your admin to set up the backend URL.');
+    return;
+  }
+  showLoad('Signing in…');
+  try{
+    try{
+      const cfg=await gasGet({action:'getSettings'});
+      if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
+    }catch(e){}
+    S.role='user'; S.name=n;
+    try{await loadAllSheets();}catch(e){console.warn(e);}
+    try{await loadResponses();}catch(e){console.warn(e);}
+    try{await loadSales();}catch(e){console.warn(e);}
+    hideLoad();
+    document.getElementById('loginScreen').style.display='none';
+    document.getElementById('appScreen').style.display='flex';
+    bootApp();
+  }catch(e){hideLoad();toast('❌ '+e.message);}
+}
+
+async function silentSync(){
+  try{
+    const cfg=await gasGet({action:'getSettings'});
+    if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
+    await loadAllSheets();
+    await loadResponses();
+    await loadSales();
+    renderSheets();renderResponses();loadSettUI();
+  }catch(e){}
 }
 
 function doLogout(){
-  S.role=''; S.name=''; S.items=[]; S.responses={}; S.draft={};
+  S.role='';S.name='';S.sheets=[];S.responses={};S.sales=[];S.draft={};
   document.getElementById('loginScreen').style.display='flex';
   document.getElementById('appScreen').style.display='none';
   document.getElementById('ln').value='';
@@ -690,63 +742,42 @@ function bootApp(){
   const av=document.getElementById('tbAv');
   av.className='av '+(isA?'av-a':'av-u');
   av.textContent=S.name.substring(0,2).toUpperCase();
-
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.btab').forEach(b=>{b.classList.remove('on');b.classList.remove('on-a');});
-
+  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('on','on-a'));
+  if(S.sheets.length){
+    S.formSheetKey=S.sheets[0].sheetKey;
+    S.viewerSheetKey=S.sheets[0].sheetKey;
+    S.sellSheetKey=S.sheets[0].sheetKey;
+  }
   if(isA){
     document.getElementById('pgSheets').classList.add('on');
     document.getElementById('bt-sh').classList.add('on','on-a');
-    renderSheets(); renderResponses(); loadSettUI();
+    renderSheets();renderResponses();loadSettUI();
   } else {
     document.getElementById('pgDash').classList.add('on');
     document.getElementById('bt-dash').classList.add('on');
-    renderDash(); reRender();
+    renderDash();renderViewer();buildFormSheetSelect();reRender();renderSell();
   }
 }
 
 /* ══════════════════════════════════════════════════
    SYNC
 ══════════════════════════════════════════════════ */
-async function syncNow(){
+async function syncAll(){
+  if(!GAS_URL){toast('⚠️ No backend URL — set in Admin Settings');return;}
   const btn=document.getElementById('syncBtn');
   btn.classList.add('spinning');
   try{
-    await loadItems();
+    const cfg=await gasGet({action:'getSettings'});
+    if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
+    await loadAllSheets();
     await loadResponses();
-    renderDash(); reRender();
-    if(S.role==='admin'){ renderSheets(); renderResponses(); }
+    await loadSales();
+    renderDash();renderViewer();reRender();buildFormSheetSelect();renderSell();
+    if(S.role==='admin'){renderSheets();renderResponses();loadSettUI();}
     toast('✅ Synced!');
-  } catch(e){ toast('❌ Sync failed: '+e.message); }
+  }catch(e){toast('❌ Sync: '+e.message);}
   btn.classList.remove('spinning');
-}
-
-/* ══════════════════════════════════════════════════
-   DATA: ITEMS (load from Sheets)
-══════════════════════════════════════════════════ */
-async function loadItems(){
-  const r = await gasGet({ action:'getItems' });
-  if(r.status==='ok') S.items = r.data||[];
-}
-
-async function loadResponses(){
-  const r = await gasGet({ action:'getResponses' });
-  if(r.status==='ok'){
-    S.responses={};
-    (r.data||[]).forEach(row=>{ S.responses[row.itemId]=row; });
-  }
-}
-
-/* ══════════════════════════════════════════════════
-   ITEM STATUS
-══════════════════════════════════════════════════ */
-function itemStatus(item){
-  const resp=S.responses[item.id];
-  const draft=S.draft[item.id];
-  if(resp) return draft?'revising':'submitted';
-  if(draft) return 'drafted';
-  if(Number(item.salePrice)>0||Number(item.purchasePrice)>0||Number(item.stock)>0) return 'has-data';
-  return 'vacant';
 }
 
 /* ══════════════════════════════════════════════════
@@ -758,11 +789,13 @@ function nav(pg,btn){
   document.getElementById(pg).classList.add('on');
   document.getElementById(btn).classList.add('on');
   if(pg==='pgDash') renderDash();
-  if(pg==='pgForm') reRender();
+  if(pg==='pgView') renderViewer();
+  if(pg==='pgForm'){buildFormSheetSelect();reRender();}
+  if(pg==='pgSell') renderSell();
 }
 function aNav(pg,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('#adminTabs .btab').forEach(b=>{b.classList.remove('on');b.classList.remove('on-a');});
+  document.querySelectorAll('#adminTabs .btab').forEach(b=>b.classList.remove('on','on-a'));
   document.getElementById(pg).classList.add('on');
   document.getElementById(btn).classList.add('on','on-a');
   if(pg==='pgSheets') renderSheets();
@@ -771,139 +804,340 @@ function aNav(pg,btn){
 }
 
 /* ══════════════════════════════════════════════════
-   DASHBOARD
+   DATA LOADERS
 ══════════════════════════════════════════════════ */
-function renderDash(){
-  document.getElementById('dGreet').textContent=`Hello, ${S.name}!`;
-  const sh = S.items.length ? 'Active' : null;
-  document.getElementById('dSub').textContent = sh ? `${S.items.length} items loaded · synced from Google Sheets` : 'No items loaded yet';
-
-  const total=S.items.length;
-  const submitted=S.items.filter(i=>S.responses[i.id]).length;
-  const vacant=S.items.filter(i=>itemStatus(i)==='vacant').length;
-  const hasData=S.items.filter(i=>itemStatus(i)==='has-data').length;
-
-  document.getElementById('dStats').innerHTML=`
-    <div class="stat"><div class="lbl">📦 Total Items</div><div class="num">${total||'—'}</div><div class="hint">in active sheet</div></div>
-    <div class="stat"><div class="lbl">✅ Submitted</div><div class="num" style="color:var(--ok)">${submitted}</div><div class="hint">by all staff</div></div>
-    <div class="stat"><div class="lbl">⬜ Vacant</div><div class="num" style="color:var(--warn)">${vacant}</div><div class="hint">no data at all</div></div>
-    <div class="stat"><div class="lbl">📋 Has Data</div><div class="num" style="color:var(--accent)">${hasData}</div><div class="hint">from sheet</div></div>`;
-
-  document.getElementById('noSheetMsg').innerHTML = !total
-    ? `<div class="info-box warn"><h4>No Items Loaded</h4><p>Admin must upload and activate a Vyapar sheet. All devices will see it instantly.</p></div>`
-    : '';
-
-  const myR=Object.values(S.responses).filter(r=>r.by===S.name).sort((a,b)=>b.ts-a.ts).slice(0,6);
-  const rl=document.getElementById('dRecent');
-  const lbl=document.getElementById('dRecentLbl');
-  if(myR.length){
-    lbl.style.display='block';
-    rl.innerHTML=myR.map(r=>`
-      <div class="mini-item">
-        <div class="mi-left"><h4>${r.itemName}</h4><span>${r.code||'—'} · ${timeAgo(r.ts)}</span></div>
-        <div class="mi-right">
-          <span class="badge b-done">✓ Submitted</span>
-          <span style="font-size:.82rem;font-weight:700;color:var(--ok)">${r.qty} pcs</span>
-        </div>
-      </div>`).join('');
-  } else { lbl.style.display='none'; rl.innerHTML=''; }
+async function loadAllSheets(){
+  const r=await gasGet({action:'getSheets'});
+  if(r&&r.status==='ok'){
+    S.sheets=r.data||[];
+    if(!S.formSheetKey&&S.sheets.length)  S.formSheetKey=S.sheets[0].sheetKey;
+    if(!S.viewerSheetKey&&S.sheets.length) S.viewerSheetKey=S.sheets[0].sheetKey;
+    if(!S.sellSheetKey&&S.sheets.length)   S.sellSheetKey=S.sheets[0].sheetKey;
+  }
+}
+async function loadResponses(){
+  const r=await gasGet({action:'getResponses'});
+  if(r&&r.status==='ok'){
+    S.responses={};
+    (r.data||[]).forEach(row=>{
+      /* key = itemId field which we store as sheetKey::rowId */
+      S.responses[row.itemId]=row;
+    });
+  }
+}
+async function loadSales(){
+  const r=await gasGet({action:'getSales'});
+  if(r&&r.status==='ok') S.sales=r.data||[];
 }
 
 /* ══════════════════════════════════════════════════
-   FORM & FILTERS
+   HELPERS
 ══════════════════════════════════════════════════ */
-function buildFilters(){
-  const counts={all:S.items.length,vacant:0,'has-data':0,drafted:0,submitted:0};
-  S.items.forEach(i=>{ const s=itemStatus(i); if(counts[s]!==undefined) counts[s]++; });
-  const tabs=[
-    {k:'all',label:`All (${counts.all})`},
-    {k:'vacant',label:`⬜ Vacant (${counts.vacant})`},
-    {k:'has-data',label:`📋 Has Data (${counts['has-data']})`},
-    {k:'drafted',label:`✏️ Draft (${counts.drafted})`},
-    {k:'submitted',label:`✅ Done (${counts.submitted})`},
-  ];
-  document.getElementById('filterTabs').innerHTML=tabs.map(t=>
-    `<button class="ftab${S.activeFilter===t.k?' on':''}" onclick="setFilter('${t.k}',this)">${t.label}</button>`
+function getSheet(k){return S.sheets.find(s=>s.sheetKey===k)||null;}
+function getItems(k){return (getSheet(k)||{items:[]}).items;}
+function rKey(sk,id){return sk+'::'+id;}
+function getResp(sk,id){return S.responses[rKey(sk,id)]||null;}
+function getDraft(sk,id){return S.draft[rKey(sk,id)]||null;}
+function locs(){return S.settings.locations||['Store 1','Store 2'];}
+
+/* Get effective qty = submitted qty (or sheet stock) minus all sales for this item */
+function getEffectiveQty(sk, item){
+  const resp = getResp(sk, item.id);
+  // Use submitted qty if available, else fall back to sheet opening stock
+  let baseQty = resp && resp.qty !== '' && resp.qty !== undefined
+    ? Number(resp.qty)
+    : Number(item.stock || 0);
+  // Subtract all recorded sales for this item
+  const soldTotal = S.sales
+    .filter(s => String(s.itemId) === rKey(sk, item.id))
+    .reduce((a, s) => a + Number(s.qty || 0), 0);
+  return Math.max(0, baseQty - soldTotal);
+}
+
+function itemStatus(sk,item){
+  const r=getResp(sk,item.id); const d=getDraft(sk,item.id);
+  if(r) return d?'revising':'submitted';
+  if(d) return 'drafted';
+  if(Number(item.salePrice)>0||Number(item.purchasePrice)>0||Number(item.stock)>0) return 'has-data';
+  return 'vacant';
+}
+
+function timeAgo(ts){
+  const d=Date.now()-Number(ts);
+  if(d<60000) return 'just now';
+  if(d<3600000) return Math.floor(d/60000)+'m ago';
+  if(d<86400000) return Math.floor(d/3600000)+'h ago';
+  return Math.floor(d/86400000)+'d ago';
+}
+function dstr(){const d=new Date();return`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;}
+
+/* ══════════════════════════════════════════════════
+   DASHBOARD
+══════════════════════════════════════════════════ */
+function renderDash(){
+  document.getElementById('dGreet').textContent='Hello, '+S.name+'!';
+  const total=S.sheets.reduce((a,s)=>a+s.items.length,0);
+  const submitted=Object.keys(S.responses).length;
+
+  // Today's sales only (midnight cutoff)
+  const todayStart=new Date(); todayStart.setHours(0,0,0,0);
+  const todaySales=S.sales.filter(s=>Number(s.ts)>=todayStart.getTime());
+  const totalUnits=todaySales.reduce((a,s)=>a+Number(s.qty||0),0);
+  const grossSale=todaySales.reduce((a,s)=>a+Number(s.grossAmt||0),0);
+  const totalProfit=todaySales.reduce((a,s)=>a+Number(s.profitAmt||0),0);
+
+  document.getElementById('dSub').textContent=S.sheets.length?`${S.sheets.length} sheet(s) · ${total} items`:'No sheets loaded';
+  document.getElementById('dStats').innerHTML=`
+    <div class="stat-box"><div class="sl">📦 Total Items</div><div class="sn">${total||'—'}</div><div class="sh">all sheets</div></div>
+    <div class="stat-box"><div class="sl">✅ Submitted</div><div class="sn" style="color:var(--ok)">${submitted}</div><div class="sh">stock entries</div></div>
+    <div class="stat-box"><div class="sl">🛒 Units Sold</div><div class="sn" style="color:var(--sell)">${totalUnits}</div><div class="sh">today</div></div>
+    <div class="stat-box"><div class="sl">💰 Gross Sale</div><div class="sn" style="color:var(--warn)">₹${grossSale.toLocaleString('en-IN')}</div><div class="sh">today</div></div>`;
+
+  document.getElementById('noSheetMsg').innerHTML=!S.sheets.length
+    ?'<div class="info-box warn"><h4>No Sheets Loaded</h4><p>Admin must upload a Vyapar sheet first.</p></div>':'';
+
+  // Today's sold items list
+  const lbl=document.getElementById('dRecentLbl');
+  const rec=document.getElementById('dRecent');
+
+  if(todaySales.length){
+    lbl.style.display='block';
+    lbl.textContent="Today's Sales";
+
+    // Group sales by itemName+loc for cleaner display
+    const rows=todaySales.slice().sort((a,b)=>b.ts-a.ts).map(s=>{
+      const profit=Number(s.profitAmt||0);
+      const displayTime=s.dateTime||new Date(Number(s.ts)).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+      return `<div class="sale-row">
+        <div class="sale-row-l">
+          <div class="sale-item-name">${s.itemName}</div>
+          <div class="sale-item-meta">${s.loc||'—'} · ${s.soldBy} · ${displayTime}</div>
+        </div>
+        <div class="sale-row-r">
+          <div class="sale-qty">-${s.qty} <span>pcs</span></div>
+          <div class="sale-amt">₹${Number(s.grossAmt||0).toLocaleString('en-IN')}</div>
+          <div class="sale-profit" title="Profit = (SP−CP)×Qty — tap to reveal">₹${profit>=0?profit.toFixed(0):profit.toFixed(0)}</div>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Gross total footer row (bold)
+    const footer=`<div class="sale-footer">
+      <div style="flex:1">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:700;color:var(--text)">Today's Total</div>
+        <div style="font-size:.67rem;color:var(--muted2)">${todaySales.length} transaction(s) · ${totalUnits} units</div>
+      </div>
+      <div style="text-align:right">
+        <div class="sale-gross-total">₹${grossSale.toLocaleString('en-IN')}</div>
+        <div class="sale-profit-total" title="Net Profit (SP−CP × Qty)">Profit: ₹${totalProfit>=0?totalProfit.toFixed(0):totalProfit.toFixed(0)}</div>
+      </div>
+    </div>`;
+
+    rec.innerHTML=rows+footer;
+  } else {
+    lbl.style.display='block';
+    lbl.textContent="Today's Sales";
+    rec.innerHTML='<div style="padding:20px 14px;text-align:center;font-size:.78rem;color:var(--muted2)">No sales recorded today yet.<br>Use the Sell tab to record a sale.</div>';
+  }
+}
+
+/* ══════════════════════════════════════════════════
+   VIEWER
+══════════════════════════════════════════════════ */
+function renderViewerTabs(){
+  const el=document.getElementById('viewerTabs');
+  el.innerHTML=S.sheets.map(s=>
+    `<button class="stab${S.viewerSheetKey===s.sheetKey?' on':''}" onclick="setViewerSheet('${s.sheetKey}')">${s.name}</button>`
   ).join('');
 }
+function setViewerSheet(k){S.viewerSheetKey=k;S.openViewer=null;document.getElementById('viewQ').value='';renderViewer();}
 
-function setFilter(k,btn){
-  S.activeFilter=k;
-  document.querySelectorAll('.ftab').forEach(b=>{b.classList.remove('on');b.classList.remove('on-warn');});
-  btn.classList.add('on');
-  if(k==='vacant') btn.classList.add('on-warn');
+function renderViewer(){
+  renderViewerTabs();
+  const items=getItems(S.viewerSheetKey);
+  const q=(document.getElementById('viewQ').value||'').trim().toLowerCase();
+  const filtered=!q?items:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
+  const el=document.getElementById('viewerList');
+  if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets</h3><p>Admin uploads a Vyapar sheet</p></div>';return;}
+  if(!filtered.length){el.innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No results</h3><p>Try different search</p></div>';return;}
+  el.innerHTML=filtered.map((item,idx)=>renderViewerCard(item,idx)).join('');
+}
+
+function renderViewerCard(item,idx){
+  const sk=S.viewerSheetKey;
+  const resp=getResp(sk,item.id);
+  const isOpen=S.openViewer===item.id;
+  const currentQty=getEffectiveQty(sk,item);
+  const soldTotal=S.sales.filter(s=>String(s.itemId)===rKey(sk,item.id)).reduce((a,s)=>a+Number(s.qty||0),0);
+  const sp=Number(resp?.sp||item.salePrice||0);
+  const cp=Number(resp?.cp||item.purchasePrice||0);
+
+  // Quick profit preset buttons: 5%, 10%, 15%, 20%, 25%
+  const presets=[5,10,15,20,25];
+  const presetBtns=presets.map(p=>{
+    const price=(cp+(cp/100*p)).toFixed(0);
+    return `<button class="preset-btn" onclick="setProfit('${item.id}',${p},${cp})">${p}%<br><span>₹${price}</span></button>`;
+  }).join('');
+
+  return `<div class="vi-card${isOpen?' open':''}" id="vi-${item.id}">
+    <div class="vi-head" onclick="toggleViewer(${item.id})">
+      <div style="flex:1;min-width:0">
+        <div class="vi-name">${item.name}</div>
+        <div class="vi-code">Code: ${item.code||'—'} ${resp?'<span style="color:var(--ok);font-size:.65rem">● Submitted</span>':''}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+        <svg class="vi-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <span style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'}">Qty: ${currentQty}</span>
+      </div>
+    </div>
+    <div class="vi-body">
+
+      <!-- BIG QTY -->
+      <div class="vi-qty-sec">
+        <div class="vi-qty-lbl">Current Stock${soldTotal>0?' (after deductions)':''}</div>
+        <div class="vi-total-row">
+          <div class="vi-qty-big">${currentQty}</div>
+          <div class="vi-qty-unit">units available${soldTotal>0?` · ${soldTotal} sold`:''}</div>
+        </div>
+      </div>
+
+      <!-- PRICES -->
+      <div class="vi-price-row">
+        <div class="price-box sp"><div class="pb-lbl">MRP / Sale Price</div><div class="pb-val">${sp?'₹'+sp:'—'}</div></div>
+        <div class="price-box cp"><div class="pb-lbl">Cost Price</div><div class="pb-val" style="filter:blur(4px);transition:filter .2s" onclick="this.style.filter='none'" title="Tap to reveal">${cp?'₹'+cp:'—'}</div></div>
+      </div>
+
+      <!-- NEGOTIATION PRICE CALCULATOR -->
+      ${cp>0?`<div class="nego-box">
+        <div class="nego-title">💬 Negotiation Price Calculator</div>
+        <div class="nego-sub">Enter profit % → see the price to quote the customer</div>
+        <div class="nego-presets">${presetBtns}</div>
+        <div class="nego-custom-row">
+          <div class="nego-custom-label">Custom Profit %</div>
+          <div class="nego-input-wrap">
+            <input type="number" id="np-${item.id}" class="nego-input" placeholder="e.g. 18" inputmode="decimal"
+              oninput="calcNego('${item.id}',${cp})">
+            <span class="nego-pct">%</span>
+          </div>
+        </div>
+        <div class="nego-result" id="nr-${item.id}">
+          <div class="nego-result-lbl">Quote this price to customer</div>
+          <div class="nego-result-price" id="nrp-${item.id}">—</div>
+          <div class="nego-result-formula" id="nrf-${item.id}"></div>
+        </div>
+      </div>`:'<div style="padding:10px 13px 13px;font-size:.72rem;color:var(--muted2)">💡 Add Cost Price in Fill Stock to enable price calculator</div>'}
+
+    </div>
+  </div>`;
+}
+
+function setProfit(itemId, pct, cp){
+  const inp=document.getElementById('np-'+itemId);
+  if(inp) inp.value=pct;
+  calcNego(itemId, cp);
+}
+
+function calcNego(itemId, cp){
+  const inp=document.getElementById('np-'+itemId);
+  const resultPrice=document.getElementById('nrp-'+itemId);
+  const resultFormula=document.getElementById('nrf-'+itemId);
+  const pct=parseFloat(inp?.value||'0');
+  if(!pct||isNaN(pct)||pct<0){
+    if(resultPrice) resultPrice.textContent='—';
+    if(resultFormula) resultFormula.textContent='';
+    return;
+  }
+  const quotePrice=cp+(cp/100*pct);
+  const profit=quotePrice-cp;
+  if(resultPrice) resultPrice.textContent='₹'+quotePrice.toFixed(2);
+  if(resultFormula) resultFormula.textContent=
+    `₹${cp} + (₹${cp} × ${pct}%) = ₹${quotePrice.toFixed(2)}  |  Profit: ₹${profit.toFixed(2)}`;
+}
+
+function toggleViewer(id){
+  S.openViewer=S.openViewer===id?null:id;
+  renderViewer();
+  if(S.openViewer) setTimeout(()=>document.getElementById('vi-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+
+/* ══════════════════════════════════════════════════
+   FILL FORM
+══════════════════════════════════════════════════ */
+function buildFormSheetSelect(){
+  const sel=document.getElementById('formSheetSel');
+  sel.innerHTML=S.sheets.length
+    ?S.sheets.map(s=>`<option value="${s.sheetKey}"${S.formSheetKey===s.sheetKey?' selected':''}>${s.name} (${s.items.length})</option>`).join('')
+    :'<option value="">No sheets uploaded</option>';
+}
+function onFormSheetChange(){
+  S.formSheetKey=document.getElementById('formSheetSel').value;
+  S.openItem=null; S.activeFilter='all';
+  document.getElementById('searchQ').value='';
   reRender();
 }
-
+function buildFilters(){
+  const items=getItems(S.formSheetKey); const sk=S.formSheetKey;
+  const c={all:items.length,vacant:0,'has-data':0,drafted:0,submitted:0};
+  items.forEach(i=>{const s=itemStatus(sk,i);if(c[s]!==undefined)c[s]++;});
+  document.getElementById('filterTabs').innerHTML=[
+    {k:'all',l:`All (${c.all})`},{k:'vacant',l:`⬜ ${c.vacant}`},
+    {k:'has-data',l:`📋 ${c['has-data']}`},{k:'drafted',l:`✏️ ${c.drafted}`},{k:'submitted',l:`✅ ${c.submitted}`}
+  ].map(t=>`<button class="ftab${S.activeFilter===t.k?' on':''}" onclick="setFilter('${t.k}',this)">${t.l}</button>`).join('');
+}
+function setFilter(k,btn){
+  S.activeFilter=k;
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); reRender();
+}
 function reRender(){
-  document.getElementById('formTitle').textContent='Stock Count Form';
-  document.getElementById('formSheet').textContent=S.items.length?`${S.items.length} items`:'No sheet';
-
+  const sk=S.formSheetKey; const items=getItems(sk);
+  document.getElementById('formTitle').textContent='Stock Form';
+  document.getElementById('formMeta').textContent=items.length?`${items.length} items`:'';
   const q=(document.getElementById('searchQ').value||'').trim().toLowerCase();
-  let filtered=!q?[...S.items]:S.items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
-  if(S.activeFilter!=='all') filtered=filtered.filter(i=>itemStatus(i)===S.activeFilter);
-
-  const total=S.items.length;
-  const done=S.items.filter(i=>S.responses[i.id]||S.draft[i.id]).length;
+  let filtered=!q?[...items]:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
+  if(S.activeFilter!=='all') filtered=filtered.filter(i=>itemStatus(sk,i)===S.activeFilter);
+  const total=items.length;
+  const done=items.filter(i=>getResp(sk,i.id)||getDraft(sk,i.id)).length;
   const pct=total?Math.round(done/total*100):0;
   document.getElementById('pFill').style.width=pct+'%';
-  document.getElementById('pText').textContent=`${done} / ${total} entries`;
+  document.getElementById('pText').textContent=`${done}/${total}`;
   document.getElementById('pPct').textContent=pct+'%';
-  document.getElementById('subCount').textContent=`${Object.keys(S.draft).filter(id=>S.items.find(i=>i.id==id)).length} drafts ready`;
-
+  document.getElementById('subCount').textContent=Object.keys(S.draft).filter(k=>k.startsWith(sk+'::')).length+' drafts';
   buildFilters();
-
-  if(!S.items.length){
-    document.getElementById('itemsWrap').innerHTML=`<div class="empty-state"><div class="ei">📭</div><h3>No items loaded</h3><p>Admin uploads a Vyapar sheet — it appears here on all devices</p></div>`;
-    return;
-  }
-  if(!filtered.length){
-    document.getElementById('itemsWrap').innerHTML=`<div class="empty-state"><div class="ei">🔍</div><h3>No items match</h3><p>Try a different search or filter</p></div>`;
-    return;
-  }
-  document.getElementById('itemsWrap').innerHTML=filtered.map((item,idx)=>renderItemCard(item,idx)).join('');
+  if(!S.sheets.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets</h3><p>Admin uploads a sheet</p></div>';return;}
+  if(!items.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">📋</div><h3>Empty sheet</h3></div>';return;}
+  if(!filtered.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No matches</h3></div>';return;}
+  document.getElementById('itemsWrap').innerHTML=filtered.map((item,idx)=>renderFormCard(item,idx,sk)).join('');
 }
 
-function renderItemCard(item,idx){
-  const st=itemStatus(item);
-  const r=S.responses[item.id];
-  const d=S.draft[item.id];
+function renderFormCard(item,idx,sk){
+  const st=itemStatus(sk,item.id);
+  const r=getResp(sk,item.id); const d=getDraft(sk,item.id);
   const isOpen=S.openItem===item.id;
-
-  let badge='',cardClass='item-card';
-  if(st==='submitted') { badge=`<span class="badge b-done">✓ Submitted</span>`; cardClass+=' ic-done'; }
-  else if(st==='has-data') { badge=`<span class="badge b-pend">📋 Has Data</span>`; }
-  else if(st==='drafted')  { badge=`<span class="badge b-rev">✏️ Draft</span>`; }
-  else if(st==='revising') { badge=`<span class="badge b-rev">🔄 Revising</span>`; cardClass+=' ic-rev'; }
-  else                     { badge=`<span class="badge b-pend">⬜ Vacant</span>`; }
-  if(isOpen) cardClass+=' open';
-
-  // existing data preview pills (only when closed)
-  let existingSnip='';
+  let badge='',cls='ic';
+  if(st==='submitted'){badge='<span class="badge b-ok">✓</span>';cls+=' ic-done';}
+  else if(st==='has-data'){badge='<span class="badge b-bl">📋</span>';}
+  else if(st==='drafted'){badge='<span class="badge b-yw">✏️</span>';}
+  else if(st==='revising'){badge='<span class="badge b-yw">🔄</span>';cls+=' ic-rev';}
+  else{badge='<span class="badge b-bl">⬜</span>';}
+  if(isOpen) cls+=' open';
+  let pills='';
   if(!isOpen){
-    const eQty=r?.qty??item.stock;
-    const eSP=r?.sp??item.salePrice;
-    const eCP=r?.cp??item.purchasePrice;
-    if(eQty||eSP||eCP){
-      existingSnip=`<div class="ic-existing">
-        ${eQty?`<div class="ex-pill"><span>Qty</span><strong>${eQty}</strong></div>`:''}
-        ${eSP?`<div class="ex-pill"><span>Sale ₹</span><strong>${eSP}</strong></div>`:''}
-        ${eCP?`<div class="ex-pill"><span>Cost ₹</span><strong>${eCP}</strong></div>`:''}
-      </div>`;
-    }
+    const eq=r?.qty??item.stock,es=r?.sp??item.salePrice,ec=r?.cp??item.purchasePrice;
+    if(eq||es||ec) pills=`<div class="ic-pills">
+      ${eq?`<div class="ex-pill"><span>Qty </span><strong>${eq}</strong></div>`:''}
+      ${es?`<div class="ex-pill"><span>Sale ₹</span><strong>${es}</strong></div>`:''}
+      ${ec?`<div class="ex-pill"><span>Cost ₹</span><strong>${ec}</strong></div>`:''}
+    </div>`;
   }
-
   const fv=k=>{
     if(d&&d[k]!==undefined&&d[k]!=='') return d[k];
     if(r&&r[k]!==undefined&&r[k]!=='') return r[k];
-    if(item[k]) return item[k];
-    return '';
+    return item[k]||'';
   };
-
   const isRevise=st==='submitted'||st==='revising';
-  const showOpt=S.settings.opt;
 
-  return `<div class="${cardClass}" id="ic-${item.id}">
+  return `<div class="${cls}" id="ic-${item.id}">
     <div class="ic-head" onclick="toggleItem(${item.id})">
       <div class="ic-num">#${idx+1}</div>
       <div class="ic-info">
@@ -911,152 +1145,289 @@ function renderItemCard(item,idx){
         <div class="ic-code">Code: ${item.code||'—'}</div>
         <div class="ic-meta">${badge}</div>
       </div>
-      <div class="ic-right">
-        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
+      <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    ${existingSnip}
+    ${pills}
     <div class="ic-body">
-      ${isRevise?`<div class="revise-notice">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        <p>Already submitted. Saving will <strong>revise</strong> this entry in Google Sheets.</p>
-      </div>`:''}
-      <div class="fields-section">
-        <div class="fields-lbl"><span class="req-dot"></span> Mandatory — all three required</div>
-        <div class="f3-grid">
+      ${isRevise?`<div class="rev-notice">⚠️ Already submitted — saving will revise this entry.</div>`:''}
+      <div class="fields-sec">
+        <div class="flbl"><span class="rdot"></span> Mandatory</div>
+        <div class="f3">
           <div class="field">
-            <label>CURRENT QTY <span class="req-star">*</span></label>
-            <input type="number" id="f-${item.id}-qty" value="${fv('qty')||fv('stock')||''}" placeholder="50" inputmode="decimal" oninput="onDraft(${item.id})">
-            <span class="err-msg hide" id="e-${item.id}-qty">Required</span>
+            <label>CURRENT QTY <span class="req">*</span></label>
+            <input type="number" id="f-${item.id}-qty" value="${fv('qty')||fv('stock')||''}" placeholder="50" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
+            <span class="errmsg hide" id="e-${item.id}-qty">Required</span>
           </div>
           <div class="field">
-            <label>SALE PRICE ₹ <span class="req-star">*</span></label>
-            <input type="number" id="f-${item.id}-sp" value="${fv('sp')||fv('salePrice')||''}" placeholder="150" inputmode="decimal" oninput="onDraft(${item.id})">
-            <span class="err-msg hide" id="e-${item.id}-sp">Required</span>
+            <label>SALE PRICE ₹</label>
+            <input type="number" id="f-${item.id}-sp" value="${fv('sp')||fv('salePrice')||''}" placeholder="150" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
           </div>
           <div class="field">
-            <label>COST PRICE ₹ <span class="req-star">*</span></label>
-            <input type="number" id="f-${item.id}-cp" value="${fv('cp')||fv('purchasePrice')||''}" placeholder="120" inputmode="decimal" oninput="onDraft(${item.id})">
-            <span class="err-msg hide" id="e-${item.id}-cp">Required</span>
+            <label>COST PRICE ₹</label>
+            <input type="number" id="f-${item.id}-cp" value="${fv('cp')||fv('purchasePrice')||''}" placeholder="120" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
           </div>
         </div>
-        ${showOpt?`
-        <div class="fields-lbl" style="margin-top:4px"><span class="ok-dot"></span> Optional</div>
-        <div class="f2-grid">
-          <div class="field"><label>MIN STOCK</label><input type="number" id="f-${item.id}-min" value="${fv('min')||fv('minStock')||''}" placeholder="5" inputmode="decimal" oninput="onDraft(${item.id})"></div>
-          <div class="field"><label>LOCATION</label><input type="text" id="f-${item.id}-loc" value="${fv('loc')||fv('location')||''}" placeholder="Store 1" oninput="onDraft(${item.id})"></div>
-          <div class="field"><label>TAX RATE %</label><input type="number" id="f-${item.id}-tax" value="${fv('tax')||fv('taxRate')||''}" placeholder="18" inputmode="decimal" oninput="onDraft(${item.id})"></div>
-          <div class="field"><label>NOTES</label><input type="text" id="f-${item.id}-notes" value="${fv('notes')||''}" placeholder="Remark" oninput="onDraft(${item.id})"></div>
+        ${S.settings.opt?`
+        <div class="flbl" style="margin-top:2px"><span class="gdot"></span> Optional</div>
+        <div class="f2">
+          <div class="field">
+            <label>MIN STOCK</label>
+            <input type="number" id="f-${item.id}-min" value="${fv('min')||fv('minStock')||''}" placeholder="5" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
+          </div>
+          <div class="field">
+            <label>TAX %</label>
+            <input type="number" id="f-${item.id}-tax" value="${fv('tax')||fv('taxRate')||''}" placeholder="18" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
+          </div>
+          <div class="field" style="grid-column:1/-1">
+            <label>NOTES</label>
+            <input type="text" id="f-${item.id}-notes" value="${fv('notes')||''}" placeholder="Remark" oninput="onDraft(${item.id},'${sk}')">
+          </div>
         </div>`:''}
       </div>
       <div class="ic-actions">
-        <button class="ic-btn ${isRevise?'btn-revise':'btn-save'}" onclick="saveItem(${item.id})">
-          ${isRevise?'🔄 Revise & Save':'✓ Save Entry'}
-        </button>
-        <button class="ic-btn btn-skip" onclick="skipItem(${item.id})">Skip</button>
+        <button class="ic-btn ${isRevise?'btn-revise':'btn-save'}" onclick="saveItem(${item.id},'${sk}')">${isRevise?'🔄 Revise':'✓ Save'}</button>
+        <button class="ic-btn btn-skip" onclick="skipItem()">Skip</button>
       </div>
     </div>
   </div>`;
 }
 
-/* ══════════════════════════════════════════════════
-   ITEM ACTIONS
-══════════════════════════════════════════════════ */
-function toggleItem(id){
-  S.openItem=S.openItem===id?null:id;
-  reRender();
-  if(S.openItem){
-    setTimeout(()=>{ const el=document.getElementById('ic-'+id); if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'}); },100);
+function toggleItem(id){S.openItem=S.openItem===id?null:id;reRender();if(S.openItem)setTimeout(()=>document.getElementById('ic-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}
+function skipItem(){S.openItem=null;reRender();}
+
+function onDraft(id,sk){
+  const g=f=>{const el=document.getElementById(`f-${id}-${f}`);return el?el.value:'';};
+  S.draft[rKey(sk,id)]={qty:g('qty'),sp:g('sp'),cp:g('cp'),min:g('min'),loc:g('loc'),tax:g('tax'),notes:g('notes')};
+}
+
+async function saveItem(id,sk){
+  const item=getItems(sk).find(i=>i.id===id); if(!item) return;
+  const g=f=>(document.getElementById(`f-${id}-${f}`)?.value||'').trim();
+  const qty=g('qty');
+  if(qty===''){
+    document.getElementById(`e-${id}-qty`)?.classList.remove('hide');
+    document.getElementById(`f-${id}-qty`)?.classList.add('err');
+    toast('⚠️ Qty is required'); return;
   }
-}
+  document.getElementById(`e-${id}-qty`)?.classList.add('hide');
+  document.getElementById(`f-${id}-qty`)?.classList.remove('err');
 
-function onDraft(id){
-  const g=f=>{ const el=document.getElementById(`f-${id}-${f}`); return el?el.value:''; };
-  S.draft[id]={ qty:g('qty'),sp:g('sp'),cp:g('cp'),min:g('min'),loc:g('loc'),tax:g('tax'),notes:g('notes') };
-}
-
-async function saveItem(id){
-  const item=S.items.find(i=>i.id===id); if(!item) return;
-  const g=f=>{ const el=document.getElementById(`f-${id}-${f}`); return (el?el.value:'').trim(); };
-  const qty=g('qty'), sp=g('sp'), cp=g('cp');
-
-  let valid=true;
-  [['qty',qty],['sp',sp],['cp',cp]].forEach(([f,v])=>{
-    const err=document.getElementById(`e-${id}-${f}`);
-    const inp=document.getElementById(`f-${id}-${f}`);
-    if(v===''){
-      valid=false;
-      err&&err.classList.remove('hide');
-      inp&&inp.classList.add('err');
-    } else {
-      err&&err.classList.add('hide');
-      inp&&inp.classList.remove('err');
-    }
-  });
-  if(!valid){ toast('⚠️ Qty, Sale Price and Cost Price are all required'); return; }
-
-  const wasSubmitted=!!S.responses[id];
+  const wasSubmitted=!!getResp(sk,item.id);
+  /* ── KEY FIX: itemId stored as rKey so responses are linked to sheet ── */
   const payload={
-    itemId:id, itemName:item.name, code:item.code||'',
-    qty, sp, cp,
-    min:g('min'), loc:g('loc'), tax:g('tax'), notes:g('notes'),
+    itemId:rKey(sk,id),
+    itemName:item.name, code:item.code||'', sheetKey:sk,
+    qty, sp:g('sp'), cp:g('cp'), min:g('min'),
+    loc:g('loc'), tax:g('tax'), notes:g('notes'),
     by:S.name, ts:Date.now(), isRevision:wasSubmitted
   };
-
-  showLoading('Saving to Google Sheets…');
+  showLoad('Saving…');
   try{
-    const r=await gasPost('saveResponse', payload);
-    if(r.status!=='ok') throw new Error(r.message);
-    S.responses[id]=payload;
-    delete S.draft[id];
-    hideLoading();
-    toast(wasSubmitted?'🔄 Revised & synced!':'✅ Saved to Google Sheets!');
+    await gasPost('saveResponse',payload);
+    S.responses[rKey(sk,id)]=payload;
+    delete S.draft[rKey(sk,id)];
+    hideLoad(); toast(wasSubmitted?'🔄 Revised!':'✅ Saved to Sheets!');
     S.openItem=null;
-    if(S.settings.adv) advanceNext(id);
-    else reRender();
-  } catch(e){
-    hideLoading();
-    // Save to draft if offline
-    S.draft[id]=payload;
-    toast('⚠️ Saved as draft (offline). Will sync on Submit.');
+    if(S.settings.adv) advNext(id,sk); else reRender();
+  }catch(e){
+    hideLoad();
+    S.draft[rKey(sk,id)]=payload;
+    toast('⚠️ Saved draft locally (network error)');
     reRender();
   }
 }
-
-function advanceNext(id){
-  const idx=S.items.findIndex(i=>i.id===id);
-  const next=S.items.slice(idx+1).find(i=>!S.responses[i.id]);
-  S.openItem=next?next.id:null;
-  reRender();
-  if(next) setTimeout(()=>{ const el=document.getElementById('ic-'+next.id); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); },150);
+function advNext(id,sk){
+  const items=getItems(sk);
+  const idx=items.findIndex(i=>i.id===id);
+  const next=items.slice(idx+1).find(i=>!getResp(sk,i.id));
+  S.openItem=next?next.id:null; reRender();
+  if(next) setTimeout(()=>document.getElementById('ic-'+next.id)?.scrollIntoView({behavior:'smooth',block:'center'}),150);
 }
 
-function skipItem(id){ S.openItem=null; reRender(); }
+async function submitAll(){
+  const sk=S.formSheetKey;
+  const draftKeys=Object.keys(S.draft).filter(k=>k.startsWith(sk+'::'));
+  if(!draftKeys.length){toast(Object.keys(S.responses).filter(k=>k.startsWith(sk+'::')).length?'✅ All submitted':'⚠️ Nothing filled');return;}
+  showModal('Submit Drafts',`Push ${draftKeys.length} draft(s) to Google Sheets?`,false,async()=>{
+    showLoad('Submitting…');
+    let ok=0;
+    for(const rk of draftKeys){
+      try{
+        const d=S.draft[rk];
+        await gasPost('saveResponse',d);
+        S.responses[rk]=d; delete S.draft[rk]; ok++;
+      }catch(e){}
+    }
+    hideLoad(); toast(`✅ ${ok} items synced!`); reRender(); renderDash();
+  });
+}
 
 /* ══════════════════════════════════════════════════
-   SUBMIT ALL (flush drafts)
+   SELL TAB
 ══════════════════════════════════════════════════ */
-async function submitAll(){
-  const draftIds=Object.keys(S.draft).filter(id=>S.items.find(i=>i.id==id));
-  if(!draftIds.length){ toast(Object.keys(S.responses).length?'✅ All items already submitted':'⚠️ Nothing filled yet'); return; }
+function renderSellTabs(){
+  document.getElementById('sellTabs').innerHTML=S.sheets.map(s=>
+    `<button class="stab${S.sellSheetKey===s.sheetKey?' on':''}" onclick="setSellSheet('${s.sheetKey}')">${s.name}</button>`
+  ).join('');
+}
+function setSellSheet(k){S.sellSheetKey=k;S.openSell=null;document.getElementById('sellQ').value='';renderSell();}
 
-  showModal('Submit All Drafts',`Push ${draftIds.length} drafted item(s) to Google Sheets?`,false,async()=>{
-    showLoading(`Submitting ${draftIds.length} items…`);
-    let ok=0;
-    for(const id of draftIds){
-      const item=S.items.find(i=>i.id==id);
-      if(!item) continue;
-      const d=S.draft[id];
-      const payload={ itemId:id, itemName:item.name, code:item.code||'', ...d, by:S.name, ts:Date.now(), isRevision:false };
-      try{
-        const r=await gasPost('saveResponse',payload);
-        if(r.status==='ok'){ S.responses[id]=payload; delete S.draft[id]; ok++; }
-      } catch(e){}
-    }
-    hideLoading();
-    toast(`✅ ${ok} items synced to Google Sheets!`);
-    reRender(); renderDash();
-  });
+function renderSell(){
+  renderSellTabs();
+  const sk=S.sellSheetKey;
+  const items=getItems(sk);
+  const q=(document.getElementById('sellQ').value||'').trim().toLowerCase();
+  const filtered=!q?items:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
+  const el=document.getElementById('sellList');
+  if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">🛒</div><h3>No sheets</h3><p>Admin uploads items first</p></div>';return;}
+  if(!filtered.length){el.innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No matches</h3></div>';return;}
+  el.innerHTML=filtered.map(item=>renderSellCard(item,sk)).join('');
+}
+
+function renderSellCard(item,sk){
+  const isOpen=S.openSell===item.id;
+  const currentQty=getEffectiveQty(sk,item);
+  const itemSales=S.sales.filter(s=>String(s.itemId)===rKey(sk,item.id));
+
+  // Recent sales history
+  const histRows=itemSales.slice(-5).reverse().map(s=>{
+    const displayTime=s.dateTime||new Date(Number(s.ts)).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+    return `<div class="sell-hist-row">
+      <span style="flex:1">${s.soldBy}</span>
+      <span style="color:var(--danger);font-weight:700">-${s.qty} sold</span>
+      <span style="color:var(--muted2);font-size:.64rem">${displayTime}</span>
+    </div>`;
+  }).join('');
+
+  return `<div class="sell-card${isOpen?' open':''}" id="sc-${item.id}">
+    <div class="sell-head" onclick="toggleSell(${item.id})">
+      <div class="sell-info">
+        <div class="sell-name">${item.name}</div>
+        <div class="sell-code">Code: ${item.code||'—'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
+        <svg class="sell-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        <div style="text-align:right">
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'}">${currentQty}</div>
+          <div style="font-size:.62rem;color:var(--muted2)">in stock</div>
+        </div>
+      </div>
+    </div>
+    <div class="sell-body">
+      <div class="sell-form-lbl">Record Sale</div>
+      <div class="sell-f2">
+        <div class="field">
+          <label>QTY SOLD <span class="req">*</span></label>
+          <input type="number" id="sl-${item.id}-qty" placeholder="e.g. 3" inputmode="decimal" min="1"
+            style="font-size:1.1rem;font-weight:600;text-align:center">
+        </div>
+        <div class="field">
+          <label>AVAILABLE</label>
+          <div style="padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'};">${currentQty} units</div>
+        </div>
+      </div>
+      <button class="sell-btn" onclick="recordSale(${item.id},'${sk}')" ${currentQty<=0?'disabled style="opacity:.4;cursor:not-allowed"':''}>
+        🛒 ${currentQty<=0?'Out of Stock':'Record Sale & Update Stock'}
+      </button>
+      ${histRows?`<div class="sell-hist"><div class="sell-hist-lbl">Recent Sales</div>${histRows}</div>`:''}
+    </div>
+  </div>`;
+}
+
+function toggleSell(id){
+  S.openSell=S.openSell===id?null:id;
+  renderSell();
+  if(S.openSell) setTimeout(()=>document.getElementById('sc-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+}
+
+async function recordSale(id,sk){
+  const qty=(document.getElementById(`sl-${id}-qty`)?.value||'').trim();
+  if(!qty||Number(qty)<=0){toast('⚠️ Enter qty sold');return;}
+
+  const item=getItems(sk).find(i=>i.id===id);
+  if(!item) return;
+
+  // Simple total qty check — no location bifurcation
+  const avail=getEffectiveQty(sk,item);
+  if(Number(qty)>avail){toast(`⚠️ Only ${avail} units available`);return;}
+
+  // Pull sp/cp from submitted response for profit calculation
+  const itemResp=getResp(sk,item.id);
+  const sp=Number(itemResp?.sp||item.salePrice||0);
+  const cp=Number(itemResp?.cp||item.purchasePrice||0);
+  const grossAmt=sp*Number(qty);
+  const profitAmt=(sp-cp)*Number(qty);
+
+  const now=Date.now();
+  const dateStr=new Date(now).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const timeStr=new Date(now).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
+  const dateTimeStr=dateStr+' '+timeStr;
+
+  const saleRecord={
+    id:'sale_'+now,
+    itemId:rKey(sk,id),
+    itemName:item.name,
+    code:item.code||'',
+    sheetKey:sk,
+    loc:'', qty:Number(qty),
+    sp, cp, grossAmt, profitAmt,
+    soldBy:S.name,
+    ts:now,
+    dateTime:dateTimeStr
+  };
+
+  const newQty=Math.max(0, avail-Number(qty));
+
+  showLoad('Recording sale…');
+  try{
+    // 1. Write sale to monthly Sales sheet
+    await gasPost('saveSale', saleRecord);
+
+    // 2. Update Responses sheet qty (reduce stock)
+    const existingResp=getResp(sk,item.id);
+    const updatedResp={
+      itemId:   rKey(sk,id),
+      itemName: item.name,
+      code:     item.code||'',
+      sheetKey: sk,
+      qty:      newQty,
+      sp:       existingResp?.sp || item.salePrice || '',
+      cp:       existingResp?.cp || item.purchasePrice || '',
+      min:      existingResp?.min || item.minStock || '',
+      loc:      existingResp?.loc || '',
+      tax:      existingResp?.tax || item.taxRate || '',
+      notes:    existingResp?.notes || '',
+      by:       existingResp?.by || S.name,
+      ts:       existingResp?.ts || now,
+      isRevision: true
+    };
+    await gasPost('saveResponse', updatedResp);
+
+    // Update local state immediately
+    S.responses[rKey(sk,id)]=updatedResp;
+    S.sales.push(saleRecord);
+
+    hideLoad();
+    toast(`✅ Sold ${qty} units! Stock: ${avail} → ${newQty}`);
+    S.openSell=null;
+    renderSell(); renderViewer(); renderDash();
+
+  } catch(e){
+    hideLoad();
+    // Offline fallback — update locally so UI stays correct
+    S.sales.push(saleRecord);
+    const existingLocal=getResp(sk,item.id);
+    S.responses[rKey(sk,id)]={
+      ...(existingLocal||{}),
+      itemId:rKey(sk,id), itemName:item.name, code:item.code||'',
+      sheetKey:sk, qty:newQty,
+      sp:existingLocal?.sp||item.salePrice||'',
+      cp:existingLocal?.cp||item.purchasePrice||'',
+      by:S.name, ts:now, isRevision:true
+    };
+    toast(`⚠️ Sold locally (offline). Will sync on next Sync.`);
+    renderSell(); renderViewer(); renderDash();
+  }
 }
 
 /* ══════════════════════════════════════════════════
@@ -1065,67 +1436,74 @@ async function submitAll(){
 function handleUpload(e){
   const f=e.target.files[0]; if(!f) return;
   const ext=f.name.split('.').pop().toLowerCase();
-  if(ext==='csv'){
-    const r=new FileReader();
-    r.onload=ev=>parseAndUpload(csvRows(ev.target.result),f.name);
-    r.readAsText(f);
-  } else {
-    const r=new FileReader();
-    r.onload=ev=>{ const wb=XLSX.read(ev.target.result,{type:'array'}); parseAndUpload(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1}),f.name); };
-    r.readAsArrayBuffer(f);
-  }
+  const r=new FileReader();
+  if(ext==='csv'){r.onload=ev=>parseAndUpload(csvRows(ev.target.result),f.name);r.readAsText(f);}
+  else{r.onload=ev=>{const wb=XLSX.read(ev.target.result,{type:'array'});parseAndUpload(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1}),f.name);};r.readAsArrayBuffer(f);}
   e.target.value='';
 }
-function csvRows(text){ return text.split('\n').map(r=>r.split(',').map(c=>c.replace(/^"|"$/g,'').trim())); }
+function csvRows(text){return text.split('\n').map(r=>r.split(',').map(c=>c.replace(/^"|"$/g,'').trim()));}
 
 async function parseAndUpload(rows,fname){
-  if(!rows.length){ toast('❌ Empty file'); return; }
+  if(!rows.length){toast('❌ Empty file');return;}
   let hi=rows.findIndex(r=>r.some(c=>(c||'').toString().toLowerCase().includes('item name')));
   if(hi<0) hi=0;
   const H=rows[hi].map(h=>(h||'').toString().toLowerCase().trim());
   const ci=k=>H.findIndex(h=>h.includes(k));
-  const iName=Math.max(ci('item name'),0),iCode=ci('item code'),iSP=ci('sale price'),iCP=ci('purchase price');
-  const iStk=ci('opening stock'),iMin=ci('minimum stock'),iLoc=ci('item location'),iTax=ci('tax rate');
-
+  const iN=Math.max(ci('item name'),0),iC=ci('item code'),iSP=ci('sale price'),iCP=ci('purchase price');
+  const iSt=ci('opening stock'),iMn=ci('minimum stock'),iLo=ci('item location'),iTx=ci('tax rate');
   const items=[];
   for(let r=hi+1;r<rows.length;r++){
-    const row=rows[r];
-    const name=(row[iName]||'').toString().trim();
-    if(!name) continue;
-    items.push({
-      id:r, name, code:iCode>=0?(row[iCode]||'').toString().trim():'',
-      salePrice:iSP>=0?Number(row[iSP]||0):0, purchasePrice:iCP>=0?Number(row[iCP]||0):0,
-      stock:iStk>=0?Number(row[iStk]||0):0, minStock:iMin>=0?Number(row[iMin]||0):0,
-      location:iLoc>=0?(row[iLoc]||'').toString().trim():'', taxRate:iTax>=0?Number(row[iTax]||0):0,
-    });
+    const row=rows[r];const name=(row[iN]||'').toString().trim();if(!name) continue;
+    items.push({id:r,name,code:iC>=0?(row[iC]||'').toString().trim():'',
+      salePrice:iSP>=0?Number(row[iSP]||0):0,purchasePrice:iCP>=0?Number(row[iCP]||0):0,
+      stock:iSt>=0?Number(row[iSt]||0):0,minStock:iMn>=0?Number(row[iMn]||0):0,
+      location:iLo>=0?(row[iLo]||'').toString().trim():'',taxRate:iTx>=0?Number(row[iTx]||0):0});
   }
-  if(!items.length){ toast('❌ No items found'); return; }
-
-  showLoading(`Uploading ${items.length} items to Google Sheets…`);
+  if(!items.length){toast('❌ No items found');return;}
+  const sheetKey='Sht_'+fname.replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9]/g,'_').substring(0,20)+'_'+Date.now().toString().slice(-4);
+  showLoad(`Uploading ${items.length} items…`);
   try{
-    const r=await gasPost('saveItems',{ name:fname, items, uploaded:Date.now() });
-    if(r.status!=='ok') throw new Error(r.message);
-    S.items=items;
-    hideLoading();
-    const vacant=items.filter(i=>!i.salePrice&&!i.purchasePrice&&!i.stock).length;
-    toast(`✅ ${items.length} items uploaded! ${vacant} vacant, ${items.length-vacant} have data`);
-    await loadItems();
-    renderSheets(); reRender(); renderDash();
-  } catch(e){ hideLoading(); toast('❌ Upload failed: '+e.message); }
+    await gasPost('saveSheet',{sheetKey,name:fname,items,uploaded:Date.now()});
+    /* Append to local sheets — never replace */
+    const ei=S.sheets.findIndex(s=>s.name===fname);
+    if(ei>-1) S.sheets[ei]={sheetKey,name:fname,items};
+    else S.sheets.push({sheetKey,name:fname,items});
+    S.formSheetKey=sheetKey; S.viewerSheetKey=sheetKey; S.sellSheetKey=sheetKey;
+    hideLoad();
+    toast(`✅ "${fname}" uploaded — ${items.length} items`);
+    renderSheets();buildFormSheetSelect();renderViewer();renderSell();renderDash();
+  }catch(e){hideLoad();toast('❌ Upload failed: '+e.message);}
 }
 
 function renderSheets(){
   const el=document.getElementById('sheetList');
-  if(!S.items.length){ el.innerHTML=`<div class="empty-state"><div class="ei">📭</div><h3>No sheet uploaded</h3><p>Upload a Vyapar Excel export above</p></div>`; return; }
-  const vacant=S.items.filter(i=>!i.salePrice&&!i.purchasePrice&&!i.stock).length;
-  el.innerHTML=`<div class="sheet-card">
-    <div class="sh-icon">📊</div>
-    <div class="sh-info">
-      <h4>Active Sheet <span class="active-tag">ACTIVE</span></h4>
-      <p>${S.items.length} items · ${S.items.length-vacant} with existing data · ${vacant} vacant</p>
-    </div>
-    <div class="sh-act"><button class="sh-btn sh-del-btn" onclick="clearData('sheets')">Remove</button></div>
-  </div>`;
+  if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets yet</h3><p>Upload a Vyapar Excel file above</p></div>';return;}
+  el.innerHTML=S.sheets.map(sh=>{
+    const v=sh.items.filter(i=>!i.salePrice&&!i.purchasePrice&&!i.stock).length;
+    return `<div class="sh-card">
+      <div class="sh-icon">📊</div>
+      <div class="sh-info"><h4>${sh.name}</h4><p>${sh.items.length} items · ${sh.items.length-v} with data · ${v} vacant</p></div>
+      <button class="sh-del" onclick="deleteSheet('${sh.sheetKey}','${sh.name}')">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+async function deleteSheet(sk,name){
+  showModal('Remove Sheet',`Remove "${name}"? Related responses will also be cleared.`,false,async()=>{
+    showLoad('Removing…');
+    try{
+      await gasPost('deleteSheet',{sheetKey:sk});
+      S.sheets=S.sheets.filter(s=>s.sheetKey!==sk);
+      Object.keys(S.responses).filter(k=>k.startsWith(sk+'::')).forEach(k=>delete S.responses[k]);
+      Object.keys(S.draft).filter(k=>k.startsWith(sk+'::')).forEach(k=>delete S.draft[k]);
+      S.sales=S.sales.filter(s=>s.sheetKey!==sk);
+      if(S.formSheetKey===sk) S.formSheetKey=S.sheets[0]?.sheetKey||'';
+      if(S.viewerSheetKey===sk) S.viewerSheetKey=S.sheets[0]?.sheetKey||'';
+      if(S.sellSheetKey===sk) S.sellSheetKey=S.sheets[0]?.sheetKey||'';
+      hideLoad();toast('Sheet removed');
+      renderSheets();buildFormSheetSelect();renderViewer();renderSell();renderDash();
+    }catch(e){hideLoad();toast('❌ '+e.message);}
+  });
 }
 
 /* ══════════════════════════════════════════════════
@@ -1134,17 +1512,15 @@ function renderSheets(){
 function renderResponses(){
   const el=document.getElementById('respList');
   const all=Object.values(S.responses);
-  if(!all.length){ el.innerHTML=`<div class="empty-state"><div class="ei">📭</div><h3>No submissions yet</h3><p>Staff will submit stock entries here</p></div>`; return; }
-  el.innerHTML=all.slice().sort((a,b)=>b.ts-a.ts).map(r=>`
+  if(!all.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No submissions</h3></div>';return;}
+  el.innerHTML=all.sort((a,b)=>b.ts-a.ts).map(r=>`
     <div class="resp-card">
-      <div class="rc-top">
-        <div><div class="rc-name">${r.itemName}</div><div class="rc-by">${r.code||'—'} · by ${r.by} · ${timeAgo(r.ts)}${r.isRevision?' · <span style="color:var(--warn)">Revised</span>':''}</div></div>
-      </div>
+      <div class="rc-name">${r.itemName}</div>
+      <div class="rc-by">${r.code||'—'} · ${r.sheetKey||''} · by ${r.by} · ${timeAgo(r.ts)}${r.isRevision?' · <span style="color:var(--warn)">Revised</span>':''}</div>
       <div class="rc-vals">
         <div class="rv"><span>Qty</span><strong>${r.qty||'—'}</strong></div>
         <div class="rv"><span>Sale ₹</span><strong>${r.sp||'—'}</strong></div>
         <div class="rv"><span>Cost ₹</span><strong>${r.cp||'—'}</strong></div>
-        ${r.min?`<div class="rv"><span>Min</span><strong>${r.min}</strong></div>`:''}
         ${r.loc?`<div class="rv"><span>Location</span><strong>${r.loc}</strong></div>`:''}
       </div>
     </div>`).join('');
@@ -1152,53 +1528,73 @@ function renderResponses(){
 
 function exportCSV(mode){
   const all=Object.values(S.responses);
-  if(!all.length){ toast('No data to export'); return; }
+  if(!all.length){toast('No data');return;}
   let rows,fn;
   if(mode==='vyapar'){
     rows=[['Item name*','Item code','Sale price','Purchase price','Opening stock quantity','Minimum stock quantity','Item Location','Tax Rate'],
-      ...all.map(r=>[r.itemName,r.code,r.sp,r.cp,r.qty,r.min||'',r.loc||'',r.tax||''])];
+      ...all.map(r=>[r.itemName,r.code,r.sp||'',r.cp||'',r.qty,r.min||'',r.loc||'',r.tax||''])];
     fn=`VyaparImport_${dstr()}.csv`;
-  } else {
-    rows=[['Item Name','Code','Qty','Sale Price','Cost Price','Min Stock','Location','Tax','Notes','By','Timestamp'],
-      ...all.map(r=>[r.itemName,r.code,r.qty,r.sp,r.cp,r.min||'',r.loc||'',r.tax||'',r.notes||'',r.by,new Date(r.ts).toLocaleString('en-IN')])];
+  }else{
+    rows=[['Sheet','Item','Code','Qty','Sale ₹','Cost ₹','Min','Location','Tax','Notes','By','Time'],
+      ...all.map(r=>[r.sheetKey||'',r.itemName,r.code,r.qty,r.sp||'',r.cp||'',r.min||'',r.loc||'',r.tax||'',r.notes||'',r.by,new Date(Number(r.ts)).toLocaleString('en-IN')])];
     fn=`StockExport_${dstr()}.csv`;
   }
   const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'})); a.download=fn; a.click();
-  toast(`✅ ${fn} downloaded!`);
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=fn;a.click();
+  toast(`✅ ${fn} downloaded`);
 }
 
 /* ══════════════════════════════════════════════════
    SETTINGS
 ══════════════════════════════════════════════════ */
 function loadSettUI(){
-  document.getElementById('gsURLDisp').value=GAS_URL||'';
+  document.getElementById('gsURLInp').value=GAS_URL||'';
+  document.getElementById('locList').value=(S.settings.locations||[]).join('\n');
   document.getElementById('togAdv').className='tog'+(S.settings.adv?' on':'');
   document.getElementById('togOpt').className='tog'+(S.settings.opt?' on':'');
 }
-function togSett(k){ S.settings[k]=!S.settings[k]; loadSettUI(); reRender(); }
+function togSett(k){S.settings[k]=!S.settings[k];loadSettUI();reRender();}
+
+function saveGASURL(){
+  const u=document.getElementById('gsURLInp').value.trim();
+  if(!u){toast('Paste URL first');return;}
+  if(!u.includes('script.google.com')||!u.includes('/exec')){toast('❌ Must be a /exec URL from script.google.com');return;}
+  GAS_URL=u; LS.set('gasURL',u);
+  toast('✅ URL saved! Sync to test connection.');
+}
+
+async function saveLocations(){
+  const raw=document.getElementById('locList').value;
+  const ll=raw.split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!ll.length){toast('Add at least one location');return;}
+  S.settings.locations=ll;
+  showLoad('Saving…');
+  try{await gasPost('saveSetting',{key:'locations',value:JSON.stringify(ll)});hideLoad();toast('✅ Locations saved!');}
+  catch(e){hideLoad();S.settings.locations=ll;toast('⚠️ Saved locally');}
+}
+
 async function changePIN(){
   const p=document.getElementById('newPIN').value.trim();
-  if(p.length!==4||isNaN(p)){ toast('PIN must be exactly 4 digits'); return; }
-  showLoading('Saving PIN…');
+  if(p.length!==4||isNaN(p)){toast('PIN must be 4 digits');return;}
+  showLoad('Saving…');
   try{
-    const r=await gasPost('saveSetting',{ key:'pin', value:p });
-    if(r.status==='ok'){ S.settings.pin=p; hideLoading(); toast('✅ PIN updated'); }
-    else throw new Error(r.message);
-  } catch(e){ hideLoading(); toast('❌ Failed: '+e.message); }
+    await gasPost('saveSetting',{key:'pin',value:p});
+    S.settings.pin=p; LS.set('adminPIN',p);
+    hideLoad();toast('✅ PIN updated');
+  }catch(e){hideLoad();toast('❌ '+e.message);}
 }
+
 async function clearData(type){
-  showModal('Confirm Clear', type==='resp'?'Delete all submitted responses from Google Sheets?':'Remove item list from Google Sheets?',false,async()=>{
-    showLoading('Clearing…');
+  showModal('Confirm',type==='resp'?'Delete ALL responses from Sheets?':'Delete ALL sales from Sheets?',false,async()=>{
+    showLoad('Clearing…');
     try{
-      await gasPost('clearData',{ type });
+      await gasPost('clearData',{type});
       if(type==='resp') S.responses={};
-      else { S.items=[]; }
-      hideLoading();
-      if(type==='resp') renderResponses(); else renderSheets();
-      renderDash(); reRender();
-      toast('Cleared from Google Sheets');
-    } catch(e){ hideLoading(); toast('❌ '+e.message); }
+      else S.sales=[];
+      hideLoad();renderDash();
+      if(type==='resp') renderResponses(); else renderSell();
+      toast('Cleared');
+    }catch(e){hideLoad();toast('❌ '+e.message);}
   });
 }
 
@@ -1211,219 +1607,282 @@ function showModal(title,msg,warn,cb){
   document.getElementById('modal').classList.remove('hide');
   S.modalCb=cb;
 }
-function closeModal(){ document.getElementById('modal').classList.add('hide'); S.modalCb=null; }
-function runModal(){ if(S.modalCb) S.modalCb(); closeModal(); }
-
+function closeModal(){document.getElementById('modal').classList.add('hide');S.modalCb=null;}
+function runModal(){if(S.modalCb)S.modalCb();closeModal();}
 let tt;
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.textContent=msg; el.classList.add('show');
-  clearTimeout(tt); tt=setTimeout(()=>el.classList.remove('show'),3000);
-}
-
-/* ══════════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════════ */
-function timeAgo(ts){
-  const d=Date.now()-ts;
-  if(d<60000) return 'just now';
-  if(d<3600000) return Math.floor(d/60000)+'m ago';
-  if(d<86400000) return Math.floor(d/3600000)+'h ago';
-  return Math.floor(d/86400000)+'d ago';
-}
-function dstr(){ const d=new Date(); return `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`; }
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),3200);}
 
 /* ══════════════════════════════════════════════════
    COPY APPS SCRIPT
 ══════════════════════════════════════════════════ */
 function copyScript(){
-const code=`// ═══════════════════════════════════════════════════════════
-// StockSync Backend — Google Apps Script  (JSONP + POST)
-// ═══════════════════════════════════════════════════════════
-// SETUP STEPS:
-// 1. Open script.google.com → paste this entire code → Save (Ctrl+S)
-// 2. Change SHEET_ID below to your Google Sheet ID
-//    (open your Sheet → copy the long ID from the URL between /d/ and /edit)
-// 3. Click Deploy → New Deployment
-//    · Type        : Web App
-//    · Execute as  : Me
-//    · Who has access : Anyone
-// 4. Click Deploy → Authorize (allow all permissions) → Copy the URL
-// 5. Paste the URL in the StockSync app setup screen
-// ═══════════════════════════════════════════════════════════
+const code=`// ══════════════════════════════════════════════════════
+// StockSync v5 — Complete Backend — Google Apps Script
+// ══════════════════════════════════════════════════════
+// SETUP:
+// 1. Paste this entire code into script.google.com (New Project)
+// 2. Replace SHEET_ID with your Google Sheet ID (from the sheet URL)
+// 3. Save → Deploy → New Deployment → Web App
+//    Execute as: Me  |  Who has access: Anyone
+// 4. Authorize → Copy the /exec URL → paste in Admin Settings
+// ══════════════════════════════════════════════════════
 
-const SHEET_ID     = 'PASTE_YOUR_GOOGLE_SHEET_ID_HERE';
-const SH_ITEMS     = 'Items';
-const SH_RESPONSES = 'Responses';
-const SH_SETTINGS  = 'Settings';
+const SHEET_ID = 'PASTE_YOUR_GOOGLE_SHEET_ID_HERE';
 
-// ─── doGet — handles JSONP reads (ping / getItems / getResponses / getSettings)
-// The app sends ?action=xxx&callback=fnName
-// We wrap response in callback(JSON) so browser JSONP works cross-origin
+// Fixed sheet names
+const SH_META  = '_Meta';       // index of all uploaded item sheets
+const SH_RESP  = 'Responses';   // stock submissions (upsert by itemId — never grows beyond item count)
+const SH_SETT  = '_Settings';   // app settings (PIN, locations)
+
+// Sales use MONTHLY sheets: Sales_2025_01, Sales_2025_02 …
+// This means the sheet NEVER fills up — a new tab is created each month automatically.
+// Each monthly sheet holds that month's sales. No data is ever lost.
+function getSalesSheetName() {
+  const d = new Date();
+  return 'Sales_' + d.getFullYear() + '_' + String(d.getMonth()+1).padStart(2,'0');
+}
+
+// ─── doGet: JSONP reads ───────────────────────────────
 function doGet(e) {
-  const cb = e.parameter.callback || '';   // JSONP callback name
+  const cb     = (e.parameter && e.parameter.callback) || '';
+  const action = (e.parameter && e.parameter.action)   || 'ping';
   try {
-    const action = e.parameter.action || 'ping';
-    const ss     = SpreadsheetApp.openById(SHEET_ID);
+    const ss = SpreadsheetApp.openById(SHEET_ID);
     let result;
 
     if (action === 'ping') {
-      result = { status:'ok', message:'StockSync is running' };
+      result = { status:'ok', message:'StockSync v5 running' };
     }
 
-    else if (action === 'getItems') {
-      const sheet = ss.getSheetByName(SH_ITEMS);
-      if (!sheet || sheet.getLastRow() < 2) {
-        result = { status:'ok', data:[] };
-      } else {
-        const rows = sheet.getRange(2, 1, sheet.getLastRow()-1, 10).getValues();
-        result = { status:'ok', data: rows.filter(r=>r[0]).map(r=>({
-          id:r[0], name:r[1], code:r[2],
-          salePrice:r[3], purchasePrice:r[4], stock:r[5],
-          minStock:r[6], location:r[7], taxRate:r[8]
-        }))};
+    // ── Load all uploaded item sheets ──
+    else if (action === 'getSheets') {
+      const meta  = getOrCreate(ss, SH_META, ['sheetKey','name','uploaded']);
+      const rows  = meta.getLastRow() > 1 ? meta.getRange(2,1,meta.getLastRow()-1,3).getValues() : [];
+      const sheets = [];
+      for (const [sk, name, up] of rows) {
+        if (!sk) continue;
+        const ws = ss.getSheetByName(sk); if (!ws) continue;
+        const items = ws.getLastRow() > 1
+          ? ws.getRange(2,1,ws.getLastRow()-1,10).getValues()
+              .filter(r => r[0])
+              .map(r => ({ id:r[0], name:r[1], code:r[2], salePrice:r[3], purchasePrice:r[4],
+                           stock:r[5], minStock:r[6], location:r[7], taxRate:r[8] }))
+          : [];
+        sheets.push({ sheetKey:sk, name, uploaded:up, items });
       }
+      result = { status:'ok', data: sheets };
     }
 
+    // ── Load stock submissions (Responses sheet) ──
     else if (action === 'getResponses') {
-      const sheet = ss.getSheetByName(SH_RESPONSES);
-      if (!sheet || sheet.getLastRow() < 2) {
-        result = { status:'ok', data:[] };
-      } else {
-        const rows = sheet.getRange(2, 1, sheet.getLastRow()-1, 13).getValues();
-        result = { status:'ok', data: rows.filter(r=>r[0]).map(r=>({
-          itemId:r[0], itemName:r[1], code:r[2],
-          qty:r[3], sp:r[4], cp:r[5], min:r[6], loc:r[7],
-          tax:r[8], notes:r[9], by:r[10], ts:r[11], isRevision:r[12]
-        }))};
+      const ws = ss.getSheetByName(SH_RESP);
+      if (!ws || ws.getLastRow() < 2) { result = { status:'ok', data:[] }; }
+      else {
+        const rows = ws.getRange(2,1,ws.getLastRow()-1,14).getValues();
+        result = { status:'ok', data: rows.filter(r => r[0]).map(r => ({
+          itemId:r[0], itemName:r[1], code:r[2], sheetKey:r[3],
+          qty:r[4], sp:r[5], cp:r[6], min:r[7], loc:r[8],
+          tax:r[9], notes:r[10], by:r[11], ts:r[12], isRevision:r[13]
+        })) };
       }
     }
 
+    // ── Load sales — reads ALL monthly sales sheets and merges ──
+    else if (action === 'getSales') {
+      const allSheets = ss.getSheets();
+      const salesSheets = allSheets.filter(ws => ws.getName().startsWith('Sales_'));
+      const allSales = [];
+      for (const ws of salesSheets) {
+        if (ws.getLastRow() < 2) continue;
+        const rows = ws.getRange(2,1,ws.getLastRow()-1,13).getValues();
+        rows.filter(r => r[0]).forEach(r => allSales.push({
+          id:r[0], itemId:r[1], itemName:r[2], sheetKey:r[3],
+          loc:r[4], qty:r[5], soldBy:r[6], ts:r[7],
+          sp:r[8], cp:r[9], grossAmt:r[10], profitAmt:r[11], dateTime:r[12]
+        }));
+      }
+      // Sort newest first
+      allSales.sort((a,b) => Number(b.ts) - Number(a.ts));
+      result = { status:'ok', data: allSales };
+    }
+
+    // ── Load settings ──
     else if (action === 'getSettings') {
-      const sheet = getOrCreate(ss, SH_SETTINGS, ['Key','Value']);
-      const rows  = sheet.getLastRow() > 1
-        ? sheet.getRange(2,1,sheet.getLastRow()-1,2).getValues() : [];
-      const cfg   = {};
-      rows.forEach(r => { if(r[0]) cfg[r[0]] = r[1]; });
-      result = { status:'ok', data:{ pin: cfg['pin'] || '1234' } };
+      const ws = getOrCreate(ss, SH_SETT, ['Key','Value']);
+      const cfg = {};
+      if (ws.getLastRow() > 1)
+        ws.getRange(2,1,ws.getLastRow()-1,2).getValues().forEach(r => { if(r[0]) cfg[r[0]] = r[1]; });
+      if (cfg['locations']) { try { cfg.locations = JSON.parse(cfg['locations']); } catch(e){} }
+      result = { status:'ok', data: { pin: cfg['pin']||'1234', locations: cfg.locations||['Store 1','Store 2'] } };
     }
 
-    else {
-      result = { status:'ok', message:'unknown action: '+action };
-    }
+    else { result = { status:'ok', message:'unknown action: ' + action }; }
 
-    // Wrap in JSONP callback if provided
-    const out = cb
-      ? cb + '(' + JSON.stringify(result) + ');'
-      : JSON.stringify(result);
+    const out = cb ? cb + '(' + JSON.stringify(result) + ');' : JSON.stringify(result);
     return ContentService.createTextOutput(out)
       .setMimeType(cb ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
 
   } catch(err) {
-    const result = { status:'error', message: err.message };
-    const out = cb ? cb+'('+JSON.stringify(result)+');' : JSON.stringify(result);
+    const r = { status:'error', message: err.message };
+    const out = cb ? cb + '(' + JSON.stringify(r) + ');' : JSON.stringify(r);
     return ContentService.createTextOutput(out)
       .setMimeType(cb ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
   }
 }
 
-// ─── doPost — handles writes (saveItems / saveResponse / saveSetting / clearData)
-// Receives application/x-www-form-urlencoded: action=xxx&data={...json...}
+// ─── doPost: writes ───────────────────────────────────
 function doPost(e) {
   try {
     const action = e.parameter.action;
     const data   = JSON.parse(e.parameter.data || '{}');
     const ss     = SpreadsheetApp.openById(SHEET_ID);
 
-    if (action === 'saveItems') {
-      const sheet = getOrCreate(ss, SH_ITEMS,
-        ['id','name','code','salePrice','purchasePrice','stock','minStock','location','taxRate','uploadedAt']);
-      if (sheet.getLastRow() > 1)
-        sheet.getRange(2,1,sheet.getLastRow()-1,10).clearContent();
-      const rows = data.items.map(i=>[
-        i.id, i.name, i.code||'', i.salePrice||0, i.purchasePrice||0,
-        i.stock||0, i.minStock||0, i.location||'', i.taxRate||0, data.uploaded||Date.now()
-      ]);
-      if (rows.length) sheet.getRange(2,1,rows.length,10).setValues(rows);
-      return jsonOut({ status:'ok', message: rows.length+' items saved' });
+    // ── Upload item sheet ──
+    if (action === 'saveSheet') {
+      const { sheetKey, name, items, uploaded } = data;
+      let ws = ss.getSheetByName(sheetKey);
+      if (!ws) { ws = ss.insertSheet(sheetKey); }
+      if (ws.getLastRow() === 0)
+        ws.appendRow(['id','name','code','salePrice','purchasePrice','stock','minStock','location','taxRate','uploaded']);
+      if (ws.getLastRow() > 1) ws.getRange(2,1,ws.getLastRow()-1,10).clearContent();
+      const rows = items.map(i => [i.id,i.name,i.code||'',i.salePrice||0,i.purchasePrice||0,
+        i.stock||0,i.minStock||0,i.location||'',i.taxRate||0,uploaded]);
+      if (rows.length) ws.getRange(2,1,rows.length,10).setValues(rows);
+      // Register in meta
+      const meta = getOrCreate(ss, SH_META, ['sheetKey','name','uploaded']);
+      let mRow = -1;
+      if (meta.getLastRow() > 1) {
+        const keys = meta.getRange(2,1,meta.getLastRow()-1,1).getValues().flat();
+        const idx  = keys.indexOf(sheetKey); if (idx > -1) mRow = idx + 2;
+      }
+      if (mRow > -1) meta.getRange(mRow,1,1,3).setValues([[sheetKey,name,uploaded]]);
+      else meta.appendRow([sheetKey, name, uploaded]);
+      return jsonOut({ status:'ok', message: items.length + ' items saved' });
     }
 
+    // ── Save / update stock submission (upsert by itemId) ──
+    // The Responses sheet has ONE row per item — it is overwritten on revision or after a sale.
+    // This means Responses NEVER exceeds the number of items — no row limit issue.
     if (action === 'saveResponse') {
-      const sheet = getOrCreate(ss, SH_RESPONSES,
-        ['itemId','itemName','code','qty','sp','cp','min','loc','tax','notes','by','ts','isRevision']);
-      const id = String(data.itemId);
+      const ws  = getOrCreate(ss, SH_RESP,
+        ['itemId','itemName','code','sheetKey','qty','sp','cp','min','loc','tax','notes','by','ts','isRevision']);
+      const id  = String(data.itemId);
       let rowNum = -1;
-      if (sheet.getLastRow() > 1) {
-        const ids = sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues().flat().map(String);
-        const idx = ids.indexOf(id);
-        if (idx > -1) rowNum = idx + 2;
+      if (ws.getLastRow() > 1) {
+        const ids = ws.getRange(2,1,ws.getLastRow()-1,1).getValues().flat().map(String);
+        const idx = ids.indexOf(id); if (idx > -1) rowNum = idx + 2;
       }
-      const row = [id, data.itemName, data.code||'', data.qty, data.sp, data.cp,
-        data.min||'', data.loc||'', data.tax||'', data.notes||'',
-        data.by, data.ts, data.isRevision ? 'Yes' : 'No'];
-      if (rowNum > -1) sheet.getRange(rowNum,1,1,row.length).setValues([row]);
-      else sheet.appendRow(row);
-      return jsonOut({ status:'ok', message:'saved' });
+      const row = [id, data.itemName, data.code||'', data.sheetKey||'',
+        data.qty, data.sp||'', data.cp||'', data.min||'', data.loc||'',
+        data.tax||'', data.notes||'', data.by, data.ts, data.isRevision ? 'Yes' : 'No'];
+      if (rowNum > -1) ws.getRange(rowNum,1,1,row.length).setValues([row]);
+      else ws.appendRow(row);
+      return jsonOut({ status:'ok' });
     }
 
+    // ── Save a sale → monthly sheet (auto-archives, never fills up) ──
+    if (action === 'saveSale') {
+      const sheetName = getSalesSheetName();   // e.g. Sales_2025_06
+      const ws = getOrCreate(ss, sheetName,
+        ['id','itemId','itemName','sheetKey','loc','qty','soldBy','ts','sp','cp','grossAmt','profitAmt','dateTime']);
+      ws.appendRow([
+        data.id, data.itemId, data.itemName, data.sheetKey||'',
+        data.loc||'', data.qty, data.soldBy, data.ts,
+        data.sp||0, data.cp||0, data.grossAmt||0, data.profitAmt||0,
+        data.dateTime||new Date(Number(data.ts)).toLocaleString('en-IN')
+      ]);
+      return jsonOut({ status:'ok', sheet: sheetName });
+    }
+
+    // ── Save a setting ──
     if (action === 'saveSetting') {
-      const sheet = getOrCreate(ss, SH_SETTINGS, ['Key','Value']);
+      const ws = getOrCreate(ss, SH_SETT, ['Key','Value']);
       let rowNum = -1;
-      if (sheet.getLastRow() > 1) {
-        const keys = sheet.getRange(2,1,sheet.getLastRow()-1,1).getValues().flat();
-        const idx  = keys.indexOf(data.key);
-        if (idx > -1) rowNum = idx + 2;
+      if (ws.getLastRow() > 1) {
+        const keys = ws.getRange(2,1,ws.getLastRow()-1,1).getValues().flat();
+        const idx  = keys.indexOf(data.key); if (idx > -1) rowNum = idx + 2;
       }
-      if (rowNum > -1) sheet.getRange(rowNum,2).setValue(data.value);
-      else sheet.appendRow([data.key, data.value]);
-      return jsonOut({ status:'ok', message:'setting saved' });
+      if (rowNum > -1) ws.getRange(rowNum,2).setValue(data.value);
+      else ws.appendRow([data.key, data.value]);
+      return jsonOut({ status:'ok' });
     }
 
+    // ── Delete a sheet and its responses / sales ──
+    if (action === 'deleteSheet') {
+      const { sheetKey } = data;
+      const ws = ss.getSheetByName(sheetKey); if (ws) ss.deleteSheet(ws);
+      const meta = ss.getSheetByName(SH_META);
+      if (meta && meta.getLastRow() > 1) {
+        const keys = meta.getRange(2,1,meta.getLastRow()-1,1).getValues().flat();
+        const idx  = keys.indexOf(sheetKey); if (idx > -1) meta.deleteRow(idx + 2);
+      }
+      // Remove related responses
+      const resp = ss.getSheetByName(SH_RESP);
+      if (resp && resp.getLastRow() > 1) {
+        const skCols = resp.getRange(2,4,resp.getLastRow()-1,1).getValues().flat();
+        for (let i = skCols.length-1; i >= 0; i--) { if(skCols[i]===sheetKey) resp.deleteRow(i+2); }
+      }
+      // Remove related sales from all monthly sheets
+      const allWs = ss.getSheets().filter(s => s.getName().startsWith('Sales_'));
+      for (const s of allWs) {
+        if (s.getLastRow() < 2) continue;
+        const skCols = s.getRange(2,4,s.getLastRow()-1,1).getValues().flat();
+        for (let i = skCols.length-1; i >= 0; i--) { if(skCols[i]===sheetKey) s.deleteRow(i+2); }
+      }
+      return jsonOut({ status:'ok' });
+    }
+
+    // ── Clear data ──
     if (action === 'clearData') {
-      const shName = data.type === 'resp' ? SH_RESPONSES : SH_ITEMS;
-      const cols   = data.type === 'resp' ? 13 : 10;
-      const sheet  = ss.getSheetByName(shName);
-      if (sheet && sheet.getLastRow() > 1)
-        sheet.getRange(2,1,sheet.getLastRow()-1,cols).clearContent();
-      return jsonOut({ status:'ok', message:'cleared' });
+      if (data.type === 'resp') {
+        const ws = ss.getSheetByName(SH_RESP);
+        if (ws && ws.getLastRow() > 1) ws.getRange(2,1,ws.getLastRow()-1,14).clearContent();
+      }
+      if (data.type === 'sales') {
+        // Clear ALL monthly sales sheets
+        const allWs = ss.getSheets().filter(s => s.getName().startsWith('Sales_'));
+        allWs.forEach(s => { if(s.getLastRow()>1) s.getRange(2,1,s.getLastRow()-1,13).clearContent(); });
+      }
+      return jsonOut({ status:'ok' });
     }
 
-    return jsonOut({ status:'ok', message:'unknown action: '+action });
+    return jsonOut({ status:'ok', message: 'unknown action: ' + action });
   } catch(err) {
     return jsonOut({ status:'error', message: err.message });
   }
 }
 
-// ─── Helpers
+// ─── Helpers ─────────────────────────────────────────
 function getOrCreate(ss, name, headers) {
-  let sheet = ss.getSheetByName(name);
-  if (!sheet) {
-    sheet = ss.insertSheet(name);
-    sheet.appendRow(headers);
-    sheet.getRange(1,1,1,headers.length).setFontWeight('bold');
+  let ws = ss.getSheetByName(name);
+  if (!ws) {
+    ws = ss.insertSheet(name);
+    ws.appendRow(headers);
+    ws.getRange(1,1,1,headers.length).setFontWeight('bold').setBackground('#1a237e').setFontColor('#ffffff');
   }
-  return sheet;
+  return ws;
 }
 function jsonOut(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
+  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
 }`;
   navigator.clipboard.writeText(code)
-    .then(()=>toast('📋 Apps Script copied! Paste into script.google.com'))
-    .catch(()=>{ alert('Copy this manually:\n\nGo to script.google.com, paste the code shown in the setup instructions'); });
+    .then(()=>toast('📋 Script copied! Paste into script.google.com'))
+    .catch(()=>toast('Copy failed — try again'));
 }
 
 /* ══════════════════════════════════════════════════
    KEYBOARD
 ══════════════════════════════════════════════════ */
-document.getElementById('ln').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
-document.getElementById('lp').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
-document.getElementById('setupURL').addEventListener('keydown',e=>{ if(e.key==='Enter') saveSetupURL(); });
+document.getElementById('ln').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 /* ══════════════════════════════════════════════════
-   INIT
+   INIT — show login directly, no setup screen
 ══════════════════════════════════════════════════ */
-checkSetup();
+// Show note if no URL configured
+if(!GAS_URL){
+  document.getElementById('noURLNote').classList.remove('hide');
+}
 </script>
 </body>
 </html>
