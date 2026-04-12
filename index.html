@@ -620,7 +620,7 @@ const LS={
    ─────────────────────────────────────────────────────────────── */
 const HARDCODED_GAS_URL = 'https://script.google.com/macros/s/AKfycbzhuukJ4cGQNjLdhF4RL4X_QfVOnKxdXwDV48BZwunoMFdJXZfTWk_6FZBZSPjgmYLZnA/exec';
 
-let GAS_URL = HARDCODED_GAS_URL || LS.get('gasURL','');
+let GAS_URL = LS.get('gasURL','') || HARDCODED_GAS_URL;
 
 let S={
   role:'', name:'', loginRole:'user',
