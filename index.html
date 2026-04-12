@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#0b0f1a">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,10 +19,10 @@
   --r:14px;--r2:10px;--shadow:0 8px 32px rgba(0,0,0,.6);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;}
+html,body{height:100%;min-height:100dvh;overflow:hidden;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:-webkit-fill-available;}
 .hide{display:none!important;}
-.screen{position:fixed;inset:0;display:flex;flex-direction:column;}
+.screen{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;height:100%;height:100dvh;}
 
 /* ══ LOGIN ══ */
 #loginScreen{background:var(--bg);align-items:center;justify-content:center;padding:28px;overflow-y:auto;}
@@ -59,7 +59,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .content{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
 .content::-webkit-scrollbar{width:3px;}
 .content::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
-.btabs{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;}
+.btabs{display:flex;background:var(--surface);border-top:1px solid var(--border);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);}
 .btab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 0 5px;gap:3px;border:none;background:transparent;color:var(--muted);font-size:9px;cursor:pointer;transition:color .2s;}
 .btab svg{width:18px;height:18px;}
 .btab.on{color:var(--accent);}
@@ -162,7 +162,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .filter-tabs::-webkit-scrollbar{display:none;}
 .ftab{flex-shrink:0;padding:4px 10px;border-radius:20px;font-size:.67rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .ftab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
-.items-wrap{padding:8px 10px 110px;}
+.items-wrap{padding:8px 10px calc(110px + env(safe-area-inset-bottom));}
 /* item form cards */
 .ic{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;overflow:hidden;transition:border-color .2s;}
 .ic.ic-done{border-color:rgba(34,197,94,.3);}
@@ -205,13 +205,13 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .btn-save{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
 .btn-revise{background:linear-gradient(135deg,#eab308,#f97316);color:#000;}
 .btn-skip{background:var(--surface);color:var(--muted2);border:1px solid var(--border);}
-.submit-sticky{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 12px;z-index:10;}
+.submit-sticky{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:10;}
 .submit-sticky button{width:100%;padding:13px;background:linear-gradient(135deg,#3b82f6,#6366f1);border:none;border-radius:var(--r2);color:#fff;font-size:.9rem;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;}
 .submit-sticky button:active{transform:scale(.99);}
 .sub-meta{display:flex;justify-content:space-between;font-size:.63rem;color:var(--muted2);margin-top:5px;}
 
 /* ══ SELL TAB ══ */
-.sell-list{padding:9px 11px 20px;}
+.sell-list{padding:9px 11px calc(20px + env(safe-area-inset-bottom));}
 .sell-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:7px;overflow:hidden;}
 .sell-head{padding:12px 13px;cursor:pointer;display:flex;align-items:flex-start;gap:9px;}
 .sell-head:active{background:var(--card2);}
@@ -488,10 +488,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
             <!-- Deploy note — shown after saving URL -->
             <div id="deployNote" class="hide" style="margin-top:12px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:13px;">
               <div style="font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:700;color:#86efac;margin-bottom:8px;">✅ URL saved on this device</div>
-              <div style="font-size:.72rem;color:var(--muted2);line-height:1.7;">
-                Staff on other devices open the app → tap <strong style="color:var(--text)">Sync</strong> — it will load automatically.<br><br>
-                If any device shows "not configured": Login as Admin on that device → Settings → paste the same URL → Save URL.
+              <div style="font-size:.72rem;color:var(--muted2);line-height:1.7;margin-bottom:10px;">
+                To make the app work on <strong style="color:var(--text)">all other phones and devices</strong>, you must embed this URL into the HTML file:<br><br>
+                1. Open <strong style="color:var(--text)">StockSync_v5_FINAL.html</strong> in a text editor (Notepad, VS Code)<br>
+                2. Find this line near the top of the &lt;script&gt; section:<br>
+                <code style="display:block;margin:6px 0;padding:6px 9px;background:var(--bg);border-radius:6px;font-size:.72rem;color:#fde047;">const HARDCODED_GAS_URL = '';</code>
+                3. Replace it with:<br>
+                <code id="deployURLDisplay" style="display:block;margin:6px 0;padding:6px 9px;background:var(--bg);border-radius:6px;font-size:.65rem;color:#86efac;word-break:break-all;"></code>
+                4. Upload the updated HTML to GitHub Pages / Netlify<br>
+                5. All staff open the same GitHub URL — no setup needed
               </div>
+              <button onclick="copyDeployLine()" style="width:100%;padding:9px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:8px;color:#86efac;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">📋 Copy the Code Line to Replace</button>
             </div>
           </div>
         </div>
@@ -604,13 +611,16 @@ const LS={
   set:(k,v)=>{try{localStorage.setItem('ss5_'+k,JSON.stringify(v));}catch(e){}}
 };
 
-/* ── BACKEND URL ─────────────────────────────────────────────────
-   GAS_URL is loaded from localStorage (set by Admin in Settings).
-   On first load the app checks Google Sheets for a saved URL so all
-   devices pick it up automatically without editing any HTML.
-   Admin: go to Settings tab → paste your /exec URL → Save URL.
+/* ── DEPLOYMENT URL ──────────────────────────────────────────────
+   IMPORTANT: Replace the empty string below with your Apps Script URL.
+   This makes the app work for ALL users on ALL devices automatically.
+   After setting it here, upload the HTML to GitHub Pages / Netlify.
+   The URL you paste in Admin Settings is also saved to localStorage
+   as a fallback, but this hardcoded value is the source of truth.
    ─────────────────────────────────────────────────────────────── */
-let GAS_URL = LS.get('gasURL','');
+const HARDCODED_GAS_URL = 'https://script.google.com/macros/s/AKfycbzhuukJ4cGQNjLdhF4RL4X_QfVOnKxdXwDV48BZwunoMFdJXZfTWk_6FZBZSPjgmYLZnA/exec';
+
+let GAS_URL = HARDCODED_GAS_URL || LS.get('gasURL','');
 
 let S={
   role:'', name:'', loginRole:'user',
@@ -712,14 +722,7 @@ async function doLogin(){
   try{
     try{
       const cfg=await gasGet({action:'getSettings'});
-      if(cfg&&cfg.data){
-        S.settings={...S.settings,...cfg.data};
-        // Auto-pick up gasURL from Sheets if this device doesn't have it
-        if(cfg.data.gasURL && !LS.get('gasURL','')){
-          GAS_URL=cfg.data.gasURL;
-          LS.set('gasURL',cfg.data.gasURL);
-        }
-      }
+      if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
     }catch(e){}
     S.role='user'; S.name=n;
     try{await loadAllSheets();}catch(e){console.warn(e);}
@@ -1575,22 +1578,18 @@ function loadSettUI(){
 }
 function togSett(k){S.settings[k]=!S.settings[k];loadSettUI();reRender();}
 
-async function saveGASURL(){
+function saveGASURL(){
   const u=document.getElementById('gsURLInp').value.trim();
   if(!u){toast('Paste URL first');return;}
   if(!u.includes('script.google.com')||!u.includes('/exec')){toast('❌ Must be a /exec URL from script.google.com');return;}
-  // Save locally first so gasPost works immediately
   GAS_URL=u;
   LS.set('gasURL',u);
-  // Show success note
+  toast('✅ URL saved for this device! Read the deploy note below.');
+  // Show the deploy instruction
   const noteEl=document.getElementById('deployNote');
-  if(noteEl) noteEl.classList.remove('hide');
-  // Push URL to Google Sheets _Settings so other devices get it on Sync
-  try{
-    await gasPost('saveSetting',{key:'gasURL',value:u});
-    toast('✅ URL saved! Other devices will get it on next Sync.');
-  }catch(e){
-    toast('✅ URL saved on this device.');
+  if(noteEl){
+    noteEl.classList.remove('hide');
+    document.getElementById('deployURLDisplay').textContent=u;
   }
 }
 
@@ -1646,6 +1645,14 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 /* ══════════════════════════════════════════════════
    COPY APPS SCRIPT
 ══════════════════════════════════════════════════ */
+function copyDeployLine(){
+  const url = document.getElementById('deployURLDisplay')?.textContent || GAS_URL;
+  if(!url){ toast('Save URL first'); return; }
+  const line = "const HARDCODED_GAS_URL = '" + url + "';";
+  navigator.clipboard.writeText(line)
+    .then(()=>toast('📋 Code line copied! Paste into the HTML file.'))
+    .catch(()=>toast('Manual copy: const HARDCODED_GAS_URL = \'' + url + '\';'));
+}
 
 function copyScript(){
 const code=`// ══════════════════════════════════════════════════════
@@ -1752,12 +1759,7 @@ function doGet(e) {
       if (ws.getLastRow() > 1)
         ws.getRange(2,1,ws.getLastRow()-1,2).getValues().forEach(r => { if(r[0]) cfg[r[0]] = r[1]; });
       if (cfg['locations']) { try { cfg.locations = JSON.parse(cfg['locations']); } catch(e){} }
-      // Return gasURL so other devices auto-configure from Sheets
-      result = { status:'ok', data: {
-        pin: cfg['pin']||'1234',
-        locations: cfg.locations||['Store 1','Store 2'],
-        gasURL: cfg['gasURL']||''
-      }};
+      result = { status:'ok', data: { pin: cfg['pin']||'1234', locations: cfg.locations||['Store 1','Store 2'] } };
     }
 
     else { result = { status:'ok', message:'unknown action: ' + action }; }
@@ -1947,15 +1949,22 @@ document.getElementById('ln').addEventListener('keydown',e=>{if(e.key==='Enter')
 document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 /* ══════════════════════════════════════════════════
-   INIT
+   INIT — show login directly, no setup screen
 ══════════════════════════════════════════════════ */
-// Show backend-not-configured note only if no URL in localStorage
+// Show note if no URL configured
+// If we have a hardcoded URL, sync it to localStorage immediately
+if(HARDCODED_GAS_URL && !LS.get('gasURL','')) {
+  LS.set('gasURL', HARDCODED_GAS_URL);
+}
+// Show note only if truly no URL configured anywhere
 if(!GAS_URL){
   document.getElementById('noURLNote').classList.remove('hide');
 }
-// Pre-fill settings URL input with whatever is already stored
-const _sURLInp = document.getElementById('gsURLInp');
-if(_sURLInp && GAS_URL) _sURLInp.value = GAS_URL;
+// Pre-fill the settings input if URL is known
+if(GAS_URL){
+  const inp = document.getElementById('gsURLInp');
+  if(inp) inp.value = GAS_URL;
+}
 </script>
 </body>
 </html>
