@@ -484,7 +484,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
             <h4>Web App URL</h4>
             <p>Paste your Google Apps Script deployment URL here.</p>
             <input id="gsURLInp" type="url" placeholder="https://script.google.com/macros/s/…/exec">
-            <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveGASURL()">Save URL</button>
+            <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveGASURL()">Save URL & Test</button>
+            <!-- Deploy note — shown after saving URL -->
+            <div id="deployNote" class="hide" style="margin-top:12px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:13px;">
+              <div style="font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:700;color:#86efac;margin-bottom:8px;">✅ URL saved on this device</div>
+              <div style="font-size:.72rem;color:var(--muted2);line-height:1.7;">
+                Staff on other devices open the app → tap <strong style="color:var(--text)">Sync</strong> — it will load automatically.<br><br>
+                If any device shows "not configured": Login as Admin on that device → Settings → paste the same URL → Save URL.
+              </div>
             </div>
           </div>
         </div>
@@ -597,16 +604,13 @@ const LS={
   set:(k,v)=>{try{localStorage.setItem('ss5_'+k,JSON.stringify(v));}catch(e){}}
 };
 
-/* ── DEPLOYMENT URL ──────────────────────────────────────────────
-   IMPORTANT: Replace the empty string below with your Apps Script URL.
-   This makes the app work for ALL users on ALL devices automatically.
-   After setting it here, upload the HTML to GitHub Pages / Netlify.
-   The URL you paste in Admin Settings is also saved to localStorage
-   as a fallback, but this hardcoded value is the source of truth.
+/* ── BACKEND URL ─────────────────────────────────────────────────
+   GAS_URL is loaded from localStorage (set by Admin in Settings).
+   On first load the app checks Google Sheets for a saved URL so all
+   devices pick it up automatically without editing any HTML.
+   Admin: go to Settings tab → paste your /exec URL → Save URL.
    ─────────────────────────────────────────────────────────────── */
-const HARDCODED_GAS_URL = '';
-
-let GAS_URL = LS.get('gasURL','') || HARDCODED_GAS_URL;
+let GAS_URL = LS.get('gasURL','');
 
 let S={
   role:'', name:'', loginRole:'user',
@@ -708,7 +712,14 @@ async function doLogin(){
   try{
     try{
       const cfg=await gasGet({action:'getSettings'});
-      if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
+      if(cfg&&cfg.data){
+        S.settings={...S.settings,...cfg.data};
+        // Auto-pick up gasURL from Sheets if this device doesn't have it
+        if(cfg.data.gasURL && !LS.get('gasURL','')){
+          GAS_URL=cfg.data.gasURL;
+          LS.set('gasURL',cfg.data.gasURL);
+        }
+      }
     }catch(e){}
     S.role='user'; S.name=n;
     try{await loadAllSheets();}catch(e){console.warn(e);}
@@ -1564,13 +1575,23 @@ function loadSettUI(){
 }
 function togSett(k){S.settings[k]=!S.settings[k];loadSettUI();reRender();}
 
-function saveGASURL(){
+async function saveGASURL(){
   const u=document.getElementById('gsURLInp').value.trim();
   if(!u){toast('Paste URL first');return;}
   if(!u.includes('script.google.com')||!u.includes('/exec')){toast('❌ Must be a /exec URL from script.google.com');return;}
+  // Save locally first so gasPost works immediately
   GAS_URL=u;
   LS.set('gasURL',u);
-  toast('✅ URL saved. Tap Sync to test connection.');
+  // Show success note
+  const noteEl=document.getElementById('deployNote');
+  if(noteEl) noteEl.classList.remove('hide');
+  // Push URL to Google Sheets _Settings so other devices get it on Sync
+  try{
+    await gasPost('saveSetting',{key:'gasURL',value:u});
+    toast('✅ URL saved! Other devices will get it on next Sync.');
+  }catch(e){
+    toast('✅ URL saved on this device.');
+  }
 }
 
 async function saveLocations(){
@@ -1625,6 +1646,7 @@ function toast(msg){const el=document.getElementById('toast');el.textContent=msg
 /* ══════════════════════════════════════════════════
    COPY APPS SCRIPT
 ══════════════════════════════════════════════════ */
+
 function copyScript(){
 const code=`// ══════════════════════════════════════════════════════
 // StockSync v5 — Complete Backend — Google Apps Script
@@ -1730,7 +1752,12 @@ function doGet(e) {
       if (ws.getLastRow() > 1)
         ws.getRange(2,1,ws.getLastRow()-1,2).getValues().forEach(r => { if(r[0]) cfg[r[0]] = r[1]; });
       if (cfg['locations']) { try { cfg.locations = JSON.parse(cfg['locations']); } catch(e){} }
-      result = { status:'ok', data: { pin: cfg['pin']||'1234', locations: cfg.locations||['Store 1','Store 2'] } };
+      // Return gasURL so other devices auto-configure from Sheets
+      result = { status:'ok', data: {
+        pin: cfg['pin']||'1234',
+        locations: cfg.locations||['Store 1','Store 2'],
+        gasURL: cfg['gasURL']||''
+      }};
     }
 
     else { result = { status:'ok', message:'unknown action: ' + action }; }
@@ -1920,13 +1947,15 @@ document.getElementById('ln').addEventListener('keydown',e=>{if(e.key==='Enter')
 document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 
 /* ══════════════════════════════════════════════════
-   INIT — show login directly, no setup screen
+   INIT
 ══════════════════════════════════════════════════ */
-// Sync hardcoded URL to localStorage on first load
-if(HARDCODED_GAS_URL) LS.set('gasURL', HARDCODED_GAS_URL);
-// Pre-fill settings input
-const _inp = document.getElementById('gsURLInp');
-if(_inp && GAS_URL) _inp.value = GAS_URL;
+// Show backend-not-configured note only if no URL in localStorage
+if(!GAS_URL){
+  document.getElementById('noURLNote').classList.remove('hide');
+}
+// Pre-fill settings URL input with whatever is already stored
+const _sURLInp = document.getElementById('gsURLInp');
+if(_sURLInp && GAS_URL) _sURLInp.value = GAS_URL;
 </script>
 </body>
 </html>
