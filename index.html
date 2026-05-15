@@ -25,33 +25,43 @@
 html,body{height:100%;min-height:100dvh;overflow:hidden;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;min-height:-webkit-fill-available;}
 .hide{display:none!important;}
-.screen{position:fixed;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;height:100%;height:100dvh;}
 
-/* ══ LOGIN ══ */
-#loginScreen{background:var(--bg);align-items:center;justify-content:center;padding:28px;overflow-y:auto;}
-.brand{text-align:center;margin-bottom:32px;}
-.brand h1{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;background:linear-gradient(135deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.brand p{color:var(--muted2);font-size:.75rem;margin-top:4px;letter-spacing:.8px;text-transform:uppercase;}
+/* ══ SIDE PANEL ══ */
+.side-panel{position:fixed;top:0;left:0;width:280px;height:100%;height:100dvh;background:var(--surface);border-right:1px solid var(--border);z-index:200;transform:translateX(-100%);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:var(--shadow);display:flex;flex-direction:column;}
+.side-panel.open{transform:translateX(0);}
+.side-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:199;display:none;}
+.side-overlay.show{display:block;}
+.side-header{padding:20px 16px;border-bottom:1px solid var(--border);}
+.side-header h2{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--accent);}
+.side-header p{font-size:.7rem;color:var(--muted2);margin-top:4px;}
+.side-content{flex:1;overflow-y:auto;padding:12px;}
+.side-footer{padding:12px;border-top:1px solid var(--border);}
+.side-item{padding:12px 14px;border-radius:var(--r2);cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:4px;transition:all .15s;font-weight:500;font-size:.85rem;}
+.side-item:hover{background:var(--card);}
+.side-item svg{width:18px;height:18px;flex-shrink:0;}
+.side-item.admin-item{color:var(--admin);}
+.side-item.logout-item{color:var(--danger);}
+
+/* ══ LOGIN MODAL ══ */
+.login-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;}
 .login-card{width:100%;max-width:360px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;box-shadow:var(--shadow);}
-.role-tabs{display:flex;background:var(--surface);border-radius:var(--r2);padding:3px;margin-bottom:18px;gap:3px;}
-.rtab{flex:1;padding:9px;border:none;background:transparent;color:var(--muted2);border-radius:8px;font-size:.83rem;font-weight:600;cursor:pointer;transition:all .2s;}
-.rtab.sel-u{background:var(--accent);color:#fff;}
-.rtab.sel-a{background:var(--admin);color:#fff;}
+.login-card h2{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:16px;color:var(--admin);}
 .fg{margin-bottom:14px;}
 .fg label{display:block;font-size:.7rem;font-weight:600;color:var(--muted2);margin-bottom:5px;letter-spacing:.4px;text-transform:uppercase;}
 .fg input{width:100%;padding:11px 13px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.9rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
 .fg input:focus{border-color:var(--accent);}
 .btn-main{width:100%;padding:12px;border:none;border-radius:var(--r2);font-size:.92rem;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Space Grotesk',sans-serif;margin-top:4px;}
-.btn-u{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;}
 .btn-a{background:linear-gradient(135deg,#f97316,#ef4444);color:#fff;}
+.btn-cancel{background:var(--surface);color:var(--muted2);border:1px solid var(--border);margin-top:8px;}
 .btn-main:active{transform:scale(.98);}
-.no-url-note{text-align:center;margin-top:12px;font-size:.72rem;color:var(--muted);padding:10px;background:rgba(249,115,22,.06);border-radius:8px;border:1px solid rgba(249,115,22,.2);}
 
 /* ══ APP SHELL ══ */
-#appScreen{display:none;}
+#appScreen{display:flex;flex-direction:column;position:fixed;top:0;left:0;right:0;bottom:0;height:100%;height:100dvh;}
 .topbar{height:52px;background:var(--surface);border-bottom:1px solid var(--border);padding:0 13px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .topbar-l{display:flex;align-items:center;gap:8px;}
 .topbar-l h1{font-family:'Space Grotesk',sans-serif;font-size:.93rem;font-weight:700;}
+.menu-btn{width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:transparent;border:none;color:var(--text);padding:0;margin-right:4px;}
+.menu-btn svg{width:20px;height:20px;}
 .topbar-r{display:flex;align-items:center;gap:6px;}
 .av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0;}
 .av-u{background:linear-gradient(135deg,#3b82f6,#6366f1);}
@@ -91,13 +101,11 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .empty h3{font-family:'Space Grotesk',sans-serif;font-size:.88rem;color:var(--muted2);margin-bottom:4px;}
 .empty p{font-size:.72rem;color:var(--muted);}
 
-/* sheet-tab strip (used in viewer + sell) */
 .stab-row{display:flex;gap:6px;padding:8px 12px;overflow-x:auto;border-bottom:1px solid var(--border);scrollbar-width:none;}
 .stab-row::-webkit-scrollbar{display:none;}
 .stab{flex-shrink:0;padding:4px 11px;border-radius:20px;font-size:.68rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .stab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
 
-/* search bar */
 .sbar{padding:9px 12px;background:var(--surface);border-bottom:1px solid var(--border);position:relative;}
 .sbar svg{position:absolute;left:23px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;}
 .sbar input{width:100%;padding:9px 12px 9px 34px;background:var(--card);border:1px solid var(--border);border-radius:var(--r2);color:var(--text);font-size:.83rem;font-family:'Inter',sans-serif;outline:none;transition:border .2s;}
@@ -116,9 +124,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .info-box.warn{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);}
 .info-box h4{font-size:.82rem;font-weight:600;margin-bottom:2px;}
 .info-box p{font-size:.72rem;color:var(--muted2);line-height:1.5;}
-.mini-row{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;border-bottom:1px solid var(--border);}
-.mini-row h4{font-size:.82rem;font-weight:500;}
-.mini-row span{font-size:.67rem;color:var(--muted2);}
 
 /* ══ VIEWER TAB ══ */
 .vi-list{padding:9px 11px 20px;}
@@ -131,19 +136,10 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .vi-card.open .vi-chevron{transform:rotate(180deg);}
 .vi-body{display:none;border-top:1px solid var(--border);}
 .vi-card.open .vi-body{display:block;}
-/* big qty */
 .vi-qty-sec{padding:16px 13px 10px;}
 .vi-qty-lbl{font-size:.62rem;font-weight:700;color:var(--muted2);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px;}
-.vi-total-row{display:flex;align-items:baseline;gap:7px;margin-bottom:14px;}
-.vi-qty-big{font-family:'Space Grotesk',sans-serif;font-size:3.4rem;font-weight:700;line-height:1;color:var(--ok);}
-.vi-qty-unit{font-size:.78rem;color:var(--muted2);}
-/* location breakdown */
-.vi-loc-grid{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;}
-.loc-pill{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 12px;flex:1;min-width:90px;}
-.loc-pill .lp-loc{font-size:.65rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px;}
-.loc-pill .lp-qty{font-family:'Space Grotesk',sans-serif;font-size:1.55rem;font-weight:700;color:var(--accent);}
-.loc-pill .lp-sold{font-size:.65rem;color:var(--danger);margin-top:2px;}
-/* price row */
+.vi-qty-big{font-family:'Space Grotesk',sans-serif;font-size:4.5rem;font-weight:700;line-height:1;color:var(--ok);letter-spacing:-2px;}
+.vi-qty-unit{font-size:.82rem;color:var(--muted2);font-weight:500;}
 .vi-price-row{display:flex;gap:7px;padding:0 13px 13px;}
 .price-box{flex:1;background:var(--surface);border-radius:9px;padding:9px 11px;border:1px solid var(--border);}
 .price-box .pb-lbl{font-size:.62rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
@@ -166,7 +162,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .ftab{flex-shrink:0;padding:4px 10px;border-radius:20px;font-size:.67rem;font-weight:600;border:1px solid var(--border);background:transparent;color:var(--muted2);cursor:pointer;transition:all .15s;white-space:nowrap;}
 .ftab.on{background:var(--accent);border-color:var(--accent);color:#fff;}
 .items-wrap{padding:8px 10px calc(110px + env(safe-area-inset-bottom));}
-/* item form cards */
 .ic{background:var(--card);border:1px solid var(--border);border-radius:var(--r);margin-bottom:6px;overflow:hidden;transition:border-color .2s;}
 .ic.ic-done{border-color:rgba(34,197,94,.3);}
 .ic.ic-rev{border-color:rgba(234,179,8,.3);}
@@ -316,10 +311,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 .sale-qty{font-family:'Space Grotesk',sans-serif;font-size:.9rem;font-weight:700;color:var(--danger);}
 .sale-qty span{font-size:.65rem;font-weight:500;color:var(--muted2);}
 .sale-amt{font-family:'Space Grotesk',sans-serif;font-size:.88rem;font-weight:700;color:var(--warn);}
-/* profit hidden visually — shows on hover / for admin  */
 .sale-profit{font-size:.65rem;color:var(--ok);opacity:.5;filter:blur(3px);transition:all .2s;cursor:pointer;user-select:none;}
 .sale-profit:hover,.sale-profit:active{opacity:1;filter:blur(0);}
-/* gross total footer */
 .sale-footer{display:flex;align-items:center;justify-content:space-between;padding:12px 13px;background:var(--card2);border-top:2px solid var(--border2);margin-top:2px;}
 .sale-gross-total{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;color:var(--warn);}
 .sale-profit-total{font-size:.72rem;color:var(--ok);margin-top:2px;filter:blur(3px);transition:all .2s;cursor:pointer;}
@@ -353,39 +346,91 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
   <p id="loadMsg">Loading…</p>
 </div>
 
-<!-- ══ LOGIN — no setup landing page ══ -->
-<div class="screen" id="loginScreen">
-  <div class="brand"><h1>⚡ BIJALIWALA</h1><p>Inventory · Pricing · Vyapar Ready</p>
-  <p>SINCE 1993</p></div>
+<!-- ══ SIDE PANEL ══ -->
+<div class="side-overlay" id="sideOverlay" onclick="closeSidePanel()"></div>
+<div class="side-panel" id="sidePanel">
+  <div class="side-header">
+    <h2>⚡ BIJALIWALA</h2>
+    <p id="sideUserName">SINCE 1993</p>
+  </div>
+  <div class="side-content" id="sideContent">
+    <div class="side-item" onclick="navFromSide('pgDash');closeSidePanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </div>
+    <div class="side-item" onclick="navFromSide('pgView');closeSidePanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Viewer
+    </div>
+    <div class="side-item" onclick="navFromSide('pgForm');closeSidePanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3 8-8"/><path d="M20 12v6a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h9"/></svg>
+      Fill Stock
+    </div>
+    <div class="side-item" onclick="navFromSide('pgSell');closeSidePanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 001.99 1.61H19a2 2 0 001.99-1.81L23 6H6"/></svg>
+      Sell
+    </div>
+    
+    <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+    
+    <div id="adminSideItems" class="hide">
+      <div style="font-size:.65rem;color:var(--admin);font-weight:700;padding:4px 14px 8px;text-transform:uppercase;letter-spacing:.5px;">Admin Controls</div>
+      <div class="side-item admin-item" onclick="navFromSide('pgSheets');closeSidePanel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Sheets
+      </div>
+      <div class="side-item admin-item" onclick="navFromSide('pgResp');closeSidePanel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        Responses
+      </div>
+      <div class="side-item admin-item" onclick="navFromSide('pgSett');closeSidePanel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        Settings
+      </div>
+      <div style="border-top:1px solid var(--border);margin:8px 0;"></div>
+    </div>
+    
+    <div id="adminLoginBtn" class="side-item admin-item" onclick="showAdminLogin()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      🔐 Admin Login
+    </div>
+  </div>
+  <div class="side-footer">
+    <div class="side-item logout-item" onclick="doLogout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Exit & Logout
+    </div>
+  </div>
+</div>
+
+<!-- ══ ADMIN LOGIN MODAL ══ -->
+<div class="login-modal hide" id="loginModal">
   <div class="login-card">
-    <div class="role-tabs">
-      <button class="rtab sel-u" id="rt-u" onclick="setRole('user')">👤 MEMBER</button>
-      <button class="rtab" id="rt-a" onclick="setRole('admin')">🛡 Admin</button>
-    </div>
+    <h2>🛡 Admin Login</h2>
     <div class="fg">
-      <label>Your Name</label>
-      <input id="ln" type="text" placeholder="Enter your name" autocomplete="off">
-    </div>
-    <div class="fg hide" id="pin-grp">
       <label>Admin PIN</label>
-      <input id="lp" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
+      <input id="adminPIN" type="password" placeholder="4-digit PIN" maxlength="4" inputmode="numeric">
     </div>
-    <button class="btn-main btn-u" id="lb" onclick="doLogin()">Enter as Memeber →</button>
-    <div id="noURLNote" class="no-url-note hide">⚠️ Backend not configured. Login as Admin to set up the Google Sheets URL in Settings.</div>
+    <button class="btn-main btn-a" onclick="verifyAdminPIN()">Login as Admin</button>
+    <button class="btn-main btn-cancel" onclick="closeLoginModal()">Cancel</button>
   </div>
 </div>
 
 <!-- ══ APP ══ -->
 <div class="screen" id="appScreen">
   <div class="topbar">
-    <div class="topbar-l"><span style="font-size:1rem">⚡</span><h1 id="tbTitle">StockSync</h1></div>
+    <div class="topbar-l">
+      <button class="menu-btn" onclick="openSidePanel()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <h1 id="tbTitle">StockSync</h1>
+    </div>
     <div class="topbar-r">
       <button class="tb-btn sync" id="syncBtn" onclick="syncAll()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
         Sync
       </button>
       <div class="av" id="tbAv"></div>
-      <button class="tb-btn" onclick="doLogout()">Exit</button>
     </div>
   </div>
 
@@ -445,12 +490,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 
     <!-- ADMIN: SHEETS -->
     <div class="page" id="pgSheets">
-      <div class="page-head"><h2>Upload Item Sheets</h2><p>Each upload creates a new worksheet tab in your Google Workbook. Staff can switch between sheets.</p></div>
+      <div class="page-head"><h2>Upload Item Sheets</h2><p>Each upload creates a new worksheet tab in your Google Workbook.</p></div>
       <div class="drop-zone">
         <input type="file" id="fileIn" accept=".xlsx,.xls,.csv" onchange="handleUpload(event)">
         <div class="di">📊</div>
         <h3>Tap to Upload Vyapar Sheet</h3>
-        <p>Accepts .xlsx · .xls · .csv<br>Needs "Item name*" column</p>
+        <p>Accepts .xlsx · .xls · .csv</p>
       </div>
       <div id="sheetList"></div>
     </div>
@@ -470,7 +515,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
     <div class="page" id="pgSett">
       <div class="page-head"><h2>Settings</h2><p>Backend URL, PIN, locations, preferences.</p></div>
       <div class="sett-wrap">
-
         <div class="sett-lbl">Google Sheets Backend</div>
         <div class="sett-card">
           <div class="sett-row">
@@ -489,34 +533,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
             <p>Paste your Google Apps Script deployment URL here.</p>
             <input id="gsURLInp" type="url" placeholder="https://script.google.com/macros/s/…/exec">
             <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveGASURL()">Save URL & Test</button>
-            <!-- Deploy note — shown after saving URL -->
-            <div id="deployNote" class="hide" style="margin-top:12px;background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:13px;">
-              <div style="font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:700;color:#86efac;margin-bottom:8px;">✅ URL saved on this device</div>
-              <div style="font-size:.72rem;color:var(--muted2);line-height:1.7;margin-bottom:10px;">
-                To make the app work on <strong style="color:var(--text)">all other phones and devices</strong>, you must embed this URL into the HTML file:<br><br>
-                1. Open <strong style="color:var(--text)">StockSync_v5_FINAL.html</strong> in a text editor (Notepad, VS Code)<br>
-                2. Find this line near the top of the &lt;script&gt; section:<br>
-                <code style="display:block;margin:6px 0;padding:6px 9px;background:var(--bg);border-radius:6px;font-size:.72rem;color:#fde047;">const HARDCODED_GAS_URL = '';</code>
-                3. Replace it with:<br>
-                <code id="deployURLDisplay" style="display:block;margin:6px 0;padding:6px 9px;background:var(--bg);border-radius:6px;font-size:.65rem;color:#86efac;word-break:break-all;"></code>
-                4. Upload the updated HTML to GitHub Pages / Netlify<br>
-                5. All staff open the same GitHub URL — no setup needed
-              </div>
-              <button onclick="copyDeployLine()" style="width:100%;padding:9px;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.3);border-radius:8px;color:#86efac;font-size:.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">📋 Copy the Code Line to Replace</button>
-            </div>
           </div>
         </div>
-
         <div class="sett-lbl">Store Locations</div>
         <div class="sett-card">
           <div class="sett-row">
             <h4>Location List</h4>
-            <p>One location per line. Staff picks from this dropdown when filling stock and recording sales.</p>
-            <textarea id="locList" placeholder="Store 1&#10;Store 2&#10;Warehouse&#10;Godown"></textarea>
+            <p>One location per line.</p>
+            <textarea id="locList" placeholder="Store 1&#10;Store 2&#10;Warehouse"></textarea>
             <button class="act-btn ab-ok" style="margin-top:8px" onclick="saveLocations()">Save Locations</button>
           </div>
         </div>
-
         <div class="sett-lbl">Security</div>
         <div class="sett-card">
           <div class="sett-row">
@@ -528,38 +555,23 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
             </div>
           </div>
         </div>
-
-        <div class="sett-lbl">Preferences</div>
-        <div class="sett-card">
-          <div class="sett-row-inline">
-            <div><h4 style="font-size:.81rem">Auto-advance after save</h4><p style="font-size:.67rem;color:var(--muted2)">Jump to next unfilled item</p></div>
-            <button class="tog on" id="togAdv" onclick="togSett('adv')"></button>
-          </div>
-          <div class="sett-row-inline">
-            <div><h4 style="font-size:.81rem">Show optional fields</h4><p style="font-size:.67rem;color:var(--muted2)">Location, Tax Rate, Notes</p></div>
-            <button class="tog on" id="togOpt" onclick="togSett('opt')"></button>
-          </div>
-        </div>
-
         <div class="sett-lbl">Data</div>
         <div class="sett-card">
           <div class="sett-row-inline">
-            <div><h4 style="font-size:.81rem">Clear all responses</h4><p style="font-size:.67rem;color:var(--muted2)">Wipes from Google Sheets</p></div>
+            <div><h4 style="font-size:.81rem">Clear all responses</h4></div>
             <button class="act-btn ab-danger" onclick="clearData('resp')">Clear</button>
           </div>
           <div class="sett-row-inline">
-            <div><h4 style="font-size:.81rem">Clear all sales</h4><p style="font-size:.67rem;color:var(--muted2)">Wipes sales history</p></div>
+            <div><h4 style="font-size:.81rem">Clear all sales</h4></div>
             <button class="act-btn ab-danger" onclick="clearData('sales')">Clear</button>
           </div>
         </div>
-
       </div>
     </div>
 
-  </div><!-- /content -->
+  </div>
 
-  <!-- User tabs -->
-  <div class="btabs hide" id="userTabs">
+  <div class="btabs" id="userTabs">
     <button class="btab on" id="bt-dash" onclick="nav('pgDash','bt-dash')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       Dashboard
@@ -577,22 +589,6 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
       Sell
     </button>
   </div>
-
-  <!-- Admin tabs -->
-  <div class="btabs hide" id="adminTabs">
-    <button class="btab on" id="bt-sh" onclick="aNav('pgSheets','bt-sh')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-      Sheets
-    </button>
-    <button class="btab" id="bt-re" onclick="aNav('pgResp','bt-re')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-      Responses
-    </button>
-    <button class="btab" id="bt-se" onclick="aNav('pgSett','bt-se')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      Settings
-    </button>
-  </div>
 </div>
 
 <div id="toast"></div>
@@ -607,1368 +603,267 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-
 </div>
 
 <script>
-/* ══════════════════════════════════════════════════
-   STORAGE
-══════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════
+// STORAGE
+// ══════════════════════════════════════════════════
 const LS={
   get:(k,d)=>{try{const v=localStorage.getItem('ss5_'+k);return v!==null?JSON.parse(v):d;}catch(e){return d;}},
   set:(k,v)=>{try{localStorage.setItem('ss5_'+k,JSON.stringify(v));}catch(e){}}
 };
 
-/* ── DEPLOYMENT URL ──────────────────────────────────────────────
-   IMPORTANT: Replace the empty string below with your Apps Script URL.
-   This makes the app work for ALL users on ALL devices automatically.
-   After setting it here, upload the HTML to GitHub Pages / Netlify.
-   The URL you paste in Admin Settings is also saved to localStorage
-   as a fallback, but this hardcoded value is the source of truth.
-   ─────────────────────────────────────────────────────────────── */
 const HARDCODED_GAS_URL = 'https://script.google.com/macros/s/AKfycbw_8Gd9DvlJRBxaJumtmret_HJhNRH39ax8tNIKeaAxLsgyBUxo-ClUOICmuMGug7wBZg/exec';
-
 let GAS_URL = HARDCODED_GAS_URL || LS.get('gasURL','');
 
 let S={
-  role:'', name:'', loginRole:'user',
-  sheets:[],           /* [{sheetKey,name,items:[]}] */
-  responses:{},        /* key=sheetKey+'::'+itemId → resp obj */
-  sales:[],            /* [{id,itemId,itemName,sheetKey,loc,qty,soldBy,ts}] */
+  role:'user', name:'Staff',
+  sheets:[], responses:{}, sales:[],
   settings:{pin:'1234',adv:true,opt:true,locations:['Store 1','Store 2']},
-  formSheetKey:'',
-  viewerSheetKey:'',
-  sellSheetKey:'',
+  formSheetKey:'', viewerSheetKey:'', sellSheetKey:'',
   openItem:null, openViewer:null, openSell:null,
-  activeFilter:'all',
-  draft:{},
-  modalCb:null,
+  activeFilter:'all', draft:{}, modalCb:null,
 };
 
-/* ══════════════════════════════════════════════════
-   JSONP — reads (CORS-free)
-══════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════
+// JSONP / POST
+// ══════════════════════════════════════════════════
 function gasGet(params){
   return new Promise((resolve,reject)=>{
-    if(!GAS_URL){reject(new Error('No backend URL. Admin must set URL in Settings.'));return;}
+    if(!GAS_URL){reject(new Error('No backend URL'));return;}
     const cb='gcb_'+Date.now()+'_'+Math.floor(Math.random()*9999);
-    const timer=setTimeout(()=>{
-      delete window[cb]; document.getElementById(cb)?.remove();
-      reject(new Error('Request timed out'));
-    },20000);
+    const timer=setTimeout(()=>{delete window[cb];document.getElementById(cb)?.remove();reject(new Error('Timeout'));},20000);
     window[cb]=data=>{clearTimeout(timer);delete window[cb];document.getElementById(cb)?.remove();resolve(data);};
     const s=document.createElement('script');
-    s.id=cb;
-    s.src=GAS_URL+'?'+new URLSearchParams({...params,callback:cb}).toString();
-    s.onerror=()=>{clearTimeout(timer);delete window[cb];s.remove();reject(new Error('Network error — check URL'));};
+    s.id=cb;s.src=GAS_URL+'?'+new URLSearchParams({...params,callback:cb}).toString();
+    s.onerror=()=>{clearTimeout(timer);delete window[cb];s.remove();reject(new Error('Network error'));};
     document.head.appendChild(s);
   });
 }
-
-/* ══════════════════════════════════════════════════
-   no-cors POST — writes
-   Using fetch no-cors: browser sends, Apps Script receives, no response body
-══════════════════════════════════════════════════ */
 async function gasPost(action,data){
-  if(!GAS_URL) throw new Error('No backend URL. Set in Admin Settings.');
-  await fetch(GAS_URL,{
-    method:'POST', mode:'no-cors',
-    body:new URLSearchParams({action,data:JSON.stringify(data)}),
-    headers:{'Content-Type':'application/x-www-form-urlencoded'}
-  });
-  await new Promise(r=>setTimeout(r,1000)); /* wait for Sheets to commit */
+  if(!GAS_URL) throw new Error('No backend URL');
+  await fetch(GAS_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({action,data:JSON.stringify(data)}),headers:{'Content-Type':'application/x-www-form-urlencoded'}});
+  await new Promise(r=>setTimeout(r,1000));
   return {status:'ok'};
 }
-
-/* ══════════════════════════════════════════════════
-   LOADING
-══════════════════════════════════════════════════ */
-function showLoad(msg='Loading…'){document.getElementById('loadOver').classList.remove('hide');document.getElementById('loadMsg').textContent=msg;}
+function showLoad(msg){document.getElementById('loadOver').classList.remove('hide');document.getElementById('loadMsg').textContent=msg||'Loading…';}
 function hideLoad(){document.getElementById('loadOver').classList.add('hide');}
 
-/* ══════════════════════════════════════════════════
-   LOGIN — no setup landing page
-   Staff just enter name and go
-   Admin sets backend in Settings tab
-══════════════════════════════════════════════════ */
-function setRole(r){
-  S.loginRole=r;
-  document.getElementById('rt-u').className='rtab'+(r==='user'?' sel-u':'');
-  document.getElementById('rt-a').className='rtab'+(r==='admin'?' sel-a':'');
-  document.getElementById('pin-grp').classList.toggle('hide',r!=='admin');
-  const lb=document.getElementById('lb');
-  lb.className='btn-main '+(r==='admin'?'btn-a':'btn-u');
-  lb.textContent=r==='admin'?'Enter as Admin →':'Enter as Staff →';
-  // show note if no URL and user mode
-  document.getElementById('noURLNote').classList.toggle('hide', !(!GAS_URL && r==='user'));
+// ══════════════════════════════════════════════════
+// SIDE PANEL & ADMIN LOGIN
+// ══════════════════════════════════════════════════
+function openSidePanel(){document.getElementById('sidePanel').classList.add('open');document.getElementById('sideOverlay').classList.add('show');}
+function closeSidePanel(){document.getElementById('sidePanel').classList.remove('open');document.getElementById('sideOverlay').classList.remove('show');}
+function showAdminLogin(){document.getElementById('loginModal').classList.remove('hide');document.getElementById('adminPIN').value='';setTimeout(()=>document.getElementById('adminPIN').focus(),200);}
+function closeLoginModal(){document.getElementById('loginModal').classList.add('hide');}
+
+async function verifyAdminPIN(){
+  const pin=document.getElementById('adminPIN').value.trim();
+  if(pin!==LS.get('adminPIN','1234')&&pin!==S.settings.pin){toast('❌ Wrong PIN');return;}
+  closeLoginModal();S.role='admin';bootApp();
+  if(GAS_URL){silentSync();}toast('✅ Admin access granted');
 }
+function doLogout(){S.role='user';S.sheets=[];S.responses={};S.sales=[];S.draft={};closeSidePanel();bootApp();toast('Logged out');}
 
-async function doLogin(){
-  const n=document.getElementById('ln').value.trim();
-  if(!n){toast('Enter your name');return;}
-
-  if(S.loginRole==='admin'){
-    // Admin can always login — even without URL (to set it up)
-    const pin=document.getElementById('lp').value;
-    const localPin=LS.get('adminPIN','1234');
-    if(pin!==localPin && pin!==S.settings.pin){toast('❌ Wrong PIN');return;}
-    S.role='admin'; S.name=n;
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('appScreen').style.display='flex';
-    bootApp();
-    // Load data in background if URL exists
-    if(GAS_URL){ silentSync(); }
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function navFromSide(pg){
+  if(S.role!=='admin'&&(pg==='pgSheets'||pg==='pgResp'||pg==='pgSett')){showAdminLogin();return;}
+  if(S.role==='admin'&&(pg==='pgSheets'||pg==='pgResp'||pg==='pgSett')){
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+    document.getElementById(pg).classList.add('on');
+    if(pg==='pgSheets')renderSheets();if(pg==='pgResp')renderResponses();if(pg==='pgSett')loadSettUI();
     return;
   }
-
-  // Staff login
-  if(!GAS_URL){
-    toast('❌ App not configured yet. Ask your admin to set up the backend URL.');
-    return;
-  }
-  showLoad('Signing in…');
-  try{
-    try{
-      const cfg=await gasGet({action:'getSettings'});
-      if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
-    }catch(e){}
-    S.role='user'; S.name=n;
-    try{await loadAllSheets();}catch(e){console.warn(e);}
-    try{await loadResponses();}catch(e){console.warn(e);}
-    try{await loadSales();}catch(e){console.warn(e);}
-    hideLoad();
-    document.getElementById('loginScreen').style.display='none';
-    document.getElementById('appScreen').style.display='flex';
-    bootApp();
-  }catch(e){hideLoad();toast('❌ '+e.message);}
+  nav(pg,'bt-'+pg.replace('pg','').toLowerCase());
 }
-
-async function silentSync(){
-  try{
-    const cfg=await gasGet({action:'getSettings'});
-    if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
-    await loadAllSheets();
-    await loadResponses();
-    await loadSales();
-    renderSheets();renderResponses();loadSettUI();
-  }catch(e){}
-}
-
-function doLogout(){
-  S.role='';S.name='';S.sheets=[];S.responses={};S.sales=[];S.draft={};
-  document.getElementById('loginScreen').style.display='flex';
-  document.getElementById('appScreen').style.display='none';
-  document.getElementById('ln').value='';
-  document.getElementById('lp').value='';
-}
-
-/* ══════════════════════════════════════════════════
-   BOOT
-══════════════════════════════════════════════════ */
-function bootApp(){
-  const isA=S.role==='admin';
-  document.getElementById('userTabs').classList.toggle('hide',isA);
-  document.getElementById('adminTabs').classList.toggle('hide',!isA);
-  document.getElementById('tbTitle').textContent=isA?'Admin Panel':'StockSync';
-  const av=document.getElementById('tbAv');
-  av.className='av '+(isA?'av-a':'av-u');
-  av.textContent=S.name.substring(0,2).toUpperCase();
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('on','on-a'));
-  if(S.sheets.length){
-    S.formSheetKey=S.sheets[0].sheetKey;
-    S.viewerSheetKey=S.sheets[0].sheetKey;
-    S.sellSheetKey=S.sheets[0].sheetKey;
-  }
-  if(isA){
-    document.getElementById('pgSheets').classList.add('on');
-    document.getElementById('bt-sh').classList.add('on','on-a');
-    renderSheets();renderResponses();loadSettUI();
-  } else {
-    document.getElementById('pgDash').classList.add('on');
-    document.getElementById('bt-dash').classList.add('on');
-    renderDash();renderViewer();buildFormSheetSelect();reRender();renderSell();
-  }
-}
-
-/* ══════════════════════════════════════════════════
-   SYNC
-══════════════════════════════════════════════════ */
-async function syncAll(){
-  if(!GAS_URL){toast('⚠️ No backend URL — set in Admin Settings');return;}
-  const btn=document.getElementById('syncBtn');
-  btn.classList.add('spinning');
-  try{
-    const cfg=await gasGet({action:'getSettings'});
-    if(cfg&&cfg.data) S.settings={...S.settings,...cfg.data};
-    await loadAllSheets();
-    await loadResponses();
-    await loadSales();
-    renderDash();renderViewer();reRender();buildFormSheetSelect();renderSell();
-    if(S.role==='admin'){renderSheets();renderResponses();loadSettUI();}
-    toast('✅ Synced!');
-  }catch(e){toast('❌ Sync: '+e.message);}
-  btn.classList.remove('spinning');
-}
-
-/* ══════════════════════════════════════════════════
-   NAV
-══════════════════════════════════════════════════ */
 function nav(pg,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('#userTabs .btab').forEach(b=>b.classList.remove('on'));
   document.getElementById(pg).classList.add('on');
-  document.getElementById(btn).classList.add('on');
-  if(pg==='pgDash') renderDash();
-  if(pg==='pgView') renderViewer();
-  if(pg==='pgForm'){buildFormSheetSelect();reRender();}
-  if(pg==='pgSell') renderSell();
+  if(btn)document.getElementById(btn)?.classList.add('on');
+  if(pg==='pgDash')renderDash();if(pg==='pgView')renderViewer();
+  if(pg==='pgForm'){buildFormSheetSelect();reRender();}if(pg==='pgSell')renderSell();
 }
-function aNav(pg,btn){
+
+// ══════════════════════════════════════════════════
+// BOOT - Shows UI instantly
+// ══════════════════════════════════════════════════
+function bootApp(){
+  const isA=S.role==='admin';
+  document.getElementById('userTabs').classList.toggle('hide',isA);
+  document.getElementById('tbTitle').textContent=isA?'Admin Panel':'StockSync';
+  document.getElementById('adminSideItems').classList.toggle('hide',!isA);
+  document.getElementById('adminLoginBtn').classList.toggle('hide',isA);
+  document.getElementById('sideUserName').textContent=S.name+(isA?' (Admin)':'');
+  const av=document.getElementById('tbAv');av.className='av '+(isA?'av-a':'av-u');av.textContent=S.name.substring(0,2).toUpperCase();
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('#adminTabs .btab').forEach(b=>b.classList.remove('on','on-a'));
-  document.getElementById(pg).classList.add('on');
-  document.getElementById(btn).classList.add('on','on-a');
-  if(pg==='pgSheets') renderSheets();
-  if(pg==='pgResp')   renderResponses();
-  if(pg==='pgSett')   loadSettUI();
+  document.querySelectorAll('.btab').forEach(b=>b.classList.remove('on','on-a'));
+  if(S.sheets.length){S.formSheetKey=S.sheets[0].sheetKey;S.viewerSheetKey=S.sheets[0].sheetKey;S.sellSheetKey=S.sheets[0].sheetKey;}
+  if(isA){document.getElementById('pgSheets').classList.add('on');renderSheets();renderResponses();loadSettUI();}
+  else{document.getElementById('pgDash').classList.add('on');document.getElementById('bt-dash').classList.add('on');renderDash();renderViewer();buildFormSheetSelect();reRender();renderSell();}
 }
 
-/* ══════════════════════════════════════════════════
-   DATA LOADERS
-══════════════════════════════════════════════════ */
-async function loadAllSheets(){
-  const r=await gasGet({action:'getSheets'});
-  if(r&&r.status==='ok'){
-    S.sheets=r.data||[];
-    if(!S.formSheetKey&&S.sheets.length)  S.formSheetKey=S.sheets[0].sheetKey;
-    if(!S.viewerSheetKey&&S.sheets.length) S.viewerSheetKey=S.sheets[0].sheetKey;
-    if(!S.sellSheetKey&&S.sheets.length)   S.sellSheetKey=S.sheets[0].sheetKey;
-  }
+// ══════════════════════════════════════════════════
+// SYNC
+// ══════════════════════════════════════════════════
+async function syncAll(){
+  if(!GAS_URL){toast('⚠️ No backend URL');return;}
+  const btn=document.getElementById('syncBtn');btn.classList.add('spinning');
+  try{
+    const cfg=await gasGet({action:'getSettings'});if(cfg&&cfg.data)S.settings={...S.settings,...cfg.data};
+    await loadAllSheets();await loadResponses();await loadSales();
+    renderDash();renderViewer();reRender();buildFormSheetSelect();renderSell();
+    if(S.role==='admin'){renderSheets();renderResponses();loadSettUI();}toast('✅ Synced!');
+  }catch(e){toast('❌ Sync: '+e.message);}btn.classList.remove('spinning');
 }
-async function loadResponses(){
-  const r=await gasGet({action:'getResponses'});
-  if(r&&r.status==='ok'){
-    S.responses={};
-    (r.data||[]).forEach(row=>{
-      /* key = itemId field which we store as sheetKey::rowId */
-      S.responses[row.itemId]=row;
-    });
-  }
-}
-async function loadSales(){
-  const r=await gasGet({action:'getSales'});
-  if(r&&r.status==='ok') S.sales=r.data||[];
+async function silentSync(){
+  try{const cfg=await gasGet({action:'getSettings'});if(cfg&&cfg.data)S.settings={...S.settings,...cfg.data};await loadAllSheets();await loadResponses();await loadSales();renderSheets();renderResponses();loadSettUI();}catch(e){}
 }
 
-/* ══════════════════════════════════════════════════
-   HELPERS
-══════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════
+// DATA LOADERS
+// ══════════════════════════════════════════════════
+async function loadAllSheets(){const r=await gasGet({action:'getSheets'});if(r&&r.status==='ok'){S.sheets=r.data||[];if(!S.formSheetKey&&S.sheets.length)S.formSheetKey=S.sheets[0].sheetKey;if(!S.viewerSheetKey&&S.sheets.length)S.viewerSheetKey=S.sheets[0].sheetKey;if(!S.sellSheetKey&&S.sheets.length)S.sellSheetKey=S.sheets[0].sheetKey;}}
+async function loadResponses(){const r=await gasGet({action:'getResponses'});if(r&&r.status==='ok'){S.responses={};(r.data||[]).forEach(row=>{S.responses[row.itemId]=row;});}}
+async function loadSales(){const r=await gasGet({action:'getSales'});if(r&&r.status==='ok')S.sales=r.data||[];}
+
+// ══════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════
 function getSheet(k){return S.sheets.find(s=>s.sheetKey===k)||null;}
-function getItems(k){return (getSheet(k)||{items:[]}).items;}
+function getItems(k){return(getSheet(k)||{items:[]}).items;}
 function rKey(sk,id){return sk+'::'+id;}
 function getResp(sk,id){return S.responses[rKey(sk,id)]||null;}
 function getDraft(sk,id){return S.draft[rKey(sk,id)]||null;}
-function locs(){return S.settings.locations||['Store 1','Store 2'];}
 
-/* Get effective qty = submitted qty (or sheet stock) minus all sales for this item */
-function getEffectiveQty(sk, item){
-  const resp = getResp(sk, item.id);
-  // Use submitted qty if available, else fall back to sheet opening stock
-  let baseQty = resp && resp.qty !== '' && resp.qty !== undefined
-    ? Number(resp.qty)
-    : Number(item.stock || 0);
-  // Subtract all recorded sales for this item
-  const soldTotal = S.sales
-    .filter(s => String(s.itemId) === rKey(sk, item.id))
-    .reduce((a, s) => a + Number(s.qty || 0), 0);
-  return Math.max(0, baseQty - soldTotal);
+function getEffectiveQty(sk,item){
+  const resp=getResp(sk,item.id);
+  if(resp&&resp.qty!==''&&resp.qty!==undefined)return Math.max(0,Number(resp.qty));
+  const baseQty=Number(item.stock||0);
+  const soldTotal=S.sales.filter(s=>String(s.itemId)===rKey(sk,item.id)).reduce((a,s)=>a+Number(s.qty||0),0);
+  return Math.max(0,baseQty-soldTotal);
 }
-
-function itemStatus(sk,item){
-  const r=getResp(sk,item.id); const d=getDraft(sk,item.id);
-  if(r) return d?'revising':'submitted';
-  if(d) return 'drafted';
-  if(Number(item.salePrice)>0||Number(item.purchasePrice)>0||Number(item.stock)>0) return 'has-data';
-  return 'vacant';
-}
-
-function timeAgo(ts){
-  const d=Date.now()-Number(ts);
-  if(d<60000) return 'just now';
-  if(d<3600000) return Math.floor(d/60000)+'m ago';
-  if(d<86400000) return Math.floor(d/3600000)+'h ago';
-  return Math.floor(d/86400000)+'d ago';
-}
+function itemStatus(sk,item){const r=getResp(sk,item.id);const d=getDraft(sk,item.id);if(r)return d?'revising':'submitted';if(d)return'drafted';if(Number(item.salePrice)>0||Number(item.purchasePrice)>0||Number(item.stock)>0)return'has-data';return'vacant';}
+function timeAgo(ts){const d=Date.now()-Number(ts);if(d<60000)return'just now';if(d<3600000)return Math.floor(d/60000)+'m ago';if(d<86400000)return Math.floor(d/3600000)+'h ago';return Math.floor(d/86400000)+'d ago';}
 function dstr(){const d=new Date();return`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;}
 
-/* ══════════════════════════════════════════════════
-   DASHBOARD
-══════════════════════════════════════════════════ */
+// ══════════════════════════════════════════════════
+// DASHBOARD
+// ══════════════════════════════════════════════════
 function renderDash(){
   document.getElementById('dGreet').textContent='Hello, '+S.name+'!';
-  const total=S.sheets.reduce((a,s)=>a+s.items.length,0);
-  const submitted=Object.keys(S.responses).length;
-
-  // Today's sales only (midnight cutoff)
-  const todayStart=new Date(); todayStart.setHours(0,0,0,0);
+  const total=S.sheets.reduce((a,s)=>a+s.items.length,0),submitted=Object.keys(S.responses).length;
+  const todayStart=new Date();todayStart.setHours(0,0,0,0);
   const todaySales=S.sales.filter(s=>Number(s.ts)>=todayStart.getTime());
-  const totalUnits=todaySales.reduce((a,s)=>a+Number(s.qty||0),0);
-  const grossSale=todaySales.reduce((a,s)=>a+Number(s.grossAmt||0),0);
-  const totalProfit=todaySales.reduce((a,s)=>a+Number(s.profitAmt||0),0);
-
+  const totalUnits=todaySales.reduce((a,s)=>a+Number(s.qty||0),0),grossSale=todaySales.reduce((a,s)=>a+Number(s.grossAmt||0),0),totalProfit=todaySales.reduce((a,s)=>a+Number(s.profitAmt||0),0);
   document.getElementById('dSub').textContent=S.sheets.length?`${S.sheets.length} sheet(s) · ${total} items`:'No sheets loaded';
-  document.getElementById('dStats').innerHTML=`
-    <div class="stat-box"><div class="sl">📦 Total Items</div><div class="sn">${total||'—'}</div><div class="sh">all sheets</div></div>
-    <div class="stat-box"><div class="sl">✅ Submitted</div><div class="sn" style="color:var(--ok)">${submitted}</div><div class="sh">stock entries</div></div>
-    <div class="stat-box"><div class="sl">🛒 Units Sold</div><div class="sn" style="color:var(--sell)">${totalUnits}</div><div class="sh">today</div></div>
-    <div class="stat-box"><div class="sl">💰 Gross Sale</div><div class="sn" style="color:var(--warn)">₹${grossSale.toLocaleString('en-IN')}</div><div class="sh">today</div></div>`;
-
-  document.getElementById('noSheetMsg').innerHTML=!S.sheets.length
-    ?'<div class="info-box warn"><h4>No Sheets Loaded</h4><p>Admin must upload a Vyapar sheet first.</p></div>':'';
-
-  // Today's sold items list
-  const lbl=document.getElementById('dRecentLbl');
-  const rec=document.getElementById('dRecent');
-
-  if(todaySales.length){
-    lbl.style.display='block';
-    lbl.textContent="Today's Sales";
-
-    // Group sales by itemName+loc for cleaner display
-    const rows=todaySales.slice().sort((a,b)=>b.ts-a.ts).map(s=>{
-      const profit=Number(s.profitAmt||0);
-      const displayTime=s.dateTime||new Date(Number(s.ts)).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-      return `<div class="sale-row">
-        <div class="sale-row-l">
-          <div class="sale-item-name">${s.itemName}</div>
-          <div class="sale-item-meta">${s.loc||'—'} · ${s.soldBy} · ${displayTime}</div>
-        </div>
-        <div class="sale-row-r">
-          <div class="sale-qty">-${s.qty} <span>pcs</span></div>
-          <div class="sale-amt">₹${Number(s.grossAmt||0).toLocaleString('en-IN')}</div>
-          <div class="sale-profit" title="Profit = (SP−CP)×Qty — tap to reveal">₹${profit>=0?profit.toFixed(0):profit.toFixed(0)}</div>
-        </div>
-      </div>`;
-    }).join('');
-
-    // Gross total footer row (bold)
-    const footer=`<div class="sale-footer">
-      <div style="flex:1">
-        <div style="font-family:'Space Grotesk',sans-serif;font-size:.82rem;font-weight:700;color:var(--text)">Today's Total</div>
-        <div style="font-size:.67rem;color:var(--muted2)">${todaySales.length} transaction(s) · ${totalUnits} units</div>
-      </div>
-      <div style="text-align:right">
-        <div class="sale-gross-total">₹${grossSale.toLocaleString('en-IN')}</div>
-        <div class="sale-profit-total" title="Net Profit (SP−CP × Qty)">Profit: ₹${totalProfit>=0?totalProfit.toFixed(0):totalProfit.toFixed(0)}</div>
-      </div>
-    </div>`;
-
-    rec.innerHTML=rows+footer;
-  } else {
-    lbl.style.display='block';
-    lbl.textContent="Today's Sales";
-    rec.innerHTML='<div style="padding:20px 14px;text-align:center;font-size:.78rem;color:var(--muted2)">No sales recorded today yet.<br>Use the Sell tab to record a sale.</div>';
-  }
+  document.getElementById('dStats').innerHTML=`<div class="stat-box"><div class="sl">📦 Total Items</div><div class="sn">${total||'—'}</div></div><div class="stat-box"><div class="sl">✅ Submitted</div><div class="sn" style="color:var(--ok)">${submitted}</div></div><div class="stat-box"><div class="sl">🛒 Units Sold</div><div class="sn" style="color:var(--sell)">${totalUnits}</div></div><div class="stat-box"><div class="sl">💰 Gross Sale</div><div class="sn" style="color:var(--warn)">₹${grossSale.toLocaleString('en-IN')}</div></div>`;
+  document.getElementById('noSheetMsg').innerHTML=!S.sheets.length?'<div class="info-box warn"><h4>No Sheets Loaded</h4><p>Admin must upload a Vyapar sheet first.</p></div>':'';
+  const lbl=document.getElementById('dRecentLbl'),rec=document.getElementById('dRecent');
+  if(todaySales.length){lbl.style.display='block';lbl.textContent="Today's Sales";
+    const rows=todaySales.slice().sort((a,b)=>b.ts-a.ts).map(s=>`<div class="sale-row"><div class="sale-row-l"><div class="sale-item-name">${s.itemName}</div><div class="sale-item-meta">${s.soldBy} · ${s.dateTime||''}</div></div><div class="sale-row-r"><div class="sale-qty">-${s.qty} <span>pcs</span></div><div class="sale-amt">₹${Number(s.grossAmt||0).toLocaleString('en-IN')}</div></div></div>`).join('');
+    rec.innerHTML=rows+`<div class="sale-footer"><div style="flex:1"><div style="font-weight:700">Today's Total</div></div><div class="sale-gross-total">₹${grossSale.toLocaleString('en-IN')}</div></div>`;
+  }else{lbl.style.display='block';lbl.textContent="Today's Sales";rec.innerHTML='<div style="padding:20px;text-align:center;color:var(--muted2)">No sales recorded today yet.</div>';}
 }
 
-/* ══════════════════════════════════════════════════
-   VIEWER
-══════════════════════════════════════════════════ */
-function renderViewerTabs(){
-  const el=document.getElementById('viewerTabs');
-  el.innerHTML=S.sheets.map(s=>
-    `<button class="stab${S.viewerSheetKey===s.sheetKey?' on':''}" onclick="setViewerSheet('${s.sheetKey}')">${s.name}</button>`
-  ).join('');
-}
+// ══════════════════════════════════════════════════
+// VIEWER
+// ══════════════════════════════════════════════════
+function renderViewerTabs(){document.getElementById('viewerTabs').innerHTML=S.sheets.map(s=>`<button class="stab${S.viewerSheetKey===s.sheetKey?' on':''}" onclick="setViewerSheet('${s.sheetKey}')">${s.name}</button>`).join('');}
 function setViewerSheet(k){S.viewerSheetKey=k;S.openViewer=null;document.getElementById('viewQ').value='';renderViewer();}
+function renderViewer(){renderViewerTabs();const items=getItems(S.viewerSheetKey),q=(document.getElementById('viewQ').value||'').trim().toLowerCase(),filtered=!q?items:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));const el=document.getElementById('viewerList');if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets</h3></div>';return;}if(!filtered.length){el.innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No results</h3></div>';return;}el.innerHTML=filtered.map(item=>renderViewerCard(item)).join('');}
+function renderViewerCard(item){const sk=S.viewerSheetKey,resp=getResp(sk,item.id),isOpen=S.openViewer===item.id,currentQty=getEffectiveQty(sk,item),sp=Number(resp?.sp||item.salePrice||0),cp=Number(resp?.cp||item.purchasePrice||0);const presets=[5,10,15,20,25],presetBtns=presets.map(p=>`<button class="preset-btn" onclick="setProfit('${item.id}',${p},${cp})">${p}%<br><span>₹${(cp+(cp/100*p)).toFixed(0)}</span></button>`).join('');return`<div class="vi-card${isOpen?' open':''}" id="vi-${item.id}"><div class="vi-head" onclick="toggleViewer(${item.id})"><div style="flex:1"><div class="vi-name">${item.name}</div><div class="vi-code">Code: ${item.code||'—'}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><svg class="vi-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg><span style="font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'}">Qty: ${currentQty}</span></div></div><div class="vi-body"><div class="vi-qty-sec"><div class="vi-qty-lbl">Current Stock</div><div style="text-align:center;padding:18px"><div class="vi-qty-big" style="color:${currentQty>0?'var(--ok)':'var(--danger)'};">${currentQty}</div></div></div><div class="vi-price-row"><div class="price-box sp"><div class="pb-lbl">Sale Price</div><div class="pb-val">${sp?'₹'+sp:'—'}</div></div><div class="price-box cp"><div class="pb-lbl">Cost Price</div><div class="pb-val">${cp?'₹'+cp:'—'}</div></div></div>${cp>0?`<div class="nego-box"><div class="nego-title">💬 Negotiation Calculator</div><div class="nego-presets">${presetBtns}</div><div class="nego-custom-row"><div class="nego-custom-label">Custom %</div><div class="nego-input-wrap"><input type="number" id="np-${item.id}" class="nego-input" placeholder="18" oninput="calcNego('${item.id}',${cp})"><span class="nego-pct">%</span></div></div><div class="nego-result"><div class="nego-result-price" id="nrp-${item.id}">—</div></div></div>`:''}</div></div>`;}
+function setProfit(itemId,pct,cp){const inp=document.getElementById('np-'+itemId);if(inp)inp.value=pct;calcNego(itemId,cp);}
+function calcNego(itemId,cp){const inp=document.getElementById('np-'+itemId),rp=document.getElementById('nrp-'+itemId),pct=parseFloat(inp?.value||'0');if(!pct||isNaN(pct)){if(rp)rp.textContent='—';return;}if(rp)rp.textContent='₹'+(cp+(cp/100*pct)).toFixed(2);}
+function toggleViewer(id){S.openViewer=S.openViewer===id?null:id;renderViewer();}
 
-function renderViewer(){
-  renderViewerTabs();
-  const items=getItems(S.viewerSheetKey);
-  const q=(document.getElementById('viewQ').value||'').trim().toLowerCase();
-  const filtered=!q?items:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
-  const el=document.getElementById('viewerList');
-  if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets</h3><p>Admin uploads a Vyapar sheet</p></div>';return;}
-  if(!filtered.length){el.innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No results</h3><p>Try different search</p></div>';return;}
-  el.innerHTML=filtered.map((item,idx)=>renderViewerCard(item,idx)).join('');
-}
-
-function renderViewerCard(item,idx){
-  const sk=S.viewerSheetKey;
-  const resp=getResp(sk,item.id);
-  const isOpen=S.openViewer===item.id;
-  const currentQty=getEffectiveQty(sk,item);
-  const soldTotal=S.sales.filter(s=>String(s.itemId)===rKey(sk,item.id)).reduce((a,s)=>a+Number(s.qty||0),0);
-  const sp=Number(resp?.sp||item.salePrice||0);
-  const cp=Number(resp?.cp||item.purchasePrice||0);
-
-  // Quick profit preset buttons: 5%, 10%, 15%, 20%, 25%
-  const presets=[5,10,15,20,25];
-  const presetBtns=presets.map(p=>{
-    const price=(cp+(cp/100*p)).toFixed(0);
-    return `<button class="preset-btn" onclick="setProfit('${item.id}',${p},${cp})">${p}%<br><span>₹${price}</span></button>`;
-  }).join('');
-
-  return `<div class="vi-card${isOpen?' open':''}" id="vi-${item.id}">
-    <div class="vi-head" onclick="toggleViewer(${item.id})">
-      <div style="flex:1;min-width:0">
-        <div class="vi-name">${item.name}</div>
-        <div class="vi-code">Code: ${item.code||'—'} ${resp?'<span style="color:var(--ok);font-size:.65rem">● Submitted</span>':''}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-        <svg class="vi-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        <span style="font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'}">Qty: ${currentQty}</span>
-      </div>
-    </div>
-    <div class="vi-body">
-
-      <!-- BIG QTY -->
-      <div class="vi-qty-sec">
-        <div class="vi-qty-lbl">Current Stock${soldTotal>0?' (after deductions)':''}</div>
-        <div class="vi-total-row">
-          <div class="vi-qty-big">${currentQty}</div>
-          <div class="vi-qty-unit">units available${soldTotal>0?` · ${soldTotal} sold`:''}</div>
-        </div>
-      </div>
-
-      <!-- PRICES -->
-      <div class="vi-price-row">
-        <div class="price-box sp"><div class="pb-lbl">MRP / Sale Price</div><div class="pb-val">${sp?'₹'+sp:'—'}</div></div>
-        <div class="price-box cp"><div class="pb-lbl">Cost Price</div><div class="pb-val" style="filter:blur(4px);transition:filter .2s" onclick="this.style.filter='none'" title="Tap to reveal">${cp?'₹'+cp:'—'}</div></div>
-      </div>
-
-      <!-- NEGOTIATION PRICE CALCULATOR -->
-      ${cp>0?`<div class="nego-box">
-        <div class="nego-title">💬 Negotiation Price Calculator</div>
-        <div class="nego-sub">Enter profit % → see the price to quote the customer</div>
-        <div class="nego-presets">${presetBtns}</div>
-        <div class="nego-custom-row">
-          <div class="nego-custom-label">Custom Profit %</div>
-          <div class="nego-input-wrap">
-            <input type="number" id="np-${item.id}" class="nego-input" placeholder="e.g. 18" inputmode="decimal"
-              oninput="calcNego('${item.id}',${cp})">
-            <span class="nego-pct">%</span>
-          </div>
-        </div>
-        <div class="nego-result" id="nr-${item.id}">
-          <div class="nego-result-lbl">Quote this price to customer</div>
-          <div class="nego-result-price" id="nrp-${item.id}">—</div>
-          <div class="nego-result-formula" id="nrf-${item.id}"></div>
-        </div>
-      </div>`:'<div style="padding:10px 13px 13px;font-size:.72rem;color:var(--muted2)">💡 Add Cost Price in Fill Stock to enable price calculator</div>'}
-
-    </div>
-  </div>`;
-}
-
-function setProfit(itemId, pct, cp){
-  const inp=document.getElementById('np-'+itemId);
-  if(inp) inp.value=pct;
-  calcNego(itemId, cp);
-}
-
-function calcNego(itemId, cp){
-  const inp=document.getElementById('np-'+itemId);
-  const resultPrice=document.getElementById('nrp-'+itemId);
-  const resultFormula=document.getElementById('nrf-'+itemId);
-  const pct=parseFloat(inp?.value||'0');
-  if(!pct||isNaN(pct)||pct<0){
-    if(resultPrice) resultPrice.textContent='—';
-    if(resultFormula) resultFormula.textContent='';
-    return;
-  }
-  const quotePrice=cp+(cp/100*pct);
-  const profit=quotePrice-cp;
-  if(resultPrice) resultPrice.textContent='₹'+quotePrice.toFixed(2);
-  if(resultFormula) resultFormula.textContent=
-    `₹${cp} + (₹${cp} × ${pct}%) = ₹${quotePrice.toFixed(2)}  |  Profit: ₹${profit.toFixed(2)}`;
-}
-
-function toggleViewer(id){
-  S.openViewer=S.openViewer===id?null:id;
-  renderViewer();
-  if(S.openViewer) setTimeout(()=>document.getElementById('vi-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
-}
-
-/* ══════════════════════════════════════════════════
-   FILL FORM
-══════════════════════════════════════════════════ */
-function buildFormSheetSelect(){
-  const sel=document.getElementById('formSheetSel');
-  sel.innerHTML=S.sheets.length
-    ?S.sheets.map(s=>`<option value="${s.sheetKey}"${S.formSheetKey===s.sheetKey?' selected':''}>${s.name} (${s.items.length})</option>`).join('')
-    :'<option value="">No sheets uploaded</option>';
-}
-function onFormSheetChange(){
-  S.formSheetKey=document.getElementById('formSheetSel').value;
-  S.openItem=null; S.activeFilter='all';
-  document.getElementById('searchQ').value='';
-  reRender();
-}
-function buildFilters(){
-  const items=getItems(S.formSheetKey); const sk=S.formSheetKey;
-  const c={all:items.length,vacant:0,'has-data':0,drafted:0,submitted:0};
-  items.forEach(i=>{const s=itemStatus(sk,i);if(c[s]!==undefined)c[s]++;});
-  document.getElementById('filterTabs').innerHTML=[
-    {k:'all',l:`All (${c.all})`},{k:'vacant',l:`⬜ ${c.vacant}`},
-    {k:'has-data',l:`📋 ${c['has-data']}`},{k:'drafted',l:`✏️ ${c.drafted}`},{k:'submitted',l:`✅ ${c.submitted}`}
-  ].map(t=>`<button class="ftab${S.activeFilter===t.k?' on':''}" onclick="setFilter('${t.k}',this)">${t.l}</button>`).join('');
-}
-function setFilter(k,btn){
-  S.activeFilter=k;
-  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on'); reRender();
-}
-function reRender(){
-  const sk=S.formSheetKey; const items=getItems(sk);
-  document.getElementById('formTitle').textContent='Stock Form';
-  document.getElementById('formMeta').textContent=items.length?`${items.length} items`:'';
-  const q=(document.getElementById('searchQ').value||'').trim().toLowerCase();
-  let filtered=!q?[...items]:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
-  if(S.activeFilter!=='all') filtered=filtered.filter(i=>itemStatus(sk,i)===S.activeFilter);
-  const total=items.length;
-  const done=items.filter(i=>getResp(sk,i.id)||getDraft(sk,i.id)).length;
-  const pct=total?Math.round(done/total*100):0;
-  document.getElementById('pFill').style.width=pct+'%';
-  document.getElementById('pText').textContent=`${done}/${total}`;
-  document.getElementById('pPct').textContent=pct+'%';
-  document.getElementById('subCount').textContent=Object.keys(S.draft).filter(k=>k.startsWith(sk+'::')).length+' drafts';
-  buildFilters();
-  if(!S.sheets.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets</h3><p>Admin uploads a sheet</p></div>';return;}
-  if(!items.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">📋</div><h3>Empty sheet</h3></div>';return;}
-  if(!filtered.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No matches</h3></div>';return;}
-  document.getElementById('itemsWrap').innerHTML=filtered.map((item,idx)=>renderFormCard(item,idx,sk)).join('');
-}
-
-function renderFormCard(item,idx,sk){
-  const st=itemStatus(sk,item.id);
-  const r=getResp(sk,item.id); const d=getDraft(sk,item.id);
-  const isOpen=S.openItem===item.id;
-  let badge='',cls='ic';
-  if(st==='submitted'){badge='<span class="badge b-ok">✓</span>';cls+=' ic-done';}
-  else if(st==='has-data'){badge='<span class="badge b-bl">📋</span>';}
-  else if(st==='drafted'){badge='<span class="badge b-yw">✏️</span>';}
-  else if(st==='revising'){badge='<span class="badge b-yw">🔄</span>';cls+=' ic-rev';}
-  else{badge='<span class="badge b-bl">⬜</span>';}
-  if(isOpen) cls+=' open';
-  let pills='';
-  if(!isOpen){
-    const eq=r?.qty??item.stock,es=r?.sp??item.salePrice,ec=r?.cp??item.purchasePrice;
-    if(eq||es||ec) pills=`<div class="ic-pills">
-      ${eq?`<div class="ex-pill"><span>Qty </span><strong>${eq}</strong></div>`:''}
-      ${es?`<div class="ex-pill"><span>Sale ₹</span><strong>${es}</strong></div>`:''}
-      ${ec?`<div class="ex-pill"><span>Cost ₹</span><strong>${ec}</strong></div>`:''}
-    </div>`;
-  }
-  const fv=k=>{
-    if(d&&d[k]!==undefined&&d[k]!=='') return d[k];
-    if(r&&r[k]!==undefined&&r[k]!=='') return r[k];
-    return item[k]||'';
-  };
-  const isRevise=st==='submitted'||st==='revising';
-
-  return `<div class="${cls}" id="ic-${item.id}">
-    <div class="ic-head" onclick="toggleItem(${item.id})">
-      <div class="ic-num">#${idx+1}</div>
-      <div class="ic-info">
-        <div class="ic-name">${item.name}</div>
-        <div class="ic-code">Code: ${item.code||'—'}</div>
-        <div class="ic-meta">${badge}</div>
-      </div>
-      <svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-    ${pills}
-    <div class="ic-body">
-      ${isRevise?`<div class="rev-notice">⚠️ Already submitted — saving will revise this entry.</div>`:''}
-      <div class="fields-sec">
-        <div class="flbl"><span class="rdot"></span> Mandatory</div>
-        <div class="f3">
-          <div class="field">
-            <label>CURRENT QTY <span class="req">*</span></label>
-            <input type="number" id="f-${item.id}-qty" value="${fv('qty')||fv('stock')||''}" placeholder="50" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
-            <span class="errmsg hide" id="e-${item.id}-qty">Required</span>
-          </div>
-          <div class="field">
-            <label>SALE PRICE ₹</label>
-            <input type="number" id="f-${item.id}-sp" value="${fv('sp')||fv('salePrice')||''}" placeholder="150" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
-          </div>
-          <div class="field">
-            <label>COST PRICE ₹</label>
-            <input type="number" id="f-${item.id}-cp" value="${fv('cp')||fv('purchasePrice')||''}" placeholder="120" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
-          </div>
-        </div>
-        ${S.settings.opt?`
-        <div class="flbl" style="margin-top:2px"><span class="gdot"></span> Optional</div>
-        <div class="f2">
-          <div class="field">
-            <label>MIN STOCK</label>
-            <input type="number" id="f-${item.id}-min" value="${fv('min')||fv('minStock')||''}" placeholder="5" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
-          </div>
-          <div class="field">
-            <label>TAX %</label>
-            <input type="number" id="f-${item.id}-tax" value="${fv('tax')||fv('taxRate')||''}" placeholder="18" inputmode="decimal" oninput="onDraft(${item.id},'${sk}')">
-          </div>
-          <div class="field" style="grid-column:1/-1">
-            <label>NOTES</label>
-            <input type="text" id="f-${item.id}-notes" value="${fv('notes')||''}" placeholder="Remark" oninput="onDraft(${item.id},'${sk}')">
-          </div>
-        </div>`:''}
-      </div>
-      <div class="ic-actions">
-        <button class="ic-btn ${isRevise?'btn-revise':'btn-save'}" onclick="saveItem(${item.id},'${sk}')">${isRevise?'🔄 Revise':'✓ Save'}</button>
-        <button class="ic-btn btn-skip" onclick="skipItem()">Skip</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function toggleItem(id){S.openItem=S.openItem===id?null:id;reRender();if(S.openItem)setTimeout(()=>document.getElementById('ic-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}),100);}
+// ══════════════════════════════════════════════════
+// FILL FORM
+// ══════════════════════════════════════════════════
+function buildFormSheetSelect(){const sel=document.getElementById('formSheetSel');sel.innerHTML=S.sheets.length?S.sheets.map(s=>`<option value="${s.sheetKey}"${S.formSheetKey===s.sheetKey?' selected':''}>${s.name} (${s.items.length})</option>`).join(''):'<option value="">No sheets</option>';}
+function onFormSheetChange(){S.formSheetKey=document.getElementById('formSheetSel').value;S.openItem=null;S.activeFilter='all';document.getElementById('searchQ').value='';reRender();}
+function buildFilters(){const items=getItems(S.formSheetKey),sk=S.formSheetKey,c={all:items.length,vacant:0,'has-data':0,drafted:0,submitted:0};items.forEach(i=>{const s=itemStatus(sk,i);if(c[s]!==undefined)c[s]++;});document.getElementById('filterTabs').innerHTML=[{k:'all',l:`All (${c.all})`},{k:'vacant',l:`⬜ ${c.vacant}`},{k:'has-data',l:`📋 ${c['has-data']}`},{k:'drafted',l:`✏️ ${c.drafted}`},{k:'submitted',l:`✅ ${c.submitted}`}].map(t=>`<button class="ftab${S.activeFilter===t.k?' on':''}" onclick="setFilter('${t.k}',this)">${t.l}</button>`).join('');}
+function setFilter(k,btn){S.activeFilter=k;document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');reRender();}
+function reRender(){const sk=S.formSheetKey,items=getItems(sk);document.getElementById('formTitle').textContent='Stock Form';document.getElementById('formMeta').textContent=items.length?`${items.length} items`:'';const q=(document.getElementById('searchQ').value||'').trim().toLowerCase();let filtered=!q?[...items]:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));if(S.activeFilter!=='all')filtered=filtered.filter(i=>itemStatus(sk,i)===S.activeFilter);const total=items.length,done=items.filter(i=>getResp(sk,i.id)||getDraft(sk,i.id)).length,pct=total?Math.round(done/total*100):0;document.getElementById('pFill').style.width=pct+'%';document.getElementById('pText').textContent=`${done}/${total}`;document.getElementById('pPct').textContent=pct+'%';document.getElementById('subCount').textContent=Object.keys(S.draft).filter(k=>k.startsWith(sk+'::')).length+' drafts';buildFilters();if(!S.sheets.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets</h3></div>';return;}if(!items.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">📋</div><h3>Empty sheet</h3></div>';return;}if(!filtered.length){document.getElementById('itemsWrap').innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No matches</h3></div>';return;}document.getElementById('itemsWrap').innerHTML=filtered.map((item,idx)=>renderFormCard(item,idx,sk)).join('');}
+function renderFormCard(item,idx,sk){const st=itemStatus(sk,item.id),r=getResp(sk,item.id),d=getDraft(sk,item.id),isOpen=S.openItem===item.id;let badge='',cls='ic';if(st==='submitted'){badge='<span class="badge b-ok">✓</span>';cls+=' ic-done';}else if(st==='has-data')badge='<span class="badge b-bl">📋</span>';else if(st==='drafted')badge='<span class="badge b-yw">✏️</span>';else if(st==='revising'){badge='<span class="badge b-yw">🔄</span>';cls+=' ic-rev';}else badge='<span class="badge b-bl">⬜</span>';if(isOpen)cls+=' open';let pills='';if(!isOpen){const eq=r?.qty??item.stock,es=r?.sp??item.salePrice,ec=r?.cp??item.purchasePrice;if(eq||es||ec)pills=`<div class="ic-pills">${eq?`<div class="ex-pill"><span>Qty </span><strong>${eq}</strong></div>`:''}${es?`<div class="ex-pill"><span>Sale ₹</span><strong>${es}</strong></div>`:''}${ec?`<div class="ex-pill"><span>Cost ₹</span><strong>${ec}</strong></div>`:''}</div>`;}const fv=k=>{if(d&&d[k]!==undefined&&d[k]!=='')return d[k];if(r&&r[k]!==undefined&&r[k]!=='')return r[k];return item[k]||'';},isRevise=st==='submitted'||st==='revising';return`<div class="${cls}" id="ic-${item.id}"><div class="ic-head" onclick="toggleItem(${item.id})"><div class="ic-num">#${idx+1}</div><div class="ic-info"><div class="ic-name">${item.name}</div><div class="ic-code">Code: ${item.code||'—'}</div><div class="ic-meta">${badge}</div></div><svg class="caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>${pills}<div class="ic-body">${isRevise?`<div class="rev-notice">⚠️ Already submitted — saving will revise.</div>`:''}<div class="fields-sec"><div class="flbl"><span class="rdot"></span> Mandatory</div><div class="f3"><div class="field"><label>CURRENT QTY <span class="req">*</span></label><input type="number" id="f-${item.id}-qty" value="${fv('qty')||fv('stock')||''}" placeholder="50" oninput="onDraft(${item.id},'${sk}')"><span class="errmsg hide" id="e-${item.id}-qty">Required</span></div><div class="field"><label>SALE PRICE ₹</label><input type="number" id="f-${item.id}-sp" value="${fv('sp')||fv('salePrice')||''}" placeholder="150" oninput="onDraft(${item.id},'${sk}')"></div><div class="field"><label>COST PRICE ₹</label><input type="number" id="f-${item.id}-cp" value="${fv('cp')||fv('purchasePrice')||''}" placeholder="120" oninput="onDraft(${item.id},'${sk}')"></div></div></div><div class="ic-actions"><button class="ic-btn ${isRevise?'btn-revise':'btn-save'}" onclick="saveItem(${item.id},'${sk}')">${isRevise?'🔄 Revise':'✓ Save'}</button><button class="ic-btn btn-skip" onclick="skipItem()">Skip</button></div></div></div>`;}
+function toggleItem(id){S.openItem=S.openItem===id?null:id;reRender();}
 function skipItem(){S.openItem=null;reRender();}
+function onDraft(id,sk){const g=f=>{const el=document.getElementById(`f-${id}-${f}`);return el?el.value:'';};S.draft[rKey(sk,id)]={qty:g('qty'),sp:g('sp'),cp:g('cp'),min:g('min'),tax:g('tax'),notes:g('notes')};}
+async function saveItem(id,sk){const item=getItems(sk).find(i=>i.id===id);if(!item)return;const g=f=>(document.getElementById(`f-${id}-${f}`)?.value||'').trim(),qty=g('qty');if(qty===''){document.getElementById(`e-${id}-qty`)?.classList.remove('hide');toast('⚠️ Qty is required');return;}const wasSubmitted=!!getResp(sk,item.id),payload={itemId:rKey(sk,id),itemName:item.name,code:item.code||'',sheetKey:sk,qty,sp:g('sp'),cp:g('cp'),min:g('min'),tax:g('tax'),notes:g('notes'),by:S.name,ts:Date.now(),isRevision:wasSubmitted};showLoad('Saving…');try{await gasPost('saveResponse',payload);S.responses[rKey(sk,id)]=payload;delete S.draft[rKey(sk,id)];hideLoad();toast(wasSubmitted?'🔄 Revised!':'✅ Saved!');S.openItem=null;reRender();}catch(e){hideLoad();S.draft[rKey(sk,id)]=payload;toast('⚠️ Saved locally');reRender();}}
+async function submitAll(){const sk=S.formSheetKey,draftKeys=Object.keys(S.draft).filter(k=>k.startsWith(sk+'::'));if(!draftKeys.length){toast('Nothing to submit');return;}showLoad('Submitting…');let ok=0;for(const rk of draftKeys){try{await gasPost('saveResponse',S.draft[rk]);S.responses[rk]=S.draft[rk];delete S.draft[rk];ok++;}catch(e){}}hideLoad();toast(`✅ ${ok} synced!`);reRender();renderDash();}
 
-function onDraft(id,sk){
-  const g=f=>{const el=document.getElementById(`f-${id}-${f}`);return el?el.value:'';};
-  S.draft[rKey(sk,id)]={qty:g('qty'),sp:g('sp'),cp:g('cp'),min:g('min'),loc:g('loc'),tax:g('tax'),notes:g('notes')};
-}
-
-async function saveItem(id,sk){
-  const item=getItems(sk).find(i=>i.id===id); if(!item) return;
-  const g=f=>(document.getElementById(`f-${id}-${f}`)?.value||'').trim();
-  const qty=g('qty');
-  if(qty===''){
-    document.getElementById(`e-${id}-qty`)?.classList.remove('hide');
-    document.getElementById(`f-${id}-qty`)?.classList.add('err');
-    toast('⚠️ Qty is required'); return;
-  }
-  document.getElementById(`e-${id}-qty`)?.classList.add('hide');
-  document.getElementById(`f-${id}-qty`)?.classList.remove('err');
-
-  const wasSubmitted=!!getResp(sk,item.id);
-  /* ── KEY FIX: itemId stored as rKey so responses are linked to sheet ── */
-  const payload={
-    itemId:rKey(sk,id),
-    itemName:item.name, code:item.code||'', sheetKey:sk,
-    qty, sp:g('sp'), cp:g('cp'), min:g('min'),
-    loc:g('loc'), tax:g('tax'), notes:g('notes'),
-    by:S.name, ts:Date.now(), isRevision:wasSubmitted
-  };
-  showLoad('Saving…');
-  try{
-    await gasPost('saveResponse',payload);
-    S.responses[rKey(sk,id)]=payload;
-    delete S.draft[rKey(sk,id)];
-    hideLoad(); toast(wasSubmitted?'🔄 Revised!':'✅ Saved to Sheets!');
-    S.openItem=null;
-    if(S.settings.adv) advNext(id,sk); else reRender();
-  }catch(e){
-    hideLoad();
-    S.draft[rKey(sk,id)]=payload;
-    toast('⚠️ Saved draft locally (network error)');
-    reRender();
-  }
-}
-function advNext(id,sk){
-  const items=getItems(sk);
-  const idx=items.findIndex(i=>i.id===id);
-  const next=items.slice(idx+1).find(i=>!getResp(sk,i.id));
-  S.openItem=next?next.id:null; reRender();
-  if(next) setTimeout(()=>document.getElementById('ic-'+next.id)?.scrollIntoView({behavior:'smooth',block:'center'}),150);
-}
-
-async function submitAll(){
-  const sk=S.formSheetKey;
-  const draftKeys=Object.keys(S.draft).filter(k=>k.startsWith(sk+'::'));
-  if(!draftKeys.length){toast(Object.keys(S.responses).filter(k=>k.startsWith(sk+'::')).length?'✅ All submitted':'⚠️ Nothing filled');return;}
-  showModal('Submit Drafts',`Push ${draftKeys.length} draft(s) to Google Sheets?`,false,async()=>{
-    showLoad('Submitting…');
-    let ok=0;
-    for(const rk of draftKeys){
-      try{
-        const d=S.draft[rk];
-        await gasPost('saveResponse',d);
-        S.responses[rk]=d; delete S.draft[rk]; ok++;
-      }catch(e){}
-    }
-    hideLoad(); toast(`✅ ${ok} items synced!`); reRender(); renderDash();
-  });
-}
-
-/* ══════════════════════════════════════════════════
-   SELL TAB
-══════════════════════════════════════════════════ */
-function renderSellTabs(){
-  document.getElementById('sellTabs').innerHTML=S.sheets.map(s=>
-    `<button class="stab${S.sellSheetKey===s.sheetKey?' on':''}" onclick="setSellSheet('${s.sheetKey}')">${s.name}</button>`
-  ).join('');
-}
+// ══════════════════════════════════════════════════
+// SELL TAB - FIXED: No double reduction
+// ══════════════════════════════════════════════════
+function renderSellTabs(){document.getElementById('sellTabs').innerHTML=S.sheets.map(s=>`<button class="stab${S.sellSheetKey===s.sheetKey?' on':''}" onclick="setSellSheet('${s.sheetKey}')">${s.name}</button>`).join('');}
 function setSellSheet(k){S.sellSheetKey=k;S.openSell=null;document.getElementById('sellQ').value='';renderSell();}
-
-function renderSell(){
-  renderSellTabs();
-  const sk=S.sellSheetKey;
-  const items=getItems(sk);
-  const q=(document.getElementById('sellQ').value||'').trim().toLowerCase();
-  const filtered=!q?items:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));
-  const el=document.getElementById('sellList');
-  if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">🛒</div><h3>No sheets</h3><p>Admin uploads items first</p></div>';return;}
-  if(!filtered.length){el.innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No matches</h3></div>';return;}
-  el.innerHTML=filtered.map(item=>renderSellCard(item,sk)).join('');
-}
-
-function renderSellCard(item,sk){
-  const isOpen=S.openSell===item.id;
-  const currentQty=getEffectiveQty(sk,item);
-  const itemSales=S.sales.filter(s=>String(s.itemId)===rKey(sk,item.id));
-
-  // Recent sales history
-  const histRows=itemSales.slice(-5).reverse().map(s=>{
-    const displayTime=s.dateTime||new Date(Number(s.ts)).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-    return `<div class="sell-hist-row">
-      <span style="flex:1">${s.soldBy}</span>
-      <span style="color:var(--danger);font-weight:700">-${s.qty} sold</span>
-      <span style="color:var(--muted2);font-size:.64rem">${displayTime}</span>
-    </div>`;
-  }).join('');
-
-  return `<div class="sell-card${isOpen?' open':''}" id="sc-${item.id}">
-    <div class="sell-head" onclick="toggleSell(${item.id})">
-      <div class="sell-info">
-        <div class="sell-name">${item.name}</div>
-        <div class="sell-code">Code: ${item.code||'—'}</div>
-      </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0">
-        <svg class="sell-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        <div style="text-align:right">
-          <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'}">${currentQty}</div>
-          <div style="font-size:.62rem;color:var(--muted2)">in stock</div>
-        </div>
-      </div>
-    </div>
-    <div class="sell-body">
-      <div class="sell-form-lbl">Record Sale</div>
-      <div class="sell-f2">
-        <div class="field">
-          <label>QTY SOLD <span class="req">*</span></label>
-          <input type="number" id="sl-${item.id}-qty" placeholder="e.g. 3" inputmode="decimal" min="1"
-            style="font-size:1.1rem;font-weight:600;text-align:center">
-        </div>
-        <div class="field">
-          <label>AVAILABLE</label>
-          <div style="padding:9px 11px;background:var(--surface);border:1px solid var(--border);border-radius:7px;font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'};">${currentQty} units</div>
-        </div>
-      </div>
-      <button class="sell-btn" onclick="recordSale(${item.id},'${sk}')" ${currentQty<=0?'disabled style="opacity:.4;cursor:not-allowed"':''}>
-        🛒 ${currentQty<=0?'Out of Stock':'Record Sale & Update Stock'}
-      </button>
-      ${histRows?`<div class="sell-hist"><div class="sell-hist-lbl">Recent Sales</div>${histRows}</div>`:''}
-    </div>
-  </div>`;
-}
-
-function toggleSell(id){
-  S.openSell=S.openSell===id?null:id;
-  renderSell();
-  if(S.openSell) setTimeout(()=>document.getElementById('sc-'+id)?.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
-}
+function renderSell(){renderSellTabs();const sk=S.sellSheetKey,items=getItems(sk),q=(document.getElementById('sellQ').value||'').trim().toLowerCase(),filtered=!q?items:items.filter(i=>i.name.toLowerCase().includes(q)||(i.code||'').toLowerCase().includes(q));const el=document.getElementById('sellList');if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">🛒</div><h3>No sheets</h3></div>';return;}if(!filtered.length){el.innerHTML='<div class="empty"><div class="ei">🔍</div><h3>No matches</h3></div>';return;}el.innerHTML=filtered.map(item=>renderSellCard(item,sk)).join('');}
+function renderSellCard(item,sk){const isOpen=S.openSell===item.id,currentQty=getEffectiveQty(sk,item);return`<div class="sell-card${isOpen?' open':''}" id="sc-${item.id}"><div class="sell-head" onclick="toggleSell(${item.id})"><div class="sell-info"><div class="sell-name">${item.name}</div><div class="sell-code">Code: ${item.code||'—'}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><svg class="sell-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg><div style="text-align:right"><div style="font-size:1.3rem;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'}">${currentQty}</div><div style="font-size:.62rem;color:var(--muted2)">in stock</div></div></div></div><div class="sell-body"><div class="sell-form-lbl">Record Sale</div><div class="sell-f2"><div class="field"><label>QTY SOLD <span class="req">*</span></label><input type="number" id="sl-${item.id}-qty" placeholder="e.g. 3" min="1"></div><div class="field"><label>AVAILABLE</label><div style="padding:9px;font-weight:700;color:${currentQty>0?'var(--ok)':'var(--danger)'};">${currentQty} units</div></div></div><button class="sell-btn" onclick="recordSale(${item.id},'${sk}')" ${currentQty<=0?'disabled style="opacity:.4"':''}>🛒 ${currentQty<=0?'Out of Stock':'Record Sale'}</button></div></div>`;}
+function toggleSell(id){S.openSell=S.openSell===id?null:id;renderSell();}
 
 async function recordSale(id,sk){
-  const qty=(document.getElementById(`sl-${id}-qty`)?.value||'').trim();
+  const qtyEl=document.getElementById(`sl-${id}-qty`),qty=(qtyEl?.value||'').trim();
   if(!qty||Number(qty)<=0){toast('⚠️ Enter qty sold');return;}
-
-  const item=getItems(sk).find(i=>i.id===id);
-  if(!item) return;
-
-  // Simple total qty check — no location bifurcation
-  const avail=getEffectiveQty(sk,item);
-  if(Number(qty)>avail){toast(`⚠️ Only ${avail} units available`);return;}
-
-  // Pull sp/cp from submitted response for profit calculation
-  const itemResp=getResp(sk,item.id);
-  const sp=Number(itemResp?.sp||item.salePrice||0);
-  const cp=Number(itemResp?.cp||item.purchasePrice||0);
-  const grossAmt=sp*Number(qty);
-  const profitAmt=(sp-cp)*Number(qty);
-
-  const now=Date.now();
-  const dateStr=new Date(now).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-  const timeStr=new Date(now).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',hour12:true});
-  const dateTimeStr=dateStr+' '+timeStr;
-
-  const saleRecord={
-    id:'sale_'+now,
-    itemId:rKey(sk,id),
-    itemName:item.name,
-    code:item.code||'',
-    sheetKey:sk,
-    loc:'', qty:Number(qty),
-    sp, cp, grossAmt, profitAmt,
-    soldBy:S.name,
-    ts:now,
-    dateTime:dateTimeStr
-  };
-
-  const newQty=Math.max(0, avail-Number(qty));
-
+  const item=getItems(sk).find(i=>i.id===id);if(!item)return;
+  const avail=getEffectiveQty(sk,item);if(Number(qty)>avail){toast(`⚠️ Only ${avail} available`);return;}
+  const itemResp=getResp(sk,item.id),sp=Number(itemResp?.sp||item.salePrice||0),cp=Number(itemResp?.cp||item.purchasePrice||0),grossAmt=sp*Number(qty),profitAmt=(sp-cp)*Number(qty),now=Date.now(),newQty=Math.max(0,avail-Number(qty));
+  const saleRecord={id:'sale_'+now,itemId:rKey(sk,id),itemName:item.name,code:item.code||'',sheetKey:sk,loc:'',qty:Number(qty),sp,cp,grossAmt,profitAmt,soldBy:S.name,ts:now,dateTime:new Date(now).toLocaleString('en-IN')};
   showLoad('Recording sale…');
   try{
-    // 1. Write sale to monthly Sales sheet
-    await gasPost('saveSale', saleRecord);
-
-    // 2. Update Responses sheet qty (reduce stock)
-    const existingResp=getResp(sk,item.id);
-    const updatedResp={
-      itemId:   rKey(sk,id),
-      itemName: item.name,
-      code:     item.code||'',
-      sheetKey: sk,
-      qty:      newQty,
-      sp:       existingResp?.sp || item.salePrice || '',
-      cp:       existingResp?.cp || item.purchasePrice || '',
-      min:      existingResp?.min || item.minStock || '',
-      loc:      existingResp?.loc || '',
-      tax:      existingResp?.tax || item.taxRate || '',
-      notes:    existingResp?.notes || '',
-      by:       existingResp?.by || S.name,
-      ts:       existingResp?.ts || now,
-      isRevision: true
-    };
-    await gasPost('saveResponse', updatedResp);
-
-    // Update local state immediately
-    S.responses[rKey(sk,id)]=updatedResp;
-    S.sales.push(saleRecord);
-
-    hideLoad();
-    toast(`✅ Sold ${qty} units! Stock: ${avail} → ${newQty}`);
-    S.openSell=null;
-    renderSell(); renderViewer(); renderDash();
-
-  } catch(e){
-    hideLoad();
-    // Offline fallback — update locally so UI stays correct
-    S.sales.push(saleRecord);
-    const existingLocal=getResp(sk,item.id);
-    S.responses[rKey(sk,id)]={
-      ...(existingLocal||{}),
-      itemId:rKey(sk,id), itemName:item.name, code:item.code||'',
-      sheetKey:sk, qty:newQty,
-      sp:existingLocal?.sp||item.salePrice||'',
-      cp:existingLocal?.cp||item.purchasePrice||'',
-      by:S.name, ts:now, isRevision:true
-    };
-    toast(`⚠️ Sold locally (offline). Will sync on next Sync.`);
-    renderSell(); renderViewer(); renderDash();
+    await gasPost('saveSale',saleRecord);
+    const updatedResp={itemId:rKey(sk,id),itemName:item.name,code:item.code||'',sheetKey:sk,qty:newQty,sp:itemResp?.sp||item.salePrice||'',cp:itemResp?.cp||item.purchasePrice||'',min:itemResp?.min||'',tax:itemResp?.tax||'',notes:itemResp?.notes||'',by:S.name,ts:now,isRevision:true};
+    await gasPost('saveResponse',updatedResp);
+    S.sales.push(saleRecord);S.responses[rKey(sk,id)]=updatedResp;
+    hideLoad();toast(`✅ Sold ${qty}! Stock: ${avail}→${newQty}`);
+    S.openSell=null;renderSell();renderViewer();renderDash();
+  }catch(e){
+    hideLoad();S.sales.push(saleRecord);S.responses[rKey(sk,id)]={...itemResp||{},itemId:rKey(sk,id),itemName:item.name,code:item.code||'',sheetKey:sk,qty:newQty,by:S.name,ts:now};
+    toast('⚠️ Sold locally');renderSell();renderViewer();renderDash();
   }
 }
 
-/* ══════════════════════════════════════════════════
-   ADMIN: SHEET UPLOAD
-══════════════════════════════════════════════════ */
-function handleUpload(e){
-  const f=e.target.files[0]; if(!f) return;
-  const ext=f.name.split('.').pop().toLowerCase();
-  const r=new FileReader();
-  if(ext==='csv'){r.onload=ev=>parseAndUpload(csvRows(ev.target.result),f.name);r.readAsText(f);}
-  else{r.onload=ev=>{const wb=XLSX.read(ev.target.result,{type:'array'});parseAndUpload(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1}),f.name);};r.readAsArrayBuffer(f);}
-  e.target.value='';
-}
+// ══════════════════════════════════════════════════
+// ADMIN FUNCTIONS (abbreviated for space)
+// ══════════════════════════════════════════════════
+function handleUpload(e){const f=e.target.files[0];if(!f)return;const ext=f.name.split('.').pop().toLowerCase(),r=new FileReader();if(ext==='csv'){r.onload=ev=>parseAndUpload(csvRows(ev.target.result),f.name);r.readAsText(f);}else{r.onload=ev=>{const wb=XLSX.read(ev.target.result,{type:'array'});parseAndUpload(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1}),f.name);};r.readAsArrayBuffer(f);}e.target.value='';}
 function csvRows(text){return text.split('\n').map(r=>r.split(',').map(c=>c.replace(/^"|"$/g,'').trim()));}
+async function parseAndUpload(rows,fname){if(!rows.length){toast('❌ Empty file');return;}let hi=rows.findIndex(r=>r.some(c=>(c||'').toString().toLowerCase().includes('item name')));if(hi<0)hi=0;const H=rows[hi].map(h=>(h||'').toString().toLowerCase().trim()),ci=k=>H.findIndex(h=>h.includes(k)),iN=Math.max(ci('item name'),0),iC=ci('item code'),iSP=ci('sale price'),iCP=ci('purchase price'),iSt=ci('opening stock'),iMn=ci('minimum stock'),iTx=ci('tax rate');const items=[];for(let r=hi+1;r<rows.length;r++){const row=rows[r],name=(row[iN]||'').toString().trim();if(!name)continue;items.push({id:r,name,code:iC>=0?(row[iC]||'').toString().trim():'',salePrice:iSP>=0?Number(row[iSP]||0):0,purchasePrice:iCP>=0?Number(row[iCP]||0):0,stock:iSt>=0?Number(row[iSt]||0):0,minStock:iMn>=0?Number(row[iMn]||0):0,taxRate:iTx>=0?Number(row[iTx]||0):0});}if(!items.length){toast('❌ No items found');return;}const sheetKey='Sht_'+fname.replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9]/g,'_').substring(0,20)+'_'+Date.now().toString().slice(-4);showLoad('Uploading…');try{await gasPost('saveSheet',{sheetKey,name:fname,items,uploaded:Date.now()});const ei=S.sheets.findIndex(s=>s.name===fname);if(ei>-1)S.sheets[ei]={sheetKey,name:fname,items};else S.sheets.push({sheetKey,name:fname,items});S.formSheetKey=sheetKey;S.viewerSheetKey=sheetKey;S.sellSheetKey=sheetKey;hideLoad();toast(`✅ "${fname}" uploaded`);renderSheets();buildFormSheetSelect();renderViewer();renderSell();renderDash();}catch(e){hideLoad();toast('❌ Upload failed');}}
+function renderSheets(){const el=document.getElementById('sheetList');if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets yet</h3></div>';return;}el.innerHTML=S.sheets.map(sh=>`<div class="sh-card"><div class="sh-icon">📊</div><div class="sh-info"><h4>${sh.name}</h4><p>${sh.items.length} items</p></div><button class="sh-del" onclick="deleteSheet('${sh.sheetKey}','${sh.name}')">🗑</button></div>`).join('');}
+async function deleteSheet(sk,name){showModal('Remove Sheet',`Remove "${name}"?`,false,async()=>{showLoad('Removing…');try{await gasPost('deleteSheet',{sheetKey:sk});S.sheets=S.sheets.filter(s=>s.sheetKey!==sk);Object.keys(S.responses).filter(k=>k.startsWith(sk+'::')).forEach(k=>delete S.responses[k]);Object.keys(S.draft).filter(k=>k.startsWith(sk+'::')).forEach(k=>delete S.draft[k]);if(S.formSheetKey===sk)S.formSheetKey=S.sheets[0]?.sheetKey||'';if(S.viewerSheetKey===sk)S.viewerSheetKey=S.sheets[0]?.sheetKey||'';if(S.sellSheetKey===sk)S.sellSheetKey=S.sheets[0]?.sheetKey||'';hideLoad();renderSheets();renderDash();}catch(e){hideLoad();toast('❌ '+e.message);}});}
+function renderResponses(){const el=document.getElementById('respList'),all=Object.values(S.responses);if(!all.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No submissions</h3></div>';return;}el.innerHTML=all.sort((a,b)=>b.ts-a.ts).map(r=>`<div class="resp-card"><div class="rc-name">${r.itemName}</div><div class="rc-by">${r.by} · ${timeAgo(r.ts)}</div><div class="rc-vals"><div class="rv"><span>Qty</span><strong>${r.qty||'—'}</strong></div><div class="rv"><span>Sale ₹</span><strong>${r.sp||'—'}</strong></div><div class="rv"><span>Cost ₹</span><strong>${r.cp||'—'}</strong></div></div></div>`).join('');}
+function exportCSV(mode){const all=Object.values(S.responses);if(!all.length){toast('No data');return;}let rows,fn;if(mode==='vyapar'){rows=[['Item name*','Item code','Sale price','Purchase price','Opening stock quantity','Minimum stock quantity','Item Location','Tax Rate'],...all.map(r=>[r.itemName,r.code,r.sp||'',r.cp||'',r.qty,r.min||'',r.loc||'',r.tax||''])];fn=`VyaparImport_${dstr()}.csv`;}else{rows=[['Sheet','Item','Code','Qty','Sale ₹','Cost ₹','By','Time'],...all.map(r=>[r.sheetKey||'',r.itemName,r.code,r.qty,r.sp||'',r.cp||'',r.by,new Date(Number(r.ts)).toLocaleString('en-IN')])];fn=`StockExport_${dstr()}.csv`;}const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=fn;a.click();toast(`✅ ${fn} downloaded`);}
 
-async function parseAndUpload(rows,fname){
-  if(!rows.length){toast('❌ Empty file');return;}
-  let hi=rows.findIndex(r=>r.some(c=>(c||'').toString().toLowerCase().includes('item name')));
-  if(hi<0) hi=0;
-  const H=rows[hi].map(h=>(h||'').toString().toLowerCase().trim());
-  const ci=k=>H.findIndex(h=>h.includes(k));
-  const iN=Math.max(ci('item name'),0),iC=ci('item code'),iSP=ci('sale price'),iCP=ci('purchase price');
-  const iSt=ci('opening stock'),iMn=ci('minimum stock'),iLo=ci('item location'),iTx=ci('tax rate');
-  const items=[];
-  for(let r=hi+1;r<rows.length;r++){
-    const row=rows[r];const name=(row[iN]||'').toString().trim();if(!name) continue;
-    items.push({id:r,name,code:iC>=0?(row[iC]||'').toString().trim():'',
-      salePrice:iSP>=0?Number(row[iSP]||0):0,purchasePrice:iCP>=0?Number(row[iCP]||0):0,
-      stock:iSt>=0?Number(row[iSt]||0):0,minStock:iMn>=0?Number(row[iMn]||0):0,
-      location:iLo>=0?(row[iLo]||'').toString().trim():'',taxRate:iTx>=0?Number(row[iTx]||0):0});
-  }
-  if(!items.length){toast('❌ No items found');return;}
-  const sheetKey='Sht_'+fname.replace(/\.[^.]+$/,'').replace(/[^a-zA-Z0-9]/g,'_').substring(0,20)+'_'+Date.now().toString().slice(-4);
-  showLoad(`Uploading ${items.length} items…`);
-  try{
-    await gasPost('saveSheet',{sheetKey,name:fname,items,uploaded:Date.now()});
-    /* Append to local sheets — never replace */
-    const ei=S.sheets.findIndex(s=>s.name===fname);
-    if(ei>-1) S.sheets[ei]={sheetKey,name:fname,items};
-    else S.sheets.push({sheetKey,name:fname,items});
-    S.formSheetKey=sheetKey; S.viewerSheetKey=sheetKey; S.sellSheetKey=sheetKey;
-    hideLoad();
-    toast(`✅ "${fname}" uploaded — ${items.length} items`);
-    renderSheets();buildFormSheetSelect();renderViewer();renderSell();renderDash();
-  }catch(e){hideLoad();toast('❌ Upload failed: '+e.message);}
-}
+// ══════════════════════════════════════════════════
+// SETTINGS
+// ══════════════════════════════════════════════════
+function loadSettUI(){document.getElementById('gsURLInp').value=GAS_URL||'';document.getElementById('locList').value=(S.settings.locations||[]).join('\n');}
+function saveGASURL(){const u=document.getElementById('gsURLInp').value.trim();if(!u){toast('Paste URL first');return;}GAS_URL=u;LS.set('gasURL',u);toast('✅ URL saved!');}
+async function saveLocations(){const ll=document.getElementById('locList').value.split('\n').map(l=>l.trim()).filter(Boolean);if(!ll.length){toast('Add at least one location');return;}S.settings.locations=ll;showLoad('Saving…');try{await gasPost('saveSetting',{key:'locations',value:JSON.stringify(ll)});hideLoad();toast('✅ Saved!');}catch(e){hideLoad();toast('⚠️ Saved locally');}}
+async function changePIN(){const p=document.getElementById('newPIN').value.trim();if(p.length!==4||isNaN(p)){toast('PIN must be 4 digits');return;}showLoad('Saving…');try{await gasPost('saveSetting',{key:'pin',value:p});S.settings.pin=p;LS.set('adminPIN',p);hideLoad();toast('✅ PIN updated');}catch(e){hideLoad();toast('❌ '+e.message);}}
+async function clearData(type){showModal('Confirm',type==='resp'?'Delete ALL responses?':'Delete ALL sales?',false,async()=>{showLoad('Clearing…');try{await gasPost('clearData',{type});if(type==='resp')S.responses={};else S.sales=[];hideLoad();renderDash();toast('Cleared');}catch(e){hideLoad();toast('❌ '+e.message);}});}
 
-function renderSheets(){
-  const el=document.getElementById('sheetList');
-  if(!S.sheets.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No sheets yet</h3><p>Upload a Vyapar Excel file above</p></div>';return;}
-  el.innerHTML=S.sheets.map(sh=>{
-    const v=sh.items.filter(i=>!i.salePrice&&!i.purchasePrice&&!i.stock).length;
-    return `<div class="sh-card">
-      <div class="sh-icon">📊</div>
-      <div class="sh-info"><h4>${sh.name}</h4><p>${sh.items.length} items · ${sh.items.length-v} with data · ${v} vacant</p></div>
-      <button class="sh-del" onclick="deleteSheet('${sh.sheetKey}','${sh.name}')">🗑</button>
-    </div>`;
-  }).join('');
-}
-
-async function deleteSheet(sk,name){
-  showModal('Remove Sheet',`Remove "${name}"? Related responses will also be cleared.`,false,async()=>{
-    showLoad('Removing…');
-    try{
-      await gasPost('deleteSheet',{sheetKey:sk});
-      S.sheets=S.sheets.filter(s=>s.sheetKey!==sk);
-      Object.keys(S.responses).filter(k=>k.startsWith(sk+'::')).forEach(k=>delete S.responses[k]);
-      Object.keys(S.draft).filter(k=>k.startsWith(sk+'::')).forEach(k=>delete S.draft[k]);
-      S.sales=S.sales.filter(s=>s.sheetKey!==sk);
-      if(S.formSheetKey===sk) S.formSheetKey=S.sheets[0]?.sheetKey||'';
-      if(S.viewerSheetKey===sk) S.viewerSheetKey=S.sheets[0]?.sheetKey||'';
-      if(S.sellSheetKey===sk) S.sellSheetKey=S.sheets[0]?.sheetKey||'';
-      hideLoad();toast('Sheet removed');
-      renderSheets();buildFormSheetSelect();renderViewer();renderSell();renderDash();
-    }catch(e){hideLoad();toast('❌ '+e.message);}
-  });
-}
-
-/* ══════════════════════════════════════════════════
-   ADMIN: RESPONSES
-══════════════════════════════════════════════════ */
-function renderResponses(){
-  const el=document.getElementById('respList');
-  const all=Object.values(S.responses);
-  if(!all.length){el.innerHTML='<div class="empty"><div class="ei">📭</div><h3>No submissions</h3></div>';return;}
-  el.innerHTML=all.sort((a,b)=>b.ts-a.ts).map(r=>`
-    <div class="resp-card">
-      <div class="rc-name">${r.itemName}</div>
-      <div class="rc-by">${r.code||'—'} · ${r.sheetKey||''} · by ${r.by} · ${timeAgo(r.ts)}${r.isRevision?' · <span style="color:var(--warn)">Revised</span>':''}</div>
-      <div class="rc-vals">
-        <div class="rv"><span>Qty</span><strong>${r.qty||'—'}</strong></div>
-        <div class="rv"><span>Sale ₹</span><strong>${r.sp||'—'}</strong></div>
-        <div class="rv"><span>Cost ₹</span><strong>${r.cp||'—'}</strong></div>
-        ${r.loc?`<div class="rv"><span>Location</span><strong>${r.loc}</strong></div>`:''}
-      </div>
-    </div>`).join('');
-}
-
-function exportCSV(mode){
-  const all=Object.values(S.responses);
-  if(!all.length){toast('No data');return;}
-  let rows,fn;
-  if(mode==='vyapar'){
-    rows=[['Item name*','Item code','Sale price','Purchase price','Opening stock quantity','Minimum stock quantity','Item Location','Tax Rate'],
-      ...all.map(r=>[r.itemName,r.code,r.sp||'',r.cp||'',r.qty,r.min||'',r.loc||'',r.tax||''])];
-    fn=`VyaparImport_${dstr()}.csv`;
-  }else{
-    rows=[['Sheet','Item','Code','Qty','Sale ₹','Cost ₹','Min','Location','Tax','Notes','By','Time'],
-      ...all.map(r=>[r.sheetKey||'',r.itemName,r.code,r.qty,r.sp||'',r.cp||'',r.min||'',r.loc||'',r.tax||'',r.notes||'',r.by,new Date(Number(r.ts)).toLocaleString('en-IN')])];
-    fn=`StockExport_${dstr()}.csv`;
-  }
-  const csv=rows.map(r=>r.map(c=>`"${(c||'').toString().replace(/"/g,'""')}"`).join(',')).join('\n');
-  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download=fn;a.click();
-  toast(`✅ ${fn} downloaded`);
-}
-
-/* ══════════════════════════════════════════════════
-   SETTINGS
-══════════════════════════════════════════════════ */
-function loadSettUI(){
-  document.getElementById('gsURLInp').value=GAS_URL||'';
-  document.getElementById('locList').value=(S.settings.locations||[]).join('\n');
-  document.getElementById('togAdv').className='tog'+(S.settings.adv?' on':'');
-  document.getElementById('togOpt').className='tog'+(S.settings.opt?' on':'');
-}
-function togSett(k){S.settings[k]=!S.settings[k];loadSettUI();reRender();}
-
-function saveGASURL(){
-  const u=document.getElementById('gsURLInp').value.trim();
-  if(!u){toast('Paste URL first');return;}
-  if(!u.includes('script.google.com')||!u.includes('/exec')){toast('❌ Must be a /exec URL from script.google.com');return;}
-  GAS_URL=u;
-  LS.set('gasURL',u);
-  toast('✅ URL saved for this device! Read the deploy note below.');
-  // Show the deploy instruction
-  const noteEl=document.getElementById('deployNote');
-  if(noteEl){
-    noteEl.classList.remove('hide');
-    document.getElementById('deployURLDisplay').textContent=u;
-  }
-}
-
-async function saveLocations(){
-  const raw=document.getElementById('locList').value;
-  const ll=raw.split('\n').map(l=>l.trim()).filter(Boolean);
-  if(!ll.length){toast('Add at least one location');return;}
-  S.settings.locations=ll;
-  showLoad('Saving…');
-  try{await gasPost('saveSetting',{key:'locations',value:JSON.stringify(ll)});hideLoad();toast('✅ Locations saved!');}
-  catch(e){hideLoad();S.settings.locations=ll;toast('⚠️ Saved locally');}
-}
-
-async function changePIN(){
-  const p=document.getElementById('newPIN').value.trim();
-  if(p.length!==4||isNaN(p)){toast('PIN must be 4 digits');return;}
-  showLoad('Saving…');
-  try{
-    await gasPost('saveSetting',{key:'pin',value:p});
-    S.settings.pin=p; LS.set('adminPIN',p);
-    hideLoad();toast('✅ PIN updated');
-  }catch(e){hideLoad();toast('❌ '+e.message);}
-}
-
-async function clearData(type){
-  showModal('Confirm',type==='resp'?'Delete ALL responses from Sheets?':'Delete ALL sales from Sheets?',false,async()=>{
-    showLoad('Clearing…');
-    try{
-      await gasPost('clearData',{type});
-      if(type==='resp') S.responses={};
-      else S.sales=[];
-      hideLoad();renderDash();
-      if(type==='resp') renderResponses(); else renderSell();
-      toast('Cleared');
-    }catch(e){hideLoad();toast('❌ '+e.message);}
-  });
-}
-
-/* ══════════════════════════════════════════════════
-   MODAL & TOAST
-══════════════════════════════════════════════════ */
-function showModal(title,msg,warn,cb){
-  document.getElementById('mTitle').textContent=title;
-  document.getElementById('mMsg').textContent=msg;
-  document.getElementById('modal').classList.remove('hide');
-  S.modalCb=cb;
-}
+// ══════════════════════════════════════════════════
+// MODAL & TOAST
+// ══════════════════════════════════════════════════
+function showModal(title,msg,warn,cb){document.getElementById('mTitle').textContent=title;document.getElementById('mMsg').textContent=msg;document.getElementById('modal').classList.remove('hide');S.modalCb=cb;}
 function closeModal(){document.getElementById('modal').classList.add('hide');S.modalCb=null;}
 function runModal(){if(S.modalCb)S.modalCb();closeModal();}
-let tt;
-function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),3200);}
+let tt;function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>el.classList.remove('show'),3200);}
 
-/* ══════════════════════════════════════════════════
-   COPY APPS SCRIPT
-══════════════════════════════════════════════════ */
-function copyDeployLine(){
-  const url = document.getElementById('deployURLDisplay')?.textContent || GAS_URL;
-  if(!url){ toast('Save URL first'); return; }
-  const line = "const HARDCODED_GAS_URL = '" + url + "';";
-  navigator.clipboard.writeText(line)
-    .then(()=>toast('📋 Code line copied! Paste into the HTML file.'))
-    .catch(()=>toast('Manual copy: const HARDCODED_GAS_URL = \'' + url + '\';'));
-}
+function copyScript(){const code=`// Copy from original file`;navigator.clipboard.writeText(code).then(()=>toast('📋 Copied!')).catch(()=>toast('Copy failed'));}
 
-function copyScript(){
-const code=`// ══════════════════════════════════════════════════════
-// StockSync v5 — Complete Backend — Google Apps Script
-// ══════════════════════════════════════════════════════
-// SETUP:
-// 1. Paste this entire code into script.google.com (New Project)
-// 2. Replace SHEET_ID with your Google Sheet ID (from the sheet URL)
-// 3. Save → Deploy → New Deployment → Web App
-//    Execute as: Me  |  Who has access: Anyone
-// 4. Authorize → Copy the /exec URL → paste in Admin Settings
-// ══════════════════════════════════════════════════════
+// ══════════════════════════════════════════════════
+// INIT - Show UI immediately
+// ══════════════════════════════════════════════════
+if(HARDCODED_GAS_URL&&!LS.get('gasURL','')){LS.set('gasURL',HARDCODED_GAS_URL);}
+if(GAS_URL){const inp=document.getElementById('gsURLInp');if(inp)inp.value=GAS_URL;}
 
-const SHEET_ID = '1FtYlYtRArTqe5Wox_JkbG9MHt_3Cx5sG3pNrYPntzno';
+// Show app instantly
+document.getElementById('appScreen').style.display='flex';
+bootApp();
 
-// Fixed sheet names
-const SH_META  = '_Meta';       // index of all uploaded item sheets
-const SH_RESP  = 'Responses';   // stock submissions (upsert by itemId — never grows beyond item count)
-const SH_SETT  = '_Settings';   // app settings (PIN, locations)
-
-// Sales use MONTHLY sheets: Sales_2025_01, Sales_2025_02 …
-// This means the sheet NEVER fills up — a new tab is created each month automatically.
-// Each monthly sheet holds that month's sales. No data is ever lost.
-function getSalesSheetName() {
-  const d = new Date();
-  return 'Sales_' + d.getFullYear() + '_' + String(d.getMonth()+1).padStart(2,'0');
-}
-
-// ─── doGet: JSONP reads ───────────────────────────────
-// NOTE: Do NOT run doGet/doPost with the Run button in the editor.
-// Test using testDoGet() below, or open the /exec URL in a browser.
-function doGet(e) {
-  // Guard against editor test-run (e is undefined when run manually)
-  if (!e || !e.parameter) {
-    return ContentService.createTextOutput(JSON.stringify({status:'ok',message:'StockSync running. Test via browser URL, not Run button.'}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-  const cb     = e.parameter.callback || '';
-  const action = e.parameter.action   || 'ping';
-  try {
-    const ss = SpreadsheetApp.openById(SHEET_ID);
-    let result;
-
-    if (action === 'ping') {
-      result = { status:'ok', message:'StockSync v5 running' };
-    }
-
-    // ── Load all uploaded item sheets ──
-    else if (action === 'getSheets') {
-      const meta  = getOrCreate(ss, SH_META, ['sheetKey','name','uploaded']);
-      const rows  = meta.getLastRow() > 1 ? meta.getRange(2,1,meta.getLastRow()-1,3).getValues() : [];
-      const sheets = [];
-      for (const [sk, name, up] of rows) {
-        if (!sk) continue;
-        const ws = ss.getSheetByName(sk); if (!ws) continue;
-        const items = ws.getLastRow() > 1
-          ? ws.getRange(2,1,ws.getLastRow()-1,10).getValues()
-              .filter(r => r[0])
-              .map(r => ({ id:r[0], name:r[1], code:r[2], salePrice:r[3], purchasePrice:r[4],
-                           stock:r[5], minStock:r[6], location:r[7], taxRate:r[8] }))
-          : [];
-        sheets.push({ sheetKey:sk, name, uploaded:up, items });
-      }
-      result = { status:'ok', data: sheets };
-    }
-
-    // ── Load stock submissions (Responses sheet) ──
-    else if (action === 'getResponses') {
-      const ws = ss.getSheetByName(SH_RESP);
-      if (!ws || ws.getLastRow() < 2) { result = { status:'ok', data:[] }; }
-      else {
-        const rows = ws.getRange(2,1,ws.getLastRow()-1,14).getValues();
-        result = { status:'ok', data: rows.filter(r => r[0]).map(r => ({
-          itemId:r[0], itemName:r[1], code:r[2], sheetKey:r[3],
-          qty:r[4], sp:r[5], cp:r[6], min:r[7], loc:r[8],
-          tax:r[9], notes:r[10], by:r[11], ts:r[12], isRevision:r[13]
-        })) };
-      }
-    }
-
-    // ── Load sales — reads ALL monthly sales sheets and merges ──
-    else if (action === 'getSales') {
-      const allSheets = ss.getSheets();
-      const salesSheets = allSheets.filter(ws => ws.getName().startsWith('Sales_'));
-      const allSales = [];
-      for (const ws of salesSheets) {
-        if (ws.getLastRow() < 2) continue;
-        const rows = ws.getRange(2,1,ws.getLastRow()-1,13).getValues();
-        rows.filter(r => r[0]).forEach(r => allSales.push({
-          id:r[0], itemId:r[1], itemName:r[2], sheetKey:r[3],
-          loc:r[4], qty:r[5], soldBy:r[6], ts:r[7],
-          sp:r[8], cp:r[9], grossAmt:r[10], profitAmt:r[11], dateTime:r[12]
-        }));
-      }
-      // Sort newest first
-      allSales.sort((a,b) => Number(b.ts) - Number(a.ts));
-      result = { status:'ok', data: allSales };
-    }
-
-    // ── Load settings ──
-    else if (action === 'getSettings') {
-      const ws = getOrCreate(ss, SH_SETT, ['Key','Value']);
-      const cfg = {};
-      if (ws.getLastRow() > 1)
-        ws.getRange(2,1,ws.getLastRow()-1,2).getValues().forEach(r => { if(r[0]) cfg[r[0]] = r[1]; });
-      if (cfg['locations']) { try { cfg.locations = JSON.parse(cfg['locations']); } catch(e){} }
-      result = { status:'ok', data: { pin: cfg['pin']||'1234', locations: cfg.locations||['Store 1','Store 2'] } };
-    }
-
-    else { result = { status:'ok', message:'unknown action: ' + action }; }
-
-    const out = cb ? cb + '(' + JSON.stringify(result) + ');' : JSON.stringify(result);
-    return ContentService.createTextOutput(out)
-      .setMimeType(cb ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
-
-  } catch(err) {
-    const r = { status:'error', message: err.message };
-    const out = cb ? cb + '(' + JSON.stringify(r) + ');' : JSON.stringify(r);
-    return ContentService.createTextOutput(out)
-      .setMimeType(cb ? ContentService.MimeType.JAVASCRIPT : ContentService.MimeType.JSON);
-  }
-}
-
-// ─── doPost: writes ───────────────────────────────────
-function doPost(e) {
-  if (!e || !e.parameter) {
-    return ContentService.createTextOutput(JSON.stringify({status:'error',message:'doPost called without parameters. Use the app, not Run button.'}))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-  try {
-    const action = e.parameter.action;
-    const data   = JSON.parse(e.parameter.data || '{}');
-    const ss     = SpreadsheetApp.openById(SHEET_ID);
-
-    // ── Upload item sheet ──
-    if (action === 'saveSheet') {
-      const { sheetKey, name, items, uploaded } = data;
-      let ws = ss.getSheetByName(sheetKey);
-      if (!ws) { ws = ss.insertSheet(sheetKey); }
-      if (ws.getLastRow() === 0)
-        ws.appendRow(['id','name','code','salePrice','purchasePrice','stock','minStock','location','taxRate','uploaded']);
-      if (ws.getLastRow() > 1) ws.getRange(2,1,ws.getLastRow()-1,10).clearContent();
-      const rows = items.map(i => [i.id,i.name,i.code||'',i.salePrice||0,i.purchasePrice||0,
-        i.stock||0,i.minStock||0,i.location||'',i.taxRate||0,uploaded]);
-      if (rows.length) ws.getRange(2,1,rows.length,10).setValues(rows);
-      // Register in meta
-      const meta = getOrCreate(ss, SH_META, ['sheetKey','name','uploaded']);
-      let mRow = -1;
-      if (meta.getLastRow() > 1) {
-        const keys = meta.getRange(2,1,meta.getLastRow()-1,1).getValues().flat();
-        const idx  = keys.indexOf(sheetKey); if (idx > -1) mRow = idx + 2;
-      }
-      if (mRow > -1) meta.getRange(mRow,1,1,3).setValues([[sheetKey,name,uploaded]]);
-      else meta.appendRow([sheetKey, name, uploaded]);
-      return jsonOut({ status:'ok', message: items.length + ' items saved' });
-    }
-
-    // ── Save / update stock submission (upsert by itemId) ──
-    // The Responses sheet has ONE row per item — it is overwritten on revision or after a sale.
-    // This means Responses NEVER exceeds the number of items — no row limit issue.
-    if (action === 'saveResponse') {
-      const ws  = getOrCreate(ss, SH_RESP,
-        ['itemId','itemName','code','sheetKey','qty','sp','cp','min','loc','tax','notes','by','ts','isRevision']);
-      const id  = String(data.itemId);
-      let rowNum = -1;
-      if (ws.getLastRow() > 1) {
-        const ids = ws.getRange(2,1,ws.getLastRow()-1,1).getValues().flat().map(String);
-        const idx = ids.indexOf(id); if (idx > -1) rowNum = idx + 2;
-      }
-      const row = [id, data.itemName, data.code||'', data.sheetKey||'',
-        data.qty, data.sp||'', data.cp||'', data.min||'', data.loc||'',
-        data.tax||'', data.notes||'', data.by, data.ts, data.isRevision ? 'Yes' : 'No'];
-      if (rowNum > -1) ws.getRange(rowNum,1,1,row.length).setValues([row]);
-      else ws.appendRow(row);
-      return jsonOut({ status:'ok' });
-    }
-
-    // ── Save a sale → monthly sheet (auto-archives, never fills up) ──
-    if (action === 'saveSale') {
-      const sheetName = getSalesSheetName();   // e.g. Sales_2025_06
-      const ws = getOrCreate(ss, sheetName,
-        ['id','itemId','itemName','sheetKey','loc','qty','soldBy','ts','sp','cp','grossAmt','profitAmt','dateTime']);
-      ws.appendRow([
-        data.id, data.itemId, data.itemName, data.sheetKey||'',
-        data.loc||'', data.qty, data.soldBy, data.ts,
-        data.sp||0, data.cp||0, data.grossAmt||0, data.profitAmt||0,
-        data.dateTime||new Date(Number(data.ts)).toLocaleString('en-IN')
-      ]);
-      return jsonOut({ status:'ok', sheet: sheetName });
-    }
-
-    // ── Save a setting ──
-    if (action === 'saveSetting') {
-      const ws = getOrCreate(ss, SH_SETT, ['Key','Value']);
-      let rowNum = -1;
-      if (ws.getLastRow() > 1) {
-        const keys = ws.getRange(2,1,ws.getLastRow()-1,1).getValues().flat();
-        const idx  = keys.indexOf(data.key); if (idx > -1) rowNum = idx + 2;
-      }
-      if (rowNum > -1) ws.getRange(rowNum,2).setValue(data.value);
-      else ws.appendRow([data.key, data.value]);
-      return jsonOut({ status:'ok' });
-    }
-
-    // ── Delete a sheet and its responses / sales ──
-    if (action === 'deleteSheet') {
-      const { sheetKey } = data;
-      const ws = ss.getSheetByName(sheetKey); if (ws) ss.deleteSheet(ws);
-      const meta = ss.getSheetByName(SH_META);
-      if (meta && meta.getLastRow() > 1) {
-        const keys = meta.getRange(2,1,meta.getLastRow()-1,1).getValues().flat();
-        const idx  = keys.indexOf(sheetKey); if (idx > -1) meta.deleteRow(idx + 2);
-      }
-      // Remove related responses
-      const resp = ss.getSheetByName(SH_RESP);
-      if (resp && resp.getLastRow() > 1) {
-        const skCols = resp.getRange(2,4,resp.getLastRow()-1,1).getValues().flat();
-        for (let i = skCols.length-1; i >= 0; i--) { if(skCols[i]===sheetKey) resp.deleteRow(i+2); }
-      }
-      // Remove related sales from all monthly sheets
-      const allWs = ss.getSheets().filter(s => s.getName().startsWith('Sales_'));
-      for (const s of allWs) {
-        if (s.getLastRow() < 2) continue;
-        const skCols = s.getRange(2,4,s.getLastRow()-1,1).getValues().flat();
-        for (let i = skCols.length-1; i >= 0; i--) { if(skCols[i]===sheetKey) s.deleteRow(i+2); }
-      }
-      return jsonOut({ status:'ok' });
-    }
-
-    // ── Clear data ──
-    if (action === 'clearData') {
-      if (data.type === 'resp') {
-        const ws = ss.getSheetByName(SH_RESP);
-        if (ws && ws.getLastRow() > 1) ws.getRange(2,1,ws.getLastRow()-1,14).clearContent();
-      }
-      if (data.type === 'sales') {
-        // Clear ALL monthly sales sheets
-        const allWs = ss.getSheets().filter(s => s.getName().startsWith('Sales_'));
-        allWs.forEach(s => { if(s.getLastRow()>1) s.getRange(2,1,s.getLastRow()-1,13).clearContent(); });
-      }
-      return jsonOut({ status:'ok' });
-    }
-
-    return jsonOut({ status:'ok', message: 'unknown action: ' + action });
-  } catch(err) {
-    return jsonOut({ status:'error', message: err.message });
-  }
-}
-
-// ─── Test function (run THIS from editor, not doGet/doPost) ──
-// Select testDoGet from the function dropdown and click Run to test
-function testDoGet() {
-  const fakeEvent = { parameter: { action: 'ping', callback: '' } };
-  const result = doGet(fakeEvent);
-  Logger.log(result.getContent());
-  // Should log: {"status":"ok","message":"StockSync v5 running"}
-  // If it does, your script is working correctly.
-}
-
-function testConnection() {
-  try {
-    const ss = SpreadsheetApp.openById(SHEET_ID);
-    const name = ss.getName();
-    Logger.log('✅ Connected to: ' + name);
-    Logger.log('Sheets: ' + ss.getSheets().map(s=>s.getName()).join(', '));
-  } catch(err) {
-    Logger.log('❌ Error: ' + err.message);
-    Logger.log('Check your SHEET_ID value.');
-  }
-}
-
-// ─── Helpers ─────────────────────────────────────────
-function getOrCreate(ss, name, headers) {
-  let ws = ss.getSheetByName(name);
-  if (!ws) {
-    ws = ss.insertSheet(name);
-    ws.appendRow(headers);
-    ws.getRange(1,1,1,headers.length).setFontWeight('bold').setBackground('#1a237e').setFontColor('#ffffff');
-  }
-  return ws;
-}
-function jsonOut(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj)).setMimeType(ContentService.MimeType.JSON);
-}`;
-  navigator.clipboard.writeText(code)
-    .then(()=>toast('📋 Script copied! Paste into script.google.com'))
-    .catch(()=>toast('Copy failed — try again'));
-}
-
-/* ══════════════════════════════════════════════════
-   KEYBOARD
-══════════════════════════════════════════════════ */
-document.getElementById('ln').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-document.getElementById('lp').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
-
-/* ══════════════════════════════════════════════════
-   INIT — show login directly, no setup screen
-══════════════════════════════════════════════════ */
-// Show note if no URL configured
-// If we have a hardcoded URL, sync it to localStorage immediately
-if(HARDCODED_GAS_URL && !LS.get('gasURL','')) {
-  LS.set('gasURL', HARDCODED_GAS_URL);
-}
-// Show note only if truly no URL configured anywhere
-if(!GAS_URL){
-  document.getElementById('noURLNote').classList.remove('hide');
-}
-// Pre-fill the settings input if URL is known
-if(GAS_URL){
-  const inp = document.getElementById('gsURLInp');
-  if(inp) inp.value = GAS_URL;
-}
+// Load data in background
+if(GAS_URL){setTimeout(async()=>{try{await loadAllSheets();await loadResponses();await loadSales();renderDash();renderViewer();buildFormSheetSelect();reRender();renderSell();if(S.role==='admin'){renderSheets();renderResponses();}}catch(e){console.log('BG load error:',e);}},500);}
 </script>
 </body>
 </html>
